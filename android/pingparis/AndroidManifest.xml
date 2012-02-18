@@ -14,10 +14,21 @@
             android:name=".ConfigActivity" >
             <intent-filter >
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        
+		<service android:name=".PingMeService">
+            <intent-filter >
+		    	<action android:name="PING_MOCK_LOCATION" />
+	    	</intent-filter>
+        </service>
+		    		    
+        
+  		
     </application>
-
+	
+  	<uses-permission android:name="android.permission.INTERNET" />
+	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    	
 </manifest>
