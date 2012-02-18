@@ -66,7 +66,7 @@ public class ListPlaceActivity extends ListActivity {
     };
     
     /**
-     * Set the liste content, or only add a item
+     * Set the list content, or only add a item
      * @param poiData
      */
     private void setDataToList(POI_Data poiData){
@@ -93,6 +93,7 @@ public class ListPlaceActivity extends ListActivity {
         }
         
         setContentView(R.layout.activity_listplaces);
+        getListView().setSelector(R.drawable.highlight_pressed);
     }
 
     @Override
