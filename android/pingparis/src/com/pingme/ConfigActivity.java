@@ -27,16 +27,27 @@ public class ConfigActivity extends ListActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
+        //Change notification sound: on/off
+        final ToggleButton notificationSoundToggle = (ToggleButton) findViewById(R.id.notificationSound);
+        notificationSoundToggle.setChecked( PingMeApplication.getNotificationSound() );
         
-        //Change service state: on/off
-        final ToggleButton togglebutton = (ToggleButton) findViewById(R.id.statusService);
-        togglebutton.setChecked( PingMeApplication.getServiceStatus() );
-        
-        togglebutton.setOnClickListener(new OnClickListener() {
+        notificationSoundToggle.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
-            	PingMeApplication.setServiceStatus( ConfigActivity.this, togglebutton.isChecked());
+            	PingMeApplication.setNotificationSound( ConfigActivity.this, notificationSoundToggle.isChecked());
             }
         });
+        
+        //Change service state: on/off
+        final ToggleButton serviceStatusToggle = (ToggleButton) findViewById(R.id.statusService);
+        serviceStatusToggle.setChecked( PingMeApplication.getServiceStatus() );
+        
+        serviceStatusToggle.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+            	notificationSoundToggle.setEnabled( !notificationSoundToggle.isEnabled() );
+            	PingMeApplication.setServiceStatus( ConfigActivity.this, serviceStatusToggle.isChecked());
+            }
+        });
+
         
         //Adapter to list of choices
         getListView().setSelector(R.drawable.highlight_pressed);

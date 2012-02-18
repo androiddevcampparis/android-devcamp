@@ -16,6 +16,16 @@
         android:textOff="@string/service_off"
         android:layout_gravity="center_horizontal"/>
     
+    <ToggleButton 
+        android:layout_marginTop="10dip"
+        android:layout_marginBottom="10dip"
+        android:id="@+id/notificationSound"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textOn="@string/notification_sound_on"
+        android:textOff="@string/notification_sound_off"
+        android:layout_gravity="center_horizontal"/>
+    
     <ListView 
         android:layout_margin="10dip"
         android:id="@+id/android:list"

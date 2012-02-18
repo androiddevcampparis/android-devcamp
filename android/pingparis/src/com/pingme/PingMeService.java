@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.json.JSONObject;
 
+import com.pingme.model.Coordinate;
 import com.pingme.model.POI_Data;
 import com.pingme.utils.POIListUtil;
 
@@ -37,10 +38,14 @@ public class PingMeService extends Service {
 	public static String INTENT_POI_DATA_EXTRA = "com.pingme.PingMeService.INTENT_DATA_EXTRA";
 	public static String INTENT_IS_NOTIF_EXTRA = "com.pingme.PingMeService.INTENT_IS_NOTIF_EXTRA";
 
+	public static String INTENT_NOTIFICATION_SOUND_EXTRA = "com.pingme.PingMeService.INTENT_NOTIFICATION_SOUND_EXTRA";
+
 	public static String PING_ACTION_LIFECYCLE = "com.pingme.PingMeService.PING_ACTION_LIFECYCLE";
-	public static String PING_ACTION_USER = "com.pingme.PingMeService.PING_ACTION_USER";
+	public static String PING_ACTION_UI_SOUND_NOTIFICATION = "com.pingme.PingMeService.PING_ACTION_UI_SOUND_NOTIFICATION";
 	public static String PING_ACTION_MOCK_LOCATION = "com.pingme.PingMeService.PING_ACTION_MOCK_LOCATION";
 	
+	public static final boolean NOTIFICATION_SOUND_DEFAULT = false;
+	private boolean notificationSound = NOTIFICATION_SOUND_DEFAULT; 
 	
     private final Binder binder = new LocalBinder();
     
@@ -84,7 +89,8 @@ public class PingMeService extends Service {
         PendingIntent contentIntent = DetailsActivity.getMyLauncher( this, data );
         notification.setLatestEventInfo(this, tickerText, data.getTitle(), contentIntent);
         
-        notification.defaults |= Notification.DEFAULT_SOUND;
+        if( notificationSound )
+        	notification.defaults |= Notification.DEFAULT_SOUND;
 
         notification.flags |= Notification.FLAG_SHOW_LIGHTS;
         notification.ledARGB = Color.GREEN; 
@@ -148,7 +154,7 @@ public class PingMeService extends Service {
 					queryLatLng( location.getLatitude(), location.getLongitude() );
 										
 					Intent broadCastIntent = new Intent( PING_BROADCAST_LOCATION );
-				    broadCastIntent.putExtra( INTENT_LOCATION_EXTRA, location );
+				    broadCastIntent.putExtra( INTENT_LOCATION_EXTRA, new Coordinate( prevLat, prevLng ) );
 				    sendBroadcast( broadCastIntent );
 				}
 			}
@@ -182,8 +188,9 @@ public class PingMeService extends Service {
 		
 		Log.v("PingMeService", "StartCommand with action " + action );
 		
-		if( PING_ACTION_USER.equals( action ) ){
-			Toast.makeText( this, "User Action", Toast.LENGTH_SHORT).show();			
+		if( PING_ACTION_UI_SOUND_NOTIFICATION.equals( action ) ){
+			notificationSound = intent.getBooleanExtra( INTENT_NOTIFICATION_SOUND_EXTRA, false );
+			Toast.makeText( this, "Sound Notification " + notificationSound, Toast.LENGTH_SHORT).show();
 		}
 		else if( PING_ACTION_MOCK_LOCATION.equals( action ) ){
 			double lat = intent.getDoubleExtra("lat", 0 );
@@ -191,8 +198,10 @@ public class PingMeService extends Service {
 			Toast.makeText( this, "GeoLoc "+ lat + "/"+lng , Toast.LENGTH_SHORT).show();
 			queryLatLng( lat, lng );
 		}
-
+		else if( PING_ACTION_LIFECYCLE.equals( action ) ){			
+		}
 		return START_STICKY;
+
 	}
 
 
