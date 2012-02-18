@@ -1,18 +1,23 @@
 package com.pingme;
 
+import com.pingme.adapters.ActionsAdapter;
+import com.pingme.adapters.PreferencesAdapter;
 import com.pingme.model.POI_Data;
 import com.pingme.utils.ImageDownloader;
 
 import android.app.Activity;
+import android.app.ListActivity;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
-public class DetailsActivity extends Activity {
+public class DetailsActivity extends ListActivity {
 	
 	private static String INTENT_DATA = "data";
 	
@@ -34,6 +39,15 @@ public class DetailsActivity extends Activity {
 		descr.setText(poiData.getDescr());
 		
 		new ImageDownloader(this).download(poiData.getUrlImage(), image, null, "DetailsActivity");
+		
+		 //Adapter to list of actions
+        getListView().setSelector(R.drawable.highlight_pressed);
+        setListAdapter(new ActionsAdapter(poiData));
+	}
+	
+	@Override
+	protected void onListItemClick(ListView l, View v, int position, long id) {
+		
 	}
 	
 	/**
