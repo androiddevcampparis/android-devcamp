@@ -4,4 +4,8 @@
 
     <string name="hello">Hello World, ConfigActivity!</string>
 
+    <string name="service_on">Service on</string>
+	<string name="service_off">Service off</string>
+	<string name="titleApp">PingMe Configuration</string>
+
 </resources>
