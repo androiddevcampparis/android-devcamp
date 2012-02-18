@@ -15,9 +15,12 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.pingme.adapters.POIAdapter;
+import com.pingme.model.ActionsDetail;
 import com.pingme.model.Coordinate;
 import com.pingme.model.POI_Data;
 import com.pingme.utils.POIListUtil;
@@ -100,6 +103,18 @@ public class ListPlaceActivity extends ListActivity {
         final TextView titleTopbar = (TextView) findViewById(R.id.titleBar);
         titleTopbar.setText(getString(R.string.titleApp_list));
     }
+    
+    @Override
+	protected void onListItemClick(ListView l, View v, int position, long id) {
+		try {
+			Intent intent = new Intent(this, DetailsActivity.class);
+			POI_Data poiData = (POI_Data) getListAdapter().getItem(position);
+			intent.putExtra(PingMeService.INTENT_POI_DATA_EXTRA, poiData);
+			startActivity(intent);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
     @Override
     public void onResume(){
