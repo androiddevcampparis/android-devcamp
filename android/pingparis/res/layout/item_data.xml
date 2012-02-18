@@ -14,7 +14,7 @@
     <LinearLayout 
         android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:layout_toLeftOf="@id/imageItem"
+		android:layout_toRightOf="@id/imageItem"
 		android:layout_marginLeft="20dip"
 		android:layout_centerVertical="true" 
 		android:orientation="vertical">

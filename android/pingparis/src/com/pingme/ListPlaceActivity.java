@@ -15,8 +15,10 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.pingme.adapters.POIAdapter;
+import com.pingme.model.Coordinate;
 import com.pingme.model.POI_Data;
 import com.pingme.utils.POIListUtil;
 
@@ -25,8 +27,6 @@ public class ListPlaceActivity extends ListActivity {
 
 	private final int MAX_POI_DATA_SIZE = 10;
 	private List<POI_Data> poiList;
-
-	private Location currentLocation;
 	
 
 	// ----------------------------------------------------------------------------
@@ -60,7 +60,9 @@ public class ListPlaceActivity extends ListActivity {
                 setDataToList(poiData);
             }
             if( PingMeService.PING_BROADCAST_LOCATION.equals( action ) ){
-                currentLocation = (Location)intent.getSerializableExtra( PingMeService.INTENT_LOCATION_EXTRA );
+                Coordinate currentLocation = (Coordinate)intent.getSerializableExtra( PingMeService.INTENT_LOCATION_EXTRA );
+                PingMeApplication.setLat(currentLocation.lat);
+                PingMeApplication.setLng(currentLocation.lng);
             }
         }
     };
@@ -94,6 +96,9 @@ public class ListPlaceActivity extends ListActivity {
         
         setContentView(R.layout.activity_listplaces);
         getListView().setSelector(R.drawable.highlight_pressed);
+        
+        final TextView titleTopbar = (TextView) findViewById(R.id.titleBar);
+        titleTopbar.setText(getString(R.string.titleApp_list));
     }
 
     @Override

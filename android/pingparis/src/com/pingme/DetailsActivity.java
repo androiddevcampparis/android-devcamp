@@ -35,7 +35,7 @@ public class DetailsActivity extends ListActivity {
 		
 		title.setText(poiData.getTitle());
 		descr.setText(poiData.getDescr());
-		titleTopbar.setText(getString(R.string.titleApp_list));
+		titleTopbar.setText(getString(R.string.detail_place));
 		
 		new ImageDownloader(this).download(poiData.getUrlImage(), image, null, "DetailsActivity");
 		

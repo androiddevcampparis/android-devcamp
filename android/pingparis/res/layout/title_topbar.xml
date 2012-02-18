@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
+	    android:layout_height="50dip"
+	    android:orientation="horizontal"
 	    android:padding="5dip"
 	    android:background="@drawable/title_bg">
 	    
         <ImageView
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
 	        android:layout_width="40dip"
 		    android:layout_height="40dip"
 		    android:src="@drawable/ic_home"
@@ -19,7 +18,7 @@
 	        android:layout_height="wrap_content"
 	        android:text="@string/titleApp"
 	        android:gravity="center"
-	        android:layout_centerInParent="true"
+	        android:layout_gravity="center"
 	        style="@style/titlebar_element" />
 	    
-    </RelativeLayout>
+    </LinearLayout>

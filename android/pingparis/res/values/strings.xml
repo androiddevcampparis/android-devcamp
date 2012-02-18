@@ -16,5 +16,7 @@
 	<string name="config_running">PingMe is actually running to show you interesting places around you</string>
 
 	 <string name="menu_openlist">Go to Places List</string>
-	 <string name="menu_configure">Go to Places List</string>
+	 <string name="menu_configure">Go to Configure List</string>
+	 
+	 <string name="detail_place">Location Founded!</string>
 </resources>
