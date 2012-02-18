@@ -18,12 +18,30 @@ import android.preference.PreferenceManager;
 
 public class PingMeApplication extends Application {
 	
-	private static final String SERVICE_STATUS = "pingme.SERVER_STATUS";
+	private static final String SERVICE_STATUS = "pingme.SERVICE_STATUS";
+	private static final String NOTIFICATION_SOUND = "pingme.NOTIFICATION_SOUND";
+	
 	private static SharedPreferences preferences;
 	private static ImageDownloader imageDownloader;
 	
 	private static double lat;
 	private static double lng;
+	
+	public static boolean getNotificationSound(){
+		return preferences.getBoolean( NOTIFICATION_SOUND, PingMeService.NOTIFICATION_SOUND_DEFAULT );
+	}
+	
+	public static void setNotificationSound( Context context, Boolean status ){
+		Editor editor = preferences.edit();
+		editor.putBoolean( NOTIFICATION_SOUND, status);
+		editor.commit();
+		
+		Intent serviceIntent = new Intent( PingMeService.PING_ACTION_UI_SOUND_NOTIFICATION );
+		serviceIntent.setClassName( context, "com.pingme.PingMeService" );
+
+		serviceIntent.putExtra( PingMeService.INTENT_NOTIFICATION_SOUND_EXTRA, status );
+		context.startService( serviceIntent );			
+	}
 	
 	public static boolean getServiceStatus(){
 		return preferences.getBoolean( SERVICE_STATUS, true );
@@ -34,7 +52,7 @@ public class PingMeApplication extends Application {
 		editor.putBoolean( SERVICE_STATUS, status);
 		editor.commit();
 
-		Intent serviceIntent = new Intent( "PING_USER_ACTION" );
+		Intent serviceIntent = new Intent( PingMeService.PING_ACTION_LIFECYCLE );
 		serviceIntent.setClassName( context, "com.pingme.PingMeService" );
 		if( status ){
 			context.startService( serviceIntent );			
@@ -50,6 +68,7 @@ public class PingMeApplication extends Application {
 		}
 	}
 
+	
 	@Override
 	public void onCreate() {
 		super.onCreate();
@@ -57,6 +76,7 @@ public class PingMeApplication extends Application {
 		imageDownloader = new ImageDownloader(getApplicationContext());
 		
 		setServiceStatus( getApplicationContext(), getServiceStatus() );
+		setNotificationSound( getApplicationContext(), getNotificationSound() );
 	}
 	
 	public static void createNotifConfig(Context context){

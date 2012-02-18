@@ -2,14 +2,17 @@
 <resources>
     <string name="app_name">PingMe</string>
 
-    <string name="hello">Hello World, ConfigActivity!</string>
-
-    <string name="service_on">Service on</string>
-	<string name="service_off">Service off</string>
+    
+    <string name="service_on">Service On</string>
+	<string name="service_off">Service Off</string>
+    <string name="notification_sound_on">Notification Sound On</string>
+	<string name="notification_sound_off">Notification Sound Off</string>
+		
+	
 	<string name="titleApp">PingMe Configuration</string>
 	
 	<string name="open_config">Configure yours PingMe Notifications</string>
-	<string name="config_running">PingMe is actually running to show you interestings places around you</string>
+	<string name="config_running">PingMe is actually running to show you interesting places around you</string>
 
 	 <string name="menu_openlist">Go to Places List</string>
 </resources>
