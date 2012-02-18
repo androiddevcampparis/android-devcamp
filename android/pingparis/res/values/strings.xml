@@ -10,9 +10,11 @@
 		
 	
 	<string name="titleApp">PingMe Configuration</string>
+	<string name="titleApp_list">Last Places</string>
 	
 	<string name="open_config">Configure yours PingMe Notifications</string>
 	<string name="config_running">PingMe is actually running to show you interesting places around you</string>
 
 	 <string name="menu_openlist">Go to Places List</string>
+	 <string name="menu_configure">Go to Places List</string>
 </resources>

@@ -4,25 +4,7 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
-    <RelativeLayout
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-	    android:orientation="vertical" 
-	    android:padding="5dip"
-	    android:background="@drawable/title_bg">
-	    
-	    <TextView android:id="@+id/titleBar"
-	        android:layout_width="fill_parent"
-	        android:layout_height="wrap_content"
-	        android:text="@string/titleApp"
-	        android:layout_centerInParent="true" />
-	    
-<!-- 	    <ImageButton android:id="@+id/imageItem"
-	        android:layout_width="30dip"
-		    android:layout_height="30dip"/> -->
-	    
-    </RelativeLayout>
-    
+    <include android:id="@+id/topBar" layout="@layout/title_topbar" />   
         
     <ToggleButton 
         android:layout_marginTop="10dip"

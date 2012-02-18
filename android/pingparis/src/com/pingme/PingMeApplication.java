@@ -27,6 +27,9 @@ public class PingMeApplication extends Application {
 	private static double lat;
 	private static double lng;
 	
+	private static boolean firstLaunch = true;
+
+	
 	public static boolean getNotificationSound(){
 		return preferences.getBoolean( NOTIFICATION_SOUND, PingMeService.NOTIFICATION_SOUND_DEFAULT );
 	}
@@ -42,6 +45,8 @@ public class PingMeApplication extends Application {
 		serviceIntent.putExtra( PingMeService.INTENT_NOTIFICATION_SOUND_EXTRA, status );
 		context.startService( serviceIntent );			
 	}
+
+
 	
 	public static boolean getServiceStatus(){
 		return preferences.getBoolean( SERVICE_STATUS, true );
@@ -74,6 +79,7 @@ public class PingMeApplication extends Application {
 		super.onCreate();
 		preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 		imageDownloader = new ImageDownloader(getApplicationContext());
+		firstLaunch = preferences.getBoolean("firstLaunch", true);
 		
 		setServiceStatus( getApplicationContext(), getServiceStatus() );
 		setNotificationSound( getApplicationContext(), getNotificationSound() );
@@ -127,6 +133,17 @@ public class PingMeApplication extends Application {
 
 	public static void setLng(double lng) {
 		PingMeApplication.lng = lng;
+	}
+
+	public static boolean isFirstLaunch() {
+		return firstLaunch;
+	}
+
+	public static void setLaunchedOnce() {
+		firstLaunch = false;
+		Editor editor = preferences.edit();
+		editor.putBoolean( "firstLaunch", false);
+		editor.commit();
 	}
 	
 	
