@@ -4,9 +4,30 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
-    <TextView
+    <LinearLayout
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="vertical" 
+	    android:padding="5dip">
+	    
+	    <TextView android:id="@+id/titleBar"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:text="" />
+	    
+    </LinearLayout>
+    
+        
+    <ToggleButton android:id="@+id/statusService"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/hello" />
+        android:textOn="@string/service_on"
+        android:textOff="@string/service_off"/>
+    
+    <ListView 
+        android:id="@+id/android:list"
+        android:layout_width="fill_parent"
+	    android:layout_height="wrap_content">
+    </ListView>
 
 </LinearLayout>
