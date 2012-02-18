@@ -15,6 +15,7 @@ public class POI_Data implements Serializable {
 	public static final int TYPE_LOCATION = 0;
 	public static final int TYPE_WIKIPEDIA = 1;
 
+	private String id;
 	private String title;
 	private String descr;
 	private String urlImage;
@@ -23,6 +24,14 @@ public class POI_Data implements Serializable {
 	private int[] typeEnabled;
 	private List<ActionsDetail> actions;
 	
+	
+	
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
 	public String getTitle() {
 		return title;
 	}

@@ -1,16 +1,13 @@
 package com.pingme;
 
 import com.pingme.adapters.ActionsAdapter;
-import com.pingme.adapters.PreferencesAdapter;
 import com.pingme.model.POI_Data;
 import com.pingme.utils.ImageDownloader;
 
-import android.app.Activity;
 import android.app.ListActivity;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;

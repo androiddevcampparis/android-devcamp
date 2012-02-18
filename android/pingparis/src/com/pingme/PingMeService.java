@@ -3,11 +3,13 @@ package com.pingme;
 
 
 import java.util.ArrayList;
+
 import java.util.List;
 
 import org.json.JSONObject;
 
 import com.pingme.model.POI_Data;
+import com.pingme.utils.POIListUtil;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -59,12 +61,6 @@ public class PingMeService extends Service {
 	// ------------------------------------------------------------
 	private final int MAX_POI_DATA_SIZE = 10;
 	private List<POI_Data> pois = new ArrayList<POI_Data>();
-	private synchronized void enqueuePOI( POI_Data data ){
-		pois.add(data);
-		if( pois.size()>MAX_POI_DATA_SIZE){
-			pois.remove(MAX_POI_DATA_SIZE);
-		}
-	}
 	/*
 	 * Return a copy of local pois (we assume that pois are immutable)
 	 */
@@ -82,16 +78,7 @@ public class PingMeService extends Service {
         long when = System.currentTimeMillis();
 
         Notification notification = new Notification( android.R.drawable.stat_sys_warning, tickerText, when);
-        
-        /*
-        Intent intent = new Intent( this, ConfigActivity.class );
-        intent.addFlags( Intent.FLAG_ACTIVITY_REORDER_TO_FRONT );
-
-
-        PendingIntent contentIntent = PendingIntent.getActivity( this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT );
-        */
-        
-        
+                
         PendingIntent contentIntent = DetailsActivity.getMyLauncher( this, data );
         notification.setLatestEventInfo(this, tickerText, data.getTitle(), contentIntent);
         
@@ -116,12 +103,18 @@ public class PingMeService extends Service {
 	
 	private void processServerResponse( JSONObject json ){
         POI_Data data = new POI_Data();
+        data.setId("uid1");
         data.setTitle("Tour Effeil");
         data.setDescr("La plus grand tour de Paris");
         data.setUrlImage("https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Tour_Eiffel_Wikimedia_Commons.jpg/220px-Tour_Eiffel_Wikimedia_Commons.jpg");
         
-        enqueuePOI( data );
-		messageNotification( getString(R.string.titleApp), data );
+        
+        synchronized( pois ){ 
+        	if( POIListUtil.contains( pois, data )  )
+        		messageNotification( getString(R.string.titleApp), data );
+        	POIListUtil.enqueuePOI(pois, data, MAX_POI_DATA_SIZE);
+        }
+        
 		
 		Intent broadCastIntent = new Intent( PING_BROADCAST_POI_DATA );
 	    broadCastIntent.putExtra( INTENT_POI_DATA_EXTRA, data );
@@ -171,6 +164,7 @@ public class PingMeService extends Service {
 	}
 	
     // ----------------------------------------------------------------------------
+	// Service Lifecycle
     // ----------------------------------------------------------------------------
     @Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
