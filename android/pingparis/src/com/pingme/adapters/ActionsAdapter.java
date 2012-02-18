@@ -10,14 +10,14 @@ import android.widget.TextView;
 
 import com.pingme.R;
 import com.pingme.model.ActionsDetail;
-import com.pingme.model.POI_Data;
+import com.pingme.model.POIData;
 import com.pingme.model.Preferences;
 
 public class ActionsAdapter extends BaseAdapter {
 	
-	private POI_Data data;
+	private POIData data;
 
-	public ActionsAdapter(POI_Data data) {
+	public ActionsAdapter(POIData data) {
 		super();
 		this.data = data;
 	}

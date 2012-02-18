@@ -3,12 +3,12 @@ package com.pingme.utils;
 
 import java.util.List;
 
-import com.pingme.model.POI_Data;
+import com.pingme.model.POIData;
 
 public class POIListUtil {
 	
-	public static void enqueuePOI( List<POI_Data> list, POI_Data data, int maxSize ){
-		for( POI_Data poi : list ){
+	public static void enqueuePOI( List<POIData> list, POIData data, int maxSize ){
+		for( POIData poi : list ){
 			if( poi.getId() == data.getId() ){
 				list.remove( poi );
 				break;
@@ -20,8 +20,8 @@ public class POIListUtil {
 		}
 	}
 
-	public static boolean contains( List<POI_Data> list, POI_Data data ){
-		for( POI_Data poi : list ){
+	public static boolean contains( List<POIData> list, POIData data ){
+		for( POIData poi : list ){
 			if( poi.getId() == data.getId() ){
 				return true;
 			}

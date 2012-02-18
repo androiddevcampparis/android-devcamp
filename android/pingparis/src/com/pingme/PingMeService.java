@@ -10,7 +10,8 @@ import java.util.List;
 import org.json.JSONObject;
 
 import com.pingme.model.Coordinate;
-import com.pingme.model.POI_Data;
+import com.pingme.model.POIData;
+import com.pingme.service.ServerRequest;
 import com.pingme.utils.POIListUtil;
 
 import android.app.Notification;
@@ -67,19 +68,19 @@ public class PingMeService extends Service {
 	// POI_DATA List
 	// ------------------------------------------------------------
 	private final int MAX_POI_DATA_SIZE = 10;
-	private List<POI_Data> pois = new ArrayList<POI_Data>();
+	private List<POIData> pois = new ArrayList<POIData>();
 	/*
 	 * Return a copy of local pois (we assume that pois are immutable)
 	 */
-	public synchronized List<POI_Data> getPOIList(){
-		return new ArrayList<POI_Data>( pois );
+	public synchronized List<POIData> getPOIList(){
+		return new ArrayList<POIData>( pois );
 	}
 
 	
     // ----------------------------------------------------------------------------
 	// Notification MGMT
     // ----------------------------------------------------------------------------
-    private void messageNotification( CharSequence tickerText, POI_Data data, int count ){
+    private void messageNotification( CharSequence tickerText, POIData data, int count ){
         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         
         long when = System.currentTimeMillis();
@@ -109,15 +110,23 @@ public class PingMeService extends Service {
     // ----------------------------------------------------------------------------
 	private void queryLatLng( double lat, double lng ){
 		Log.v("PingMeService", "queryLatLng lat:"+ lat +" lng:" + lng );
-		processServerResponse( null );
+		try{
+			POIData data = new POIData();//ServerRequest.fetchPOI();
+			if( data != null )
+				processServerResponse( data );			
+		}
+		catch( Exception e ){
+			Log.e( "PingMeService", e.getMessage(), e );
+		}
+		
 	}
 	
-	private void processServerResponse( JSONObject json ){
-        POI_Data data = new POI_Data();
+	private void processServerResponse( POIData data ){
+        data = new POIData();
         data.setId("uid"+System.currentTimeMillis());
         data.setTitle("Tour Effeil");
-        data.setDescr("La plus grand tour de Paris");
-        data.setUrlImage("https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Tour_Eiffel_Wikimedia_Commons.jpg/220px-Tour_Eiffel_Wikimedia_Commons.jpg");
+        data.setDescription("La plus grand tour de Paris");
+        data.setUrl_image("https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Tour_Eiffel_Wikimedia_Commons.jpg/220px-Tour_Eiffel_Wikimedia_Commons.jpg");
         
         
         synchronized( pois ){ 

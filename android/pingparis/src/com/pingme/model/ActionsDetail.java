@@ -19,7 +19,7 @@ public abstract class ActionsDetail {
 	protected String name;
 	protected int idRes;
 	protected int idType;
-	protected POI_Data data;
+	protected POIData data;
 
 	public String getName() {
 		return name;
@@ -47,7 +47,7 @@ public abstract class ActionsDetail {
 
 	public abstract void execute(Context context);
 	
-	public ActionsDetail(String name, int idRes, int idType, POI_Data data) {
+	public ActionsDetail(String name, int idRes, int idType, POIData data) {
 		super();
 		this.name = name;
 		this.idRes = idRes;
@@ -58,7 +58,7 @@ public abstract class ActionsDetail {
 	
 	public static class MapsDriveAction extends ActionsDetail{
 
-		public MapsDriveAction(POI_Data data) {
+		public MapsDriveAction(POIData data) {
 			super("Maps", R.drawable.maps, 100,data);
 		}
 		
@@ -73,7 +73,7 @@ public abstract class ActionsDetail {
 	
 	public static class SearchAction extends ActionsDetail{
 
-		public SearchAction(POI_Data data) {
+		public SearchAction(POIData data) {
 			super("Search", R.drawable.search, 102,data);
 		}
 
@@ -87,7 +87,7 @@ public abstract class ActionsDetail {
 	
 	public static class ShareAction extends ActionsDetail{
 
-		public ShareAction(POI_Data data) {
+		public ShareAction(POIData data) {
 			super("Share", R.drawable.sharemanager, 103,data);
 		}
 
@@ -96,7 +96,7 @@ public abstract class ActionsDetail {
 			Intent shareIntent = new Intent(Intent.ACTION_SEND);
 			shareIntent.setType("text/plain");
 			shareIntent.putExtra(Intent.EXTRA_SUBJECT, "I recommand you "+data.getTitle());
-			shareIntent.putExtra(Intent.EXTRA_TEXT, data.getDescr());
+			shareIntent.putExtra(Intent.EXTRA_TEXT, data.getDescription());
 			
 			context.startActivity(shareIntent);
 		}

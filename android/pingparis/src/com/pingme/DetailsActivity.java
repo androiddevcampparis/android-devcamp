@@ -2,7 +2,7 @@ package com.pingme;
 
 import com.pingme.adapters.ActionsAdapter;
 import com.pingme.model.ActionsDetail;
-import com.pingme.model.POI_Data;
+import com.pingme.model.POIData;
 import com.pingme.utils.ImageDownloader;
 
 import android.app.ListActivity;
@@ -18,7 +18,7 @@ import android.widget.TextView;
 public class DetailsActivity extends ListActivity {
 	
 	
-	private POI_Data poiData;
+	private POIData poiData;
 
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -26,7 +26,7 @@ public class DetailsActivity extends ListActivity {
 		setContentView(R.layout.activity_details);
 		
 		// get data from intent and set To View
-		poiData = (POI_Data) getIntent().getSerializableExtra(PingMeService.INTENT_POI_DATA_EXTRA);
+		poiData = (POIData) getIntent().getSerializableExtra(PingMeService.INTENT_POI_DATA_EXTRA);
 		
 		final TextView title = (TextView) findViewById(R.id.titleEvent);
 		final TextView descr = (TextView) findViewById(R.id.descrEvent);
@@ -34,10 +34,10 @@ public class DetailsActivity extends ListActivity {
 		final TextView titleTopbar = (TextView) findViewById(R.id.titleBar);
 		
 		title.setText(poiData.getTitle());
-		descr.setText(poiData.getDescr());
+		descr.setText(poiData.getDescription());
 		titleTopbar.setText(getString(R.string.detail_place));
 		
-		new ImageDownloader(this).download(poiData.getUrlImage(), image, null, "DetailsActivity");
+		new ImageDownloader(this).download(poiData.getUrl_image(), image, null, "DetailsActivity");
 		
 		 //Adapter to list of actions
         getListView().setSelector(R.drawable.highlight_pressed);
@@ -65,7 +65,7 @@ public class DetailsActivity extends ListActivity {
 	 * @param data
 	 * @return
 	 */
-	public static PendingIntent getMyLauncher(Context context, POI_Data data){
+	public static PendingIntent getMyLauncher(Context context, POIData data){
 		Intent intent = new Intent(context, DetailsActivity.class);
 		intent.putExtra(PingMeService.INTENT_POI_DATA_EXTRA, data);
 		intent.putExtra(PingMeService.INTENT_IS_NOTIF_EXTRA, true);
