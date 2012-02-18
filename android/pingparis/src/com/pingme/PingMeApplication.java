@@ -5,35 +5,45 @@ import java.util.List;
 import com.pingme.model.Preferences;
 
 import android.app.Application;
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.preference.PreferenceManager;
 
 public class PingMeApplication extends Application {
 	
+	private static final String SERVICE_STATUS = "pingme.SERVER_STATUS";
 	private static SharedPreferences preferences;
 
-	public static void stopApp(){
-		setStatusService(false);
-		//TODO Stop service
+	public static boolean getServiceStatus(){
+		return preferences.getBoolean( SERVICE_STATUS, true );
 	}
 	
-	public static void startApp(){
-		setStatusService(true);
-		//TODO start service
-	}
-	
-	private static void setStatusService(boolean status){
+	public static void setServiceStatus( Context context, Boolean status ){
 		Editor editor = preferences.edit();
-		editor.putBoolean("SERVICE_STATUS", status);
+		editor.putBoolean( SERVICE_STATUS, status);
 		editor.commit();
+
+		Intent serviceIntent = new Intent( "PING_USER_ACTION" );
+		serviceIntent.setClassName( context, "com.pingme.PingMeService" );
+		if( status ){
+			context.startService( serviceIntent );			
+		}
+		else {
+			context.stopService( serviceIntent );						
+		}
 	}
 	
+
 
 	@Override
 	public void onCreate() {
 		super.onCreate();
 		preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+		
+		setServiceStatus( this, getServiceStatus() );
+		
 	}
 
 	public static void savePref(List<Preferences> preferences2) {

@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 public class PingMeService extends Service {
 
+	public static String PING_LIFECYCLE_ACTION = "PING_LIFECYCLE_ACTION";
 	public static String PING_USER_ACTION = "PING_USER_ACTION";
 	public static String PING_MOCK_LOCATION = "PING_MOCK_LOCATION";
 	

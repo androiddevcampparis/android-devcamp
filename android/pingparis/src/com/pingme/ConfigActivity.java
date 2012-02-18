@@ -20,21 +20,14 @@ public class ConfigActivity extends ListActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
-
-        Intent serviceIntent = new Intent( "PING_USER_ACTION" );
-        serviceIntent.setClassName( this, "com.pingme.PingMeService" );
-        startService( serviceIntent );
-
         
         //Change service state: on/off
         final ToggleButton togglebutton = (ToggleButton) findViewById(R.id.statusService);
+        togglebutton.setChecked( PingMeApplication.getServiceStatus() );
+        
         togglebutton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
-                if (togglebutton.isChecked()) {
-                    PingMeApplication.startApp();
-                } else {
-                	PingMeApplication.stopApp();
-                }
+            	PingMeApplication.setServiceStatus( ConfigActivity.this, togglebutton.isChecked());
             }
         });
         
