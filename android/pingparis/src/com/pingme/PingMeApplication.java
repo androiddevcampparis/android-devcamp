@@ -6,10 +6,14 @@ import com.pingme.model.Preferences;
 import com.pingme.utils.ImageDownloader;
 
 import android.app.Application;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.graphics.Color;
 import android.preference.PreferenceManager;
 
 public class PingMeApplication extends Application {
@@ -38,9 +42,13 @@ public class PingMeApplication extends Application {
 		else {
 			context.stopService( serviceIntent );						
 		}
+		
+		if(status){
+			createNotifConfig(context);
+		} else{
+			removeNotifConfig(context);
+		}
 	}
-	
-
 
 	@Override
 	public void onCreate() {
@@ -48,8 +56,22 @@ public class PingMeApplication extends Application {
 		preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 		imageDownloader = new ImageDownloader(getApplicationContext());
 		
-		setServiceStatus( this, getServiceStatus() );
-		
+		setServiceStatus( getApplicationContext(), getServiceStatus() );
+	}
+	
+	public static void createNotifConfig(Context context){
+		NotificationManager notificationManager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
+		 PendingIntent contentIntent = ConfigActivity.getMyLauncher( context );
+		 long when = System.currentTimeMillis();
+		 
+		 Notification notification = new Notification( android.R.drawable.stat_sys_warning, context.getString(R.string.open_config), when);
+	     notification.setLatestEventInfo(context, context.getString(R.string.open_config), context.getString(R.string.config_running), contentIntent);
+	     notificationManager.notify( R.string.app_name, notification);
+	}
+	
+	public static void removeNotifConfig(Context context){
+		NotificationManager notificationManager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
+		notificationManager.cancel(R.string.app_name);
 	}
 
 	public static void savePref(List<Preferences> preferences2) {

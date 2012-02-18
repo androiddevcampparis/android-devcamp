@@ -7,6 +7,7 @@ import com.pingme.utils.ImageDownloader;
 
 import android.app.Activity;
 import android.app.ListActivity;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -20,6 +21,7 @@ import android.widget.TextView;
 public class DetailsActivity extends ListActivity {
 	
 	private static String INTENT_DATA = "data";
+	private static String IS_NOTIF = "isNotif";
 	
 	private POI_Data poiData;
 
@@ -43,6 +45,11 @@ public class DetailsActivity extends ListActivity {
 		 //Adapter to list of actions
         getListView().setSelector(R.drawable.highlight_pressed);
         setListAdapter(new ActionsAdapter(poiData));
+        
+        //Reset Location notif to Main Notif
+        if(PingMeApplication.getServiceStatus() && getIntent().getExtras().getBoolean(IS_NOTIF, false)){
+        	 PingMeApplication.createNotifConfig(this);
+        }
 	}
 	
 	@Override
@@ -59,6 +66,7 @@ public class DetailsActivity extends ListActivity {
 	public static PendingIntent getMyLauncher(Context context, POI_Data data){
 		Intent intent = new Intent(context, DetailsActivity.class);
 		intent.putExtra(INTENT_DATA, data);
+		intent.putExtra(IS_NOTIF, true);
 		
 		PendingIntent contentIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 		return contentIntent;

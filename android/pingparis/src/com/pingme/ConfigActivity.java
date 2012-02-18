@@ -1,8 +1,10 @@
 package com.pingme;
 
+import android.content.Context;
 import android.content.Intent;
 
 import android.app.ListActivity;
+import android.app.PendingIntent;
 
 import android.os.Bundle;
 import android.view.View;
@@ -11,6 +13,7 @@ import android.widget.ListView;
 import android.widget.ToggleButton;
 
 import com.pingme.adapters.PreferencesAdapter;
+import com.pingme.model.POI_Data;
 import com.pingme.model.Preferences;
 
 public class ConfigActivity extends ListActivity {
@@ -45,5 +48,17 @@ public class ConfigActivity extends ListActivity {
 		PingMeApplication.savePref(Preferences.getPreferences());
 	}
     
+	
+	/**
+	 * Get the Intent for notification to launch the ConfigActivity
+	 * @param context
+	 * @param data
+	 * @return
+	 */
+	public static PendingIntent getMyLauncher(Context context){
+		Intent intent = new Intent(context, ConfigActivity.class);		
+		PendingIntent contentIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+		return contentIntent;
+	}
     
 }

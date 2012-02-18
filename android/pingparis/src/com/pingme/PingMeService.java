@@ -8,6 +8,7 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.location.Location;
@@ -45,7 +46,7 @@ public class PingMeService extends Service {
 	
     // ----------------------------------------------------------------------------
     // ----------------------------------------------------------------------------
-    private void messageNotification( CharSequence tickerText, POI_Data data ){
+    private void messageNotification( CharSequence tickerText, POI_Data data, int count ){
         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         
         long when = System.currentTimeMillis();
@@ -69,7 +70,10 @@ public class PingMeService extends Service {
         notification.flags |= Notification.FLAG_SHOW_LIGHTS;
         notification.ledARGB = Color.GREEN; 
         notification.ledOffMS = 500; 
-        notification.ledOnMS = 500; 
+        notification.ledOnMS = 500;
+        if(count>1){
+        	notification.number = count;
+        }
         
         notificationManager.notify( R.string.app_name, notification);
     }
@@ -112,9 +116,14 @@ public class PingMeService extends Service {
 
 			@Override
 			public void onStatusChanged(String str, int arg1, Bundle arg2) {				
-			}	    	
+			}
 		} );
-
+	    
+	    //Add permanent icon in status bar
+//	    Notification notifStatusBar = new Notification(R.drawable.status_icon, getString(R.string.app_name), System.currentTimeMillis());
+//	    notifStatusBar.flags |= Notification.FLAG_NO_CLEAR | Notification.FLAG_ONGOING_EVENT;
+//	    NotificationManager notifier = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+//	    notifier.notify(1, notifStatusBar);
 	}
 	
     // ----------------------------------------------------------------------------
@@ -130,7 +139,8 @@ public class PingMeService extends Service {
         data.setTitle("Tour Effeil");
         data.setDescr("La plus grand tour de Paris");
         data.setUrlImage("https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Tour_Eiffel_Wikimedia_Commons.jpg/220px-Tour_Eiffel_Wikimedia_Commons.jpg");
-		messageNotification( getString(R.string.titleApp), data );
+		int countPlaces = 1;
+        messageNotification( getString(R.string.titleApp), data , countPlaces);
 		
 		if( PING_USER_ACTION.equals( action ) ){
 			
@@ -154,6 +164,8 @@ public class PingMeService extends Service {
     
     @Override
     public void onDestroy(){
+    	//remove permanent icon in status bar
+    	//((NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE)).cancel(1);
     }
 
 
