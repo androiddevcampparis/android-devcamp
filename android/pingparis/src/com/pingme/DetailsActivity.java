@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 public class DetailsActivity extends Activity {
 	
-	private static String INTENT_DATA = "data";
+
 	
 	private POI_Data poiData;
 
@@ -24,7 +24,7 @@ public class DetailsActivity extends Activity {
 		setContentView(R.layout.activity_details);
 		
 		// get data from intent and set To View
-		poiData = (POI_Data) getIntent().getSerializableExtra(INTENT_DATA);
+		poiData = (POI_Data) getIntent().getSerializableExtra(PingMeService.INTENT_POI_DATA_EXTRA);
 		
 		final TextView title = (TextView) findViewById(R.id.titleEvent);
 		final TextView descr = (TextView) findViewById(R.id.descrEvent);
@@ -44,7 +44,7 @@ public class DetailsActivity extends Activity {
 	 */
 	public static PendingIntent getMyLauncher(Context context, POI_Data data){
 		Intent intent = new Intent(context, DetailsActivity.class);
-		intent.putExtra(INTENT_DATA, data);
+		intent.putExtra(PingMeService.INTENT_POI_DATA_EXTRA, data);
 		
 		PendingIntent contentIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 		return contentIntent;
