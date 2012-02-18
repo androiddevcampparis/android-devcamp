@@ -12,13 +12,13 @@ import android.widget.TextView;
 
 import com.pingme.PingMeApplication;
 import com.pingme.R;
-import com.pingme.model.POI_Data;
+import com.pingme.model.POIData;
 
 public class POIAdapter extends BaseAdapter {
 	
-	private List<POI_Data> datas;
+	private List<POIData> datas;
 
-	public POIAdapter(List<POI_Data> datas) {
+	public POIAdapter(List<POIData> datas) {
 		super();
 		this.datas = datas;
 	}
@@ -47,16 +47,16 @@ public class POIAdapter extends BaseAdapter {
 		}
 		
 		//Build view
-		POI_Data data = (POI_Data)getItem(position);
+		POIData data = (POIData)getItem(position);
 		
 		ImageView image = (ImageView) cell.findViewById(R.id.imageItem);
-		PingMeApplication.getImageDownloader().download(data.getUrlImage(), image, null, "Adapter");
+		PingMeApplication.getImageDownloader().download(data.getUrl_image(), image, null, "Adapter");
 		
 		TextView text = (TextView) cell.findViewById(R.id.textItem);
 		text.setText(data.getTitle());
 		
 		TextView textDetail = (TextView) cell.findViewById(R.id.detailsItem);
-		textDetail.setText(data.getDescr());
+		textDetail.setText(data.getDescription());
 		
 		return cell;
 	}

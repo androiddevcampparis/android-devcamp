@@ -22,14 +22,14 @@ import android.widget.TextView;
 import com.pingme.adapters.POIAdapter;
 import com.pingme.model.ActionsDetail;
 import com.pingme.model.Coordinate;
-import com.pingme.model.POI_Data;
+import com.pingme.model.POIData;
 import com.pingme.utils.POIListUtil;
 
 
 public class ListPlaceActivity extends ListActivity {
 
 	private final int MAX_POI_DATA_SIZE = 10;
-	private List<POI_Data> poiList;
+	private List<POIData> poiList;
 	
 
 	// ----------------------------------------------------------------------------
@@ -38,7 +38,7 @@ public class ListPlaceActivity extends ListActivity {
     private ServiceConnection onService = new ServiceConnection(){
         public void onServiceConnected( ComponentName className, IBinder rawBinder ){
             PingMeService pingMeService = ( (PingMeService.LocalBinder) rawBinder ).getService();
-            List<POI_Data> list = pingMeService.getPOIList();
+            List<POIData> list = pingMeService.getPOIList();
             poiList = list.subList( Math.max(0,list.size()-MAX_POI_DATA_SIZE), list.size() );
 
             registerReceiver( receiver, new IntentFilter( PingMeService.PING_BROADCAST_POI_DATA ) );
@@ -58,7 +58,7 @@ public class ListPlaceActivity extends ListActivity {
         public void onReceive( Context context, Intent intent ){
         	String action = intent.getAction() ;
             if( PingMeService.PING_BROADCAST_POI_DATA.equals( action ) ){
-                POI_Data poiData = (POI_Data)intent.getSerializableExtra( PingMeService.INTENT_POI_DATA_EXTRA );
+                POIData poiData = (POIData)intent.getSerializableExtra( PingMeService.INTENT_POI_DATA_EXTRA );
                 POIListUtil.enqueuePOI( poiList, poiData, MAX_POI_DATA_SIZE );
                 setDataToList(poiData);
             }
@@ -74,7 +74,7 @@ public class ListPlaceActivity extends ListActivity {
      * Set the list content, or only add a item
      * @param poiData
      */
-    private void setDataToList(POI_Data poiData){
+    private void setDataToList(POIData poiData){
     	if(poiData != null && poiList.size() >= MAX_POI_DATA_SIZE){
     		
     	}
