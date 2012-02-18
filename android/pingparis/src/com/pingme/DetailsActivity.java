@@ -16,7 +16,6 @@ import android.widget.TextView;
 
 public class DetailsActivity extends ListActivity {
 	
-
 	
 	private POI_Data poiData;
 
@@ -40,6 +39,11 @@ public class DetailsActivity extends ListActivity {
 		 //Adapter to list of actions
         getListView().setSelector(R.drawable.highlight_pressed);
         setListAdapter(new ActionsAdapter(poiData));
+        
+        //Reset Location notif to Main Notif
+        if( PingMeApplication.getServiceStatus() && getIntent().getExtras().getBoolean(PingMeService.INTENT_IS_NOTIF_EXTRA, false) ){
+        	 PingMeApplication.createNotifConfig(this);
+        }
 	}
 	
 	@Override
@@ -56,6 +60,7 @@ public class DetailsActivity extends ListActivity {
 	public static PendingIntent getMyLauncher(Context context, POI_Data data){
 		Intent intent = new Intent(context, DetailsActivity.class);
 		intent.putExtra(PingMeService.INTENT_POI_DATA_EXTRA, data);
+		intent.putExtra(PingMeService.INTENT_IS_NOTIF_EXTRA, true);
 		
 		PendingIntent contentIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 		return contentIntent;

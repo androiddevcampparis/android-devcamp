@@ -7,5 +7,8 @@
     <string name="service_on">Service on</string>
 	<string name="service_off">Service off</string>
 	<string name="titleApp">PingMe Configuration</string>
+	
+	<string name="open_config">Configure yours PingMe Notifications</string>
+	<string name="config_running">PingMe is actually running to show you interestings places around you</string>
 
 </resources>

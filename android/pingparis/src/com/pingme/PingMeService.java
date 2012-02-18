@@ -2,6 +2,7 @@ package com.pingme;
 
 
 
+
 import java.util.ArrayList;
 
 import java.util.List;
@@ -34,7 +35,8 @@ public class PingMeService extends Service {
 	
 	public static String PING_BROADCAST_POI_DATA = "com.pingme.PingMeService.PING_BROADCAST_MESSAGE";
 	public static String INTENT_POI_DATA_EXTRA = "com.pingme.PingMeService.INTENT_DATA_EXTRA";
-	
+	public static String INTENT_IS_NOTIF_EXTRA = "com.pingme.PingMeService.INTENT_IS_NOTIF_EXTRA";
+
 	public static String PING_ACTION_LIFECYCLE = "com.pingme.PingMeService.PING_ACTION_LIFECYCLE";
 	public static String PING_ACTION_USER = "com.pingme.PingMeService.PING_ACTION_USER";
 	public static String PING_ACTION_MOCK_LOCATION = "com.pingme.PingMeService.PING_ACTION_MOCK_LOCATION";
@@ -67,12 +69,12 @@ public class PingMeService extends Service {
 	public synchronized List<POI_Data> getPOIList(){
 		return new ArrayList<POI_Data>( pois );
 	}
-	
 
+	
     // ----------------------------------------------------------------------------
 	// Notification MGMT
     // ----------------------------------------------------------------------------
-    private void messageNotification( CharSequence tickerText, POI_Data data ){
+    private void messageNotification( CharSequence tickerText, POI_Data data, int count ){
         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         
         long when = System.currentTimeMillis();
@@ -87,7 +89,10 @@ public class PingMeService extends Service {
         notification.flags |= Notification.FLAG_SHOW_LIGHTS;
         notification.ledARGB = Color.GREEN; 
         notification.ledOffMS = 500; 
-        notification.ledOnMS = 500; 
+        notification.ledOnMS = 500;
+        if(count>1){
+        	notification.number = count;
+        }
         
         notificationManager.notify( R.string.app_name, notification);
     }
@@ -103,15 +108,15 @@ public class PingMeService extends Service {
 	
 	private void processServerResponse( JSONObject json ){
         POI_Data data = new POI_Data();
-        data.setId("uid1");
+        data.setId("uid"+System.currentTimeMillis());
         data.setTitle("Tour Effeil");
         data.setDescr("La plus grand tour de Paris");
         data.setUrlImage("https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Tour_Eiffel_Wikimedia_Commons.jpg/220px-Tour_Eiffel_Wikimedia_Commons.jpg");
         
         
         synchronized( pois ){ 
-        	if( POIListUtil.contains( pois, data )  )
-        		messageNotification( getString(R.string.titleApp), data );
+        	if( !POIListUtil.contains( pois, data )  )
+        		messageNotification( getString(R.string.titleApp), data, 1 );
         	POIListUtil.enqueuePOI(pois, data, MAX_POI_DATA_SIZE);
         }
         
@@ -141,7 +146,7 @@ public class PingMeService extends Service {
 					prevLat = location.getLatitude();
 					prevLng = location.getLongitude();
 					queryLatLng( location.getLatitude(), location.getLongitude() );
-					
+										
 					Intent broadCastIntent = new Intent( PING_BROADCAST_LOCATION );
 				    broadCastIntent.putExtra( INTENT_LOCATION_EXTRA, location );
 				    sendBroadcast( broadCastIntent );
@@ -158,9 +163,14 @@ public class PingMeService extends Service {
 
 			@Override
 			public void onStatusChanged(String str, int arg1, Bundle arg2) {				
-			}	    	
+			}
 		} );
-
+	    
+	    //Add permanent icon in status bar
+//	    Notification notifStatusBar = new Notification(R.drawable.status_icon, getString(R.string.app_name), System.currentTimeMillis());
+//	    notifStatusBar.flags |= Notification.FLAG_NO_CLEAR | Notification.FLAG_ONGOING_EVENT;
+//	    NotificationManager notifier = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+//	    notifier.notify(1, notifStatusBar);
 	}
 	
     // ----------------------------------------------------------------------------
@@ -171,15 +181,14 @@ public class PingMeService extends Service {
 		String action = intent.getAction();
 		
 		Log.v("PingMeService", "StartCommand with action " + action );
-		Toast.makeText( this, action, Toast.LENGTH_SHORT).show();
-		
 		
 		if( PING_ACTION_USER.equals( action ) ){
-			
+			Toast.makeText( this, "User Action", Toast.LENGTH_SHORT).show();			
 		}
 		else if( PING_ACTION_MOCK_LOCATION.equals( action ) ){
 			double lat = intent.getDoubleExtra("lat", 0 );
-			double lng = intent.getDoubleExtra("lon", 0 );
+			double lng = intent.getDoubleExtra("lng", 0 );
+			Toast.makeText( this, "GeoLoc "+ lat + "/"+lng , Toast.LENGTH_SHORT).show();
 			queryLatLng( lat, lng );
 		}
 
@@ -196,6 +205,8 @@ public class PingMeService extends Service {
     
     @Override
     public void onDestroy(){
+    	//remove permanent icon in status bar
+    	//((NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE)).cancel(1);
     }
 
 
