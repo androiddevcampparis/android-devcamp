@@ -13,7 +13,7 @@ public class ActionsDetail {
 	
 	private String name;
 	private int idRes;
-	private int idSync;
+	private int idType;
 	private Intent action;
 	
 	public static List<ActionsDetail> getActions() {
@@ -44,12 +44,12 @@ public class ActionsDetail {
 		this.idRes = idRes;
 	}
 
-	public int getIdSync() {
-		return idSync;
+	public int getIdType() {
+		return idType;
 	}
 
-	public void setIdSync(int idSync) {
-		this.idSync = idSync;
+	public void setIdType(int idSync) {
+		this.idType = idSync;
 	}
 
 	public Intent getAction() {
@@ -60,11 +60,11 @@ public class ActionsDetail {
 		this.action = action;
 	}
 
-	public ActionsDetail(String name, int idRes, int idSync, Intent action) {
+	public ActionsDetail(String name, int idRes, int idType, Intent action) {
 		super();
 		this.name = name;
 		this.idRes = idRes;
-		this.idSync = idSync;
+		this.idType = idType;
 		this.action = action;
 	}
 	

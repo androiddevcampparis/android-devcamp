@@ -1,6 +1,7 @@
 package com.pingme;
 
 import com.pingme.model.POI_Data;
+import com.pingme.utils.ImageDownloader;
 
 import android.app.Activity;
 import android.app.PendingIntent;
@@ -31,7 +32,8 @@ public class DetailsActivity extends Activity {
 		
 		title.setText(poiData.getTitle());
 		descr.setText(poiData.getDescr());
-		image.setImageURI(Uri.parse(poiData.getUrlImage()));
+		
+		new ImageDownloader(this).download(poiData.getUrlImage(), image, null, "DetailsActivity");
 	}
 	
 	/**
