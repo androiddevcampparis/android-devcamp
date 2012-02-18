@@ -3,6 +3,7 @@ package com.pingme;
 import java.util.List;
 
 import com.pingme.model.Preferences;
+import com.pingme.utils.ImageDownloader;
 
 import android.app.Application;
 import android.content.Context;
@@ -15,7 +16,11 @@ public class PingMeApplication extends Application {
 	
 	private static final String SERVICE_STATUS = "pingme.SERVER_STATUS";
 	private static SharedPreferences preferences;
-
+	private static ImageDownloader imageDownloader;
+	
+	private static double lat;
+	private static double lng;
+	
 	public static boolean getServiceStatus(){
 		return preferences.getBoolean( SERVICE_STATUS, true );
 	}
@@ -41,6 +46,7 @@ public class PingMeApplication extends Application {
 	public void onCreate() {
 		super.onCreate();
 		preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+		imageDownloader = new ImageDownloader(getApplicationContext());
 		
 		setServiceStatus( this, getServiceStatus() );
 		
@@ -59,6 +65,26 @@ public class PingMeApplication extends Application {
 	
 	public static boolean getPrefStatus(String name){
 		return preferences.getBoolean(name, false);
+	}
+
+	public static ImageDownloader getImageDownloader() {
+		return imageDownloader;
+	}
+
+	public static double getLat() {
+		return lat;
+	}
+
+	public static void setLat(double lat) {
+		PingMeApplication.lat = lat;
+	}
+
+	public static double getLng() {
+		return lng;
+	}
+
+	public static void setLng(double lng) {
+		PingMeApplication.lng = lng;
 	}
 	
 	
