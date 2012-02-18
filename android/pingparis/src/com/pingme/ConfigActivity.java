@@ -1,13 +1,16 @@
 package com.pingme;
 
-import android.app.Activity;
+import android.app.ListActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Toast;
+import android.widget.ListView;
 import android.widget.ToggleButton;
 
-public class ConfigActivity extends Activity {
+import com.pingme.adapters.PreferencesAdapter;
+import com.pingme.model.Preferences;
+
+public class ConfigActivity extends ListActivity {
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -27,8 +30,17 @@ public class ConfigActivity extends Activity {
         });
         
         //Adapter to list of choices
-        
+        getListView().setSelector(R.drawable.highlight_pressed);
+        setListAdapter(new PreferencesAdapter());
     }
+
+	@Override
+	protected void onListItemClick(ListView l, View v, int position, long id) {
+		Preferences pref = Preferences.getPreferences().get(position);
+		pref.setChecked(!pref.isChecked());
+		PreferencesAdapter.setStatusIcon(v, pref);
+		PingMeApplication.savePref(Preferences.getPreferences());
+	}
     
     
 }

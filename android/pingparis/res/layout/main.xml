@@ -8,26 +8,33 @@
 	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
 	    android:orientation="vertical" 
-	    android:padding="5dip">
+	    android:padding="5dip"
+	    android:background="@drawable/title_bg">
 	    
 	    <TextView android:id="@+id/titleBar"
 	        android:layout_width="fill_parent"
 	        android:layout_height="wrap_content"
-	        android:text="" />
+	        android:text="@string/titleApp" />
 	    
     </LinearLayout>
     
         
-    <ToggleButton android:id="@+id/statusService"
-        android:layout_width="fill_parent"
+    <ToggleButton 
+        android:layout_marginTop="10dip"
+        android:layout_marginBottom="10dip"
+        android:id="@+id/statusService"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textOn="@string/service_on"
-        android:textOff="@string/service_off"/>
+        android:textOff="@string/service_off"
+        android:layout_gravity="center_horizontal"/>
     
     <ListView 
+        android:layout_margin="10dip"
         android:id="@+id/android:list"
         android:layout_width="fill_parent"
-	    android:layout_height="wrap_content">
+	    android:layout_height="wrap_content"
+	    android:background="@drawable/list_bg">
     </ListView>
 
 </LinearLayout>

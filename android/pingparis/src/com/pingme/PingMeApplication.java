@@ -1,5 +1,9 @@
 package com.pingme;
 
+import java.util.List;
+
+import com.pingme.model.Preferences;
+
 import android.app.Application;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -29,8 +33,22 @@ public class PingMeApplication extends Application {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		
 		preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+	}
+
+	public static void savePref(List<Preferences> preferences2) {
+		for(Preferences pref: preferences2){
+			savePref(pref);
+		}
+	}
+	
+	public static void savePref(Preferences pref) {
+		Editor editor = preferences.edit();
+		editor.putBoolean(pref.getName(), pref.isChecked());
+	}
+	
+	public static boolean getPrefStatus(String name){
+		return preferences.getBoolean(name, false);
 	}
 	
 	
