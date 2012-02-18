@@ -1,6 +1,5 @@
 package com.pingme;
 
-import android.app.Activity;
 import android.content.Intent;
 
 import android.app.ListActivity;
