@@ -1,11 +1,12 @@
 package com.pingme.model;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.sax.StartElementListener;
 import android.util.Log;
 
 import com.pingme.PingMeApplication;
@@ -44,7 +45,7 @@ public abstract class ActionsDetail {
 		this.idType = idSync;
 	}
 
-	public abstract Intent getAction();
+	public abstract void execute(Context context);
 	
 	public ActionsDetail(String name, int idRes, int idType, POI_Data data) {
 		super();
@@ -62,11 +63,11 @@ public abstract class ActionsDetail {
 		}
 		
 		@Override
-		public Intent getAction() {
+		public  void execute(Context context) {
 			String uriMaps = "http://maps.google.com/maps?saddr="+PingMeApplication.getLat()+","+PingMeApplication.getLat()+"&daddr="+data.getLat()+","+data.getLng();
 			Log.i("ActionDetails", "uri:"+ uriMaps);
 			Intent intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(uriMaps));
-			return intent;
+			context.startActivity(intent);
 		}
 	}
 	
@@ -77,10 +78,10 @@ public abstract class ActionsDetail {
 		}
 
 		@Override
-		public Intent getAction() {
+		public void execute(Context context) {
 			Intent intent = new Intent(Intent.ACTION_SEARCH);
 			intent.putExtra(SearchManager.QUERY, name);
-			return intent;
+			context.startActivity(intent);
 		}
 	}
 	
@@ -91,13 +92,13 @@ public abstract class ActionsDetail {
 		}
 
 		@Override
-		public Intent getAction() {
+		public void execute(Context context) {
 			Intent shareIntent = new Intent(Intent.ACTION_SEND);
 			shareIntent.setType("text/plain");
 			shareIntent.putExtra(Intent.EXTRA_SUBJECT, "I recommand you "+data.getTitle());
 			shareIntent.putExtra(Intent.EXTRA_TEXT, data.getDescr());
 			
-			return shareIntent;
+			context.startActivity(shareIntent);
 		}
 	}
 }

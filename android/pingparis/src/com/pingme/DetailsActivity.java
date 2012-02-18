@@ -1,6 +1,7 @@
 package com.pingme;
 
 import com.pingme.adapters.ActionsAdapter;
+import com.pingme.model.ActionsDetail;
 import com.pingme.model.POI_Data;
 import com.pingme.utils.ImageDownloader;
 
@@ -30,9 +31,11 @@ public class DetailsActivity extends ListActivity {
 		final TextView title = (TextView) findViewById(R.id.titleEvent);
 		final TextView descr = (TextView) findViewById(R.id.descrEvent);
 		final ImageView image = (ImageView) findViewById(R.id.imageEvent);
+		final TextView titleTopbar = (TextView) findViewById(R.id.titleBar);
 		
 		title.setText(poiData.getTitle());
 		descr.setText(poiData.getDescr());
+		titleTopbar.setText(getString(R.string.titleApp_list));
 		
 		new ImageDownloader(this).download(poiData.getUrlImage(), image, null, "DetailsActivity");
 		
@@ -48,7 +51,12 @@ public class DetailsActivity extends ListActivity {
 	
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
-		
+		try {
+			ActionsDetail details = poiData.getActions().get(position);
+			details.execute(this);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	/**

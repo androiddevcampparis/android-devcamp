@@ -25,6 +25,8 @@ public class PingMeApplication extends Application {
 	private static double lat;
 	private static double lng;
 	
+	private static boolean firstLaunch = true;
+	
 	public static boolean getServiceStatus(){
 		return preferences.getBoolean( SERVICE_STATUS, true );
 	}
@@ -55,6 +57,7 @@ public class PingMeApplication extends Application {
 		super.onCreate();
 		preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 		imageDownloader = new ImageDownloader(getApplicationContext());
+		firstLaunch = preferences.getBoolean("firstLaunch", true);
 		
 		setServiceStatus( getApplicationContext(), getServiceStatus() );
 	}
@@ -107,6 +110,17 @@ public class PingMeApplication extends Application {
 
 	public static void setLng(double lng) {
 		PingMeApplication.lng = lng;
+	}
+
+	public static boolean isFirstLaunch() {
+		return firstLaunch;
+	}
+
+	public static void setLaunchedOnce() {
+		firstLaunch = false;
+		Editor editor = preferences.edit();
+		editor.putBoolean( "firstLaunch", false);
+		editor.commit();
 	}
 	
 	

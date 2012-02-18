@@ -13,6 +13,8 @@ import android.content.ServiceConnection;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.pingme.adapters.POIAdapter;
 import com.pingme.model.POI_Data;
@@ -34,7 +36,7 @@ public class ListPlaceActivity extends ListActivity {
         public void onServiceConnected( ComponentName className, IBinder rawBinder ){
             PingMeService pingMeService = ( (PingMeService.LocalBinder) rawBinder ).getService();
             List<POI_Data> list = pingMeService.getPOIList();
-            poiList = list.subList( list.size()-MAX_POI_DATA_SIZE, list.size() );
+            poiList = list.subList( Math.max(0,list.size()-MAX_POI_DATA_SIZE), list.size() );
 
             registerReceiver( receiver, new IntentFilter( PingMeService.PING_BROADCAST_POI_DATA ) );
             registerReceiver( receiver, new IntentFilter( PingMeService.PING_BROADCAST_LOCATION ) );
@@ -82,6 +84,14 @@ public class ListPlaceActivity extends ListActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if(PingMeApplication.isFirstLaunch()){
+        	PingMeApplication.setLaunchedOnce();
+        	
+        	//TODO launch tutorial and add to Menu
+        	Intent intent = new Intent(this, ConfigActivity.class);
+        	startActivity(intent);
+        }
+        
         setContentView(R.layout.activity_listplaces);
     }
 
@@ -101,5 +111,22 @@ public class ListPlaceActivity extends ListActivity {
     public void onDestroy(){
         super.onDestroy();
     }
+    
+    @Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		if (item.getTitle().equals(getString(R.string.menu_configure))) {
+			Intent intent = new Intent(this, ConfigActivity.class);
+			startActivity(intent);
+			return true;
+		}
+		return false;
+	}
+	
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		menu.clear();
+		menu.add(R.string.menu_configure).setIcon(android.R.drawable.ic_menu_preferences);
+		return super.onPrepareOptionsMenu(menu);
+	}
     
 }
