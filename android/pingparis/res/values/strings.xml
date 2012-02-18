@@ -11,4 +11,5 @@
 	<string name="open_config">Configure yours PingMe Notifications</string>
 	<string name="config_running">PingMe is actually running to show you interestings places around you</string>
 
+	 <string name="menu_openlist">Go to Places List</string>
 </resources>

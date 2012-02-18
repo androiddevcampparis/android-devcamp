@@ -14,11 +14,9 @@ import android.location.Location;
 import android.os.Bundle;
 import android.os.IBinder;
 
+import com.pingme.adapters.POIAdapter;
 import com.pingme.model.POI_Data;
 import com.pingme.utils.POIListUtil;
-
-
-
 
 
 public class ListPlaceActivity extends ListActivity {
@@ -40,7 +38,7 @@ public class ListPlaceActivity extends ListActivity {
 
             registerReceiver( receiver, new IntentFilter( PingMeService.PING_BROADCAST_POI_DATA ) );
             registerReceiver( receiver, new IntentFilter( PingMeService.PING_BROADCAST_LOCATION ) );
-
+            setDataToList(null);
         }
         public void onServiceDisconnected( ComponentName className ){
             unregisterReceiver( receiver );
@@ -57,12 +55,25 @@ public class ListPlaceActivity extends ListActivity {
             if( PingMeService.PING_BROADCAST_POI_DATA.equals( action ) ){
                 POI_Data poiData = (POI_Data)intent.getSerializableExtra( PingMeService.INTENT_POI_DATA_EXTRA );
                 POIListUtil.enqueuePOI( poiList, poiData, MAX_POI_DATA_SIZE );
+                setDataToList(poiData);
             }
             if( PingMeService.PING_BROADCAST_LOCATION.equals( action ) ){
                 currentLocation = (Location)intent.getSerializableExtra( PingMeService.INTENT_LOCATION_EXTRA );
             }
         }
     };
+    
+    /**
+     * Set the liste content, or only add a item
+     * @param poiData
+     */
+    private void setDataToList(POI_Data poiData){
+    	if(poiData != null && poiList.size() >= MAX_POI_DATA_SIZE){
+    		
+    	}
+    	
+    	getListView().setAdapter(new POIAdapter(poiList));
+    }
 
     
     // ----------------------------------------------------------------------------
@@ -71,6 +82,7 @@ public class ListPlaceActivity extends ListActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_listplaces);
     }
 
     @Override

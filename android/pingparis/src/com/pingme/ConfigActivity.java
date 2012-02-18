@@ -9,6 +9,8 @@ import android.app.ListActivity;
 import android.app.PendingIntent;
 
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ListView;
@@ -62,5 +64,23 @@ public class ConfigActivity extends ListActivity {
 		PendingIntent contentIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 		return contentIntent;
 	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		if (item.getTitle().equals(getString(R.string.menu_openlist))) {
+			Intent intent = new Intent(this, ListPlaceActivity.class);
+			startActivity(intent);
+			return true;
+		}
+		return false;
+	}
+	
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		menu.clear();
+		menu.add(R.string.menu_openlist).setIcon(android.R.drawable.ic_menu_gallery);
+		return super.onPrepareOptionsMenu(menu);
+	}
+
     
 }

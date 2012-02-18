@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="vertical" >
-
-    <RelativeLayout
+    
+     <LinearLayout
 	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
 	    android:orientation="vertical" 
@@ -14,25 +14,9 @@
 	    <TextView android:id="@+id/titleBar"
 	        android:layout_width="fill_parent"
 	        android:layout_height="wrap_content"
-	        android:text="@string/titleApp"
-	        android:layout_centerInParent="true" />
+	        android:text="@string/titleApp" />
 	    
-<!-- 	    <ImageButton android:id="@+id/imageItem"
-	        android:layout_width="30dip"
-		    android:layout_height="30dip"/> -->
-	    
-    </RelativeLayout>
-    
-        
-    <ToggleButton 
-        android:layout_marginTop="10dip"
-        android:layout_marginBottom="10dip"
-        android:id="@+id/statusService"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textOn="@string/service_on"
-        android:textOff="@string/service_off"
-        android:layout_gravity="center_horizontal"/>
+    </LinearLayout>
     
     <ListView 
         android:layout_margin="10dip"
