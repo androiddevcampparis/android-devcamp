@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+	    
+	     <TextView android:id="@+id/titleBar"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="@string/asso"
+	        android:padding="10dip"
+	        android:layout_centerHorizontal="true"
+	        android:layout_centerVertical="true"
+	       	style="@style/titlebar_element" />
+	     
+	      <ImageView
+	    android:id="@+id/datagouv"
+        android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:src="@drawable/datagouvfr"
+	    android:layout_marginLeft="5dip"
+        android:layout_centerVertical="true"
+        android:clickable="true"
+		/>
+	       <ImageView android:id="@+id/datapublica"
+        android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:src="@drawable/datapublica"
+	    android:layout_marginLeft="5dip"
+        android:layout_centerVertical="true"
+        android:clickable="true"
+		/>
+	        <ImageView android:id="@+id/opendatasoft"
+        android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:src="@drawable/opendatasoft"
+	    android:layout_marginLeft="5dip"
+        android:layout_centerVertical="true"
+        android:clickable="true"
+		/>
+	         <ImageView android:id="@+id/parisdata"
+        android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:src="@drawable/parisdata"
+	    android:layout_marginLeft="5dip"
+        android:layout_centerVertical="true"
+        android:clickable="true"
+		/>
+	         
+	    <ImageView android:id="@+id/logopaug"
+        android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:src="@drawable/logopaug"
+	    android:layout_marginLeft="5dip"
+        android:layout_centerVertical="true"
+        android:clickable="true"/>
+	  	    
+	    
+	     <TextView android:id="@+id/titleBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/copy"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+       	style="@style/titlebar_element" />
+	     
+</LinearLayout>
+</ScrollView>
