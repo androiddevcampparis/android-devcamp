@@ -134,13 +134,6 @@ public class PingMeService extends Service {
 	}
 	
 	public void processServerResponse( POIData data ){
-		/*
-        data = new POIData();
-        data.setId("uid"+System.currentTimeMillis());
-        data.setTitle("Tour Effeil");
-        data.setDescription("La plus grand tour de Paris");
-        data.setUrl_image("https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Tour_Eiffel_Wikimedia_Commons.jpg/220px-Tour_Eiffel_Wikimedia_Commons.jpg");
-        */
         
         synchronized( pois ){ 
         	if( !POIListUtil.contains( pois, data )  )
