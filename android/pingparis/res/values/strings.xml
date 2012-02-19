@@ -9,9 +9,9 @@
 	<string name="notification_sound_off">Notification Sound Off</string>
 		
 	
-	<string name="titleApp">PingMe Configuration</string>
-	<string name="titleApp_list">Last Places</string>
-	
+	<string name="titleApp">PingMe</string>
+	<string name="title_setting">PingMe Settings</string>
+		
 	<string name="open_config">PingMe Service</string>
 	<string name="config_running">Location service running in background.</string>
 

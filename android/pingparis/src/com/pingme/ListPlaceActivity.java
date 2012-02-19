@@ -95,7 +95,7 @@ public class ListPlaceActivity extends ListActivity {
         getListView().setSelector(R.drawable.highlight_pressed);
         
         final TextView titleTopbar = (TextView) findViewById(R.id.titleBar);
-        titleTopbar.setText(getString(R.string.titleApp_list));
+        titleTopbar.setText(getString(R.string.titleApp));
         
         bindService( new Intent( this, PingMeService.class ), onService, BIND_AUTO_CREATE );
         
@@ -136,6 +136,11 @@ public class ListPlaceActivity extends ListActivity {
         super.onDestroy();
     	unbindService( onService );
     }
+
+    
+    // ----------------------------------------------------------------------------
+	// Menu
+    // ----------------------------------------------------------------------------
     
     @Override
 	public boolean onOptionsItemSelected(MenuItem item) {
