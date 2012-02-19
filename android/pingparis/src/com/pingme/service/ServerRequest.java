@@ -22,6 +22,7 @@ import org.json.JSONObject;
 import android.util.Log;
 
 import com.pingme.model.POIData;
+import com.pingme.utils.Utils;
 
 public class ServerRequest {
 
@@ -60,7 +61,7 @@ public class ServerRequest {
 		if (entity != null) 
 		{
 			InputStream instream = entity.getContent();
-			String stringResult = streamToString(instream);
+			String stringResult = Utils.streamToString(instream);
 			
 			return parseJSON( stringResult );
 					
@@ -87,31 +88,4 @@ public class ServerRequest {
 		
 		return data;		
 	}
-	
-	private final static int bufferSize = 8192;
-
-	public static String streamToString(InputStream is)
-			throws UnsupportedEncodingException {
-
-		BufferedReader reader = new BufferedReader( new InputStreamReader(is, "UTF-8"), bufferSize );
-		StringBuilder sb = new StringBuilder();
-
-		String line = null;
-		try {
-			while ((line = reader.readLine()) != null) {
-					sb.append(line + "\n");
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				is.close();
-				reader.close();
-			} catch (IOException e) {
-				Log.e("ServerRequest", e.getMessage(), e );
-			}
-		}
-		return sb.toString();
-	}
-
 }
