@@ -15,17 +15,13 @@ public abstract class ActionsDetail {
 
 	private static List<ActionsDetail> actions;
 	
-	protected String name;
+	protected int nameId;
 	protected int idRes;
 	protected int idType;
 	protected POIData data;
 
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
+	public int getName() {
+		return nameId;
 	}
 
 	public int getIdRes() {
@@ -46,9 +42,9 @@ public abstract class ActionsDetail {
 
 	public abstract void execute(Context context);
 	
-	public ActionsDetail(String name, int idRes, int idType, POIData data) {
+	public ActionsDetail(int name, int idRes, int idType, POIData data) {
 		super();
-		this.name = name;
+		this.nameId = name;
 		this.idRes = idRes;
 		this.idType = idType;
 		this.data = data;
@@ -58,7 +54,7 @@ public abstract class ActionsDetail {
 	public static class MapsDriveAction extends ActionsDetail{
 
 		public MapsDriveAction(POIData data) {
-			super("Maps", R.drawable.maps, 100,data);
+			super(R.string.maps, R.drawable.maps, 100,data);
 		}
 		
 		@Override
@@ -75,7 +71,7 @@ public abstract class ActionsDetail {
 	public static class SearchAction extends ActionsDetail{
 
 		public SearchAction(POIData data) {
-			super("Search", R.drawable.search, 102,data);
+			super(R.string.search, R.drawable.search, 102,data);
 		}
 
 		@Override
@@ -89,7 +85,7 @@ public abstract class ActionsDetail {
 	public static class ShareAction extends ActionsDetail{
 
 		public ShareAction(POIData data) {
-			super("Share", R.drawable.share_img, 103,data);
+			super(R.string.share, R.drawable.share_img, 103,data);
 		}
 
 		@Override
@@ -106,7 +102,7 @@ public abstract class ActionsDetail {
 	public static class WikipediaAction extends ActionsDetail{
 
 		public WikipediaAction(POIData data) {
-			super("wikipedia", R.drawable.wikipedia, 104, data);
+			super(R.string.wikipedia, R.drawable.wikipedia, 104, data);
 		}
 
 		@Override
@@ -119,7 +115,7 @@ public abstract class ActionsDetail {
 	public static class LocatedPhotosAction extends ActionsDetail{
 
 		public LocatedPhotosAction(POIData data) {
-			super("photos", R.drawable.pictures_intent, 105, data);
+			super(R.string.photos, R.drawable.pictures_intent, 105, data);
 		}
 
 		@Override
@@ -134,7 +130,7 @@ public abstract class ActionsDetail {
 	public static class YoutubeAction extends ActionsDetail{
 
 		public YoutubeAction(POIData data) {
-			super("youtube", R.drawable.youtube, 106, data);
+			super(R.string.youtube, R.drawable.youtube, 106, data);
 		}
 
 		@Override

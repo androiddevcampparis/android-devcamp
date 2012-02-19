@@ -86,6 +86,8 @@ public class PingMeApplication extends Application {
 		firstLaunch = preferences.getBoolean("firstLaunch", true);
 		
 		Intent photoIntent = new Intent("com.google.android.radar.SHOW_RADAR");
+		photoIntent.putExtra("latitude", 48f);
+		photoIntent.putExtra("longitude", 2f);
 		isPhotoIntentCallable = Utils.isCallable(photoIntent, this);
 		
 		setServiceStatus( getApplicationContext(), getServiceStatus() );

@@ -19,4 +19,11 @@
 	 <string name="menu_configure">Go to Configure List</string>
 	 
 	 <string name="detail_place">Location Details</string>
+	 
+	 <string name="maps">Go and see with Maps</string>
+	 <string name="search">Search more Infos</string>
+	 <string name="share">Share the place</string>
+	 <string name="wikipedia">Wikipedia Link</string>
+	 <string name="photos">Photos in radar View</string>
+	 <string name="youtube">Videos about</string>
 </resources>
