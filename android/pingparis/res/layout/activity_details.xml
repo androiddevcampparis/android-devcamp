@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
@@ -16,8 +20,7 @@
 		    android:layout_height="40dip"
 		    android:src="@drawable/ic_home"
 		    android:layout_marginLeft="5dip"
-	        android:layout_centerVertical="true"
-		/> 
+	        android:layout_centerVertical="true"/> 
         
 	    
 	    <TextView android:id="@+id/titleBar"
@@ -26,8 +29,7 @@
 	        android:text="@string/titleApp"
 	        android:layout_centerHorizontal="true"
 	        android:layout_centerVertical="true"
-	       	style="@style/titlebar_element" 
-           />
+	       	style="@style/titlebar_element" />
 	
 	    <LinearLayout
             android:layout_width="wrap_content"
@@ -35,8 +37,7 @@
 			android:layout_centerVertical="true"
 			android:layout_alignParentRight="true"
 			
-			android:gravity="center_vertical"
-	    	>
+			android:gravity="center_vertical">
 	    	
 	        
 	    	<TextView 
@@ -83,9 +84,9 @@
     <Gallery
 		    android:id="@+id/gallery"
 		    android:layout_width="fill_parent"
-		    android:layout_height="120dip"
-		    android:layout_marginTop="15dip"
-		    android:layout_marginBottom="15dip"
+		    android:layout_height="wrap_content"
+		    android:layout_marginTop="10dip"
+		    android:layout_marginBottom="8dip"
 		/>
     
     <TextView 
@@ -97,15 +98,22 @@
 	    android:ellipsize="marquee"
 	    android:layout_marginBottom="5dip"/>
     
+    <LinearLayout 
+        android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+        android:background="@drawable/list_bg"
+        android:id="@+id/listAction"
+        android:orientation="vertical">
+    </LinearLayout>
     
-    
-    <ListView 
+<!--     <ListView 
         android:layout_margin="10dip"
         android:id="@+id/android:list"
         android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
 	    android:background="@drawable/list_bg"
 	    android:cacheColorHint="@android:color/transparent">
-    </ListView>
+    </ListView> -->
 
 </LinearLayout>
+</ScrollView>

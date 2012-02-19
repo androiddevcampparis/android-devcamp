@@ -114,7 +114,6 @@ public class ListPlaceActivity extends ListActivity {
 
     @Override
     public void onResume(){
-    	
         super.onResume();
         
         reloadAdapterDataFromService();

@@ -47,7 +47,7 @@ public class ImageAdapter extends BaseAdapter {
         imageView.setImageResource(R.drawable.temp_img);
         PingMeApplication.getImageDownloader().download(datas.get(position), imageView, null, "ImageAdapter");
         
-        imageView.setLayoutParams(new Gallery.LayoutParams(180, 130));
+        imageView.setLayoutParams(new Gallery.LayoutParams(200, 150));
         imageView.setScaleType(ImageView.ScaleType.FIT_XY);
         imageView.setBackgroundResource(mGalleryItemBackground);
 

@@ -6,6 +6,7 @@ import java.util.List;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ListActivity;
@@ -20,6 +21,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.view.View.OnTouchListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -39,7 +42,7 @@ import com.pingme.service.DownloaderCallback;
 import com.pingme.service.WikipediaAsyncTask;
 import com.pingme.utils.Utils;
 
-public class DetailsActivity extends ListActivity implements DownloaderCallback{
+public class DetailsActivity extends Activity implements DownloaderCallback{
 	
 	public Button plusUnBtn;
 	private POIData poiData;
@@ -125,8 +128,32 @@ public class DetailsActivity extends ListActivity implements DownloaderCallback{
 	    });
 		
 		//Adapter to list of actions
-        getListView().setSelector(R.drawable.highlight_pressed);
-        setListAdapter(new ActionsAdapter(poiData));
+//        getListView().setSelector(R.drawable.highlight_pressed);
+//        setListAdapter(new ActionsAdapter(poiData));
+	    ViewGroup listView = (ViewGroup) findViewById(R.id.listAction);
+	    List<ActionsDetail> actions = poiData.getActions();
+	    boolean first = true;
+	    
+	    for(final ActionsDetail action: actions){
+	    	if(!first){
+	    		getLayoutInflater().inflate(R.layout.separator, listView);
+	    	}
+	    	View view = getLayoutInflater().inflate(R.layout.item_action, null);
+	    	listView.addView(view);
+	    	
+	    	ImageView image = (ImageView) view.findViewById(R.id.imageItem);
+			image.setImageResource(action.getIdRes());
+			
+			TextView text = (TextView) view.findViewById(R.id.textItem);
+			text.setText(action.getName());
+			
+			view.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					action.execute(DetailsActivity.this);
+				}
+			});
+	    }
         
         if(Utils.isEmpty(poiData.getWiki_url())){
         	
@@ -139,7 +166,7 @@ public class DetailsActivity extends ListActivity implements DownloaderCallback{
 			
 			@Override
 			public void loadingFinished(List<Object> datas) {
-				setListAdapter(new ActionsAdapter(poiData));
+				//setListAdapter(new ActionsAdapter(poiData));
 			}
 		}, poiData).execute(null);
         }
@@ -149,25 +176,16 @@ public class DetailsActivity extends ListActivity implements DownloaderCallback{
         	 PingMeApplication.createNotifConfig(this);
         }
 	}
-	
-	
-	
 
-
-
-
-
-
-	@Override
-	protected void onListItemClick(ListView l, View v, int position, long id) {
-		try {
-			ActionsDetail details = poiData.getActions().get(position);
-			details.execute(this);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
+//	@Override
+//	protected void onListItemClick(ListView l, View v, int position, long id) {
+//		try {
+//			ActionsDetail details = poiData.getActions().get(position);
+//			details.execute(this);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//	}
 	
 	
 	/**
