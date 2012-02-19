@@ -1,24 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	    android:layout_width="fill_parent"
-	    android:layout_height="50dip"
-	    android:orientation="horizontal"
-	    android:padding="5dip"
-	    android:background="@drawable/title_bg">
-	    
-        <ImageView
-	        android:layout_width="40dip"
-		    android:layout_height="40dip"
-		    android:src="@drawable/ic_home"
-		    android:layout_marginLeft="5dip"
-		    android:scaleType="centerCrop"/>
-	    
-	    <TextView android:id="@+id/titleBar"
-	        android:layout_width="fill_parent"
-	        android:layout_height="wrap_content"
-	        android:text="@string/titleApp"
-	        android:gravity="center"
-	        android:layout_gravity="center"
-	        style="@style/titlebar_element" />
-	    
-    </LinearLayout>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="50dip"
+    
+    android:padding="5dip"
+    android:background="@drawable/title_bg">
+    
+       <ImageView
+        android:layout_width="40dip"
+	    android:layout_height="40dip"
+	    android:src="@drawable/ic_home"
+	    android:layout_marginLeft="5dip"
+        android:layout_centerVertical="true"
+	/>
+    
+    <TextView android:id="@+id/titleBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/titleApp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+       	style="@style/titlebar_element" 
+          />
+</RelativeLayout>
