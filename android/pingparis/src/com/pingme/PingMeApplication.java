@@ -2,7 +2,8 @@ package com.pingme;
 
 import java.util.List;
 
-import com.pingme.model.Preferences;
+import com.pingme.adapters.CategoriesAdapter;
+import com.pingme.model.Category;
 import com.pingme.utils.ImageDownloader;
 import com.pingme.utils.Utils;
 
@@ -21,6 +22,7 @@ public class PingMeApplication extends Application {
 	
 	private static final String SERVICE_STATUS = "pingme.SERVICE_STATUS";
 	private static final String NOTIFICATION_SOUND = "pingme.NOTIFICATION_SOUND";
+	private static final String CATEGORY_PREFIX = "pingme.CATEGORY.";
 	
 	private static SharedPreferences preferences;
 	private static ImageDownloader imageDownloader;
@@ -88,6 +90,7 @@ public class PingMeApplication extends Application {
 		
 		setServiceStatus( getApplicationContext(), getServiceStatus() );
 		setNotificationSound( getApplicationContext(), getNotificationSound() );
+		setCategories( getApplicationContext(), Category.getCategories() );
 	}
 	
 	public static void createNotifConfig(Context context){
@@ -105,19 +108,26 @@ public class PingMeApplication extends Application {
 		notificationManager.cancel(R.string.app_name);
 	}
 
-	public static void savePref(List<Preferences> preferences2) {
-		for(Preferences pref: preferences2){
-			savePref(pref);
+	public static void setCategories( Context context, List<Category> categories) {
+		for(Category category: categories){
+			saveCategory(category);
 		}
+		
+		Intent serviceIntent = new Intent( PingMeService.PING_ACTION_UI_CATEGORIES );
+		serviceIntent.setClassName( context, "com.pingme.PingMeService" );
+
+		Category[] catArray = categories.toArray(new Category[0]) ;
+		serviceIntent.putExtra( PingMeService.INTENT_CATEGORIES_EXTRA,  catArray );
+		context.startService( serviceIntent );			
 	}
 	
-	public static void savePref(Preferences pref) {
+	private static void saveCategory(Category category) {
 		Editor editor = preferences.edit();
-		editor.putBoolean(pref.getName(), pref.isChecked());
+		editor.putBoolean(CATEGORY_PREFIX+category.getIdSync(), category.isChecked());
+		editor.commit();
 	}
-	
-	public static boolean getPrefStatus(String name){
-		return preferences.getBoolean(name, false);
+	public static void loadCategory(Category category){
+		category.setChecked( preferences.getBoolean(CATEGORY_PREFIX+category.getIdSync(), category.isChecked() ) );
 	}
 
 	public static ImageDownloader getImageDownloader() {

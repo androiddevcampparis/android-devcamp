@@ -16,9 +16,9 @@ import android.view.View.OnClickListener;
 import android.widget.ListView;
 import android.widget.ToggleButton;
 
-import com.pingme.adapters.PreferencesAdapter;
+import com.pingme.adapters.CategoriesAdapter;
 
-import com.pingme.model.Preferences;
+import com.pingme.model.Category;
 
 public class ConfigActivity extends ListActivity {
     /** Called when the activity is first created. */
@@ -51,16 +51,16 @@ public class ConfigActivity extends ListActivity {
         
         //Adapter to list of choices
         getListView().setSelector(R.drawable.highlight_pressed);
-        setListAdapter(new PreferencesAdapter());
+        setListAdapter(new CategoriesAdapter());
 
     }
 
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
-		Preferences pref = Preferences.getPreferences().get(position);
-		pref.setChecked(!pref.isChecked());
-		PreferencesAdapter.setStatusIcon(v, pref);
-		PingMeApplication.savePref(Preferences.getPreferences());
+		Category category = Category.getCategories().get(position);
+		category.setChecked(!category.isChecked());
+		CategoriesAdapter.setStatusIcon(v, category);
+		PingMeApplication.setCategories( this, Category.getCategories() );
 	}
     
 	

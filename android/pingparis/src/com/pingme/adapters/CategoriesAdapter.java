@@ -9,18 +9,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.pingme.R;
-import com.pingme.model.Preferences;
+import com.pingme.model.Category;
 
-public class PreferencesAdapter extends BaseAdapter {
+public class CategoriesAdapter extends BaseAdapter {
 
 	@Override
 	public int getCount() {
-		return Preferences.getPreferences().size();
+		return Category.getCategories().size();
 	}
 
 	@Override
 	public Object getItem(int arg0) {
-		return Preferences.getPreferences().get(arg0);
+		return Category.getCategories().get(arg0);
 	}
 
 	@Override
@@ -37,7 +37,7 @@ public class PreferencesAdapter extends BaseAdapter {
 		}
 		
 		//Build view
-		Preferences pref = (Preferences)getItem(position);
+		Category pref = (Category)getItem(position);
 		setStatusIcon(cell, pref);
 		
 		ImageView image = (ImageView) cell.findViewById(R.id.imageItem);
@@ -49,7 +49,7 @@ public class PreferencesAdapter extends BaseAdapter {
 		return cell;
 	}
 	
-	public static void setStatusIcon(View view, Preferences pref){
+	public static void setStatusIcon(View view, Category pref){
 		ImageView imageStatus = (ImageView) view.findViewById(R.id.statusItem);
 		imageStatus.setImageResource(pref.isChecked() ? R.drawable.pref_on : R.drawable.pref_off);
 	}

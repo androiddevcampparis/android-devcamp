@@ -4,11 +4,13 @@ package com.pingme;
 
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import java.util.List;
 
 import org.json.JSONObject;
 
+import com.pingme.model.Category;
 import com.pingme.model.Coordinate;
 import com.pingme.model.POIData;
 import com.pingme.service.ServerRequest;
@@ -37,6 +39,11 @@ public class PingMeService extends Service {
 	
 	public static String PING_BROADCAST_POI_DATA = "com.pingme.PingMeService.PING_BROADCAST_MESSAGE";
 	public static String INTENT_POI_DATA_EXTRA = "com.pingme.PingMeService.INTENT_DATA_EXTRA";
+	
+	public static String PING_ACTION_UI_CATEGORIES = "com.pingme.PingMeService.PING_ACTION_UI_CATEGORIES";
+	public static String INTENT_CATEGORIES_EXTRA = "com.pingme.PingMeService.INTENT_CATEGORIES_EXTRA";
+	
+	
 	public static String INTENT_IS_NOTIF_EXTRA = "com.pingme.PingMeService.INTENT_IS_NOTIF_EXTRA";
 
 	public static String INTENT_NOTIFICATION_SOUND_EXTRA = "com.pingme.PingMeService.INTENT_NOTIFICATION_SOUND_EXTRA";
@@ -47,6 +54,9 @@ public class PingMeService extends Service {
 	
 	public static final boolean NOTIFICATION_SOUND_DEFAULT = false;
 	private boolean notificationSound = NOTIFICATION_SOUND_DEFAULT; 
+	
+	public static final Category[] CATEGORIES_DEFAULT = new Category[0];
+	private Category[] categories = CATEGORIES_DEFAULT; 
 	
     private final Binder binder = new LocalBinder();
     
@@ -113,7 +123,6 @@ public class PingMeService extends Service {
 	private void queryLatLng( double lat, double lng ){
 		Log.v("PingMeService", "queryLatLng lat:"+ lat +" lng:" + lng );
 		try{
-			String[] categories = { "monument" };
 			POIData data = ServerRequest.fetchPOI( lat, lng, FETCH_RANGE_RADIUS, categories );
 			if( data != null )
 				processServerResponse( data );			
@@ -204,6 +213,12 @@ public class PingMeService extends Service {
 		if( PING_ACTION_UI_SOUND_NOTIFICATION.equals( action ) ){
 			notificationSound = intent.getBooleanExtra( INTENT_NOTIFICATION_SOUND_EXTRA, false );
 			Toast.makeText( this, "Sound Notification " + notificationSound, Toast.LENGTH_SHORT).show();
+		}
+		else if( PING_ACTION_UI_CATEGORIES.equals( action ) ){
+			Object[] array = (Object[])intent.getSerializableExtra( INTENT_CATEGORIES_EXTRA );
+			categories = new Category[array.length];
+			for( int i = 0; i< array.length; i++ ) categories[i] = (Category)array[i];
+			Toast.makeText( this, "Categories " + Arrays.asList(categories), Toast.LENGTH_SHORT).show();			
 		}
 		else if( PING_ACTION_MOCK_LOCATION.equals( action ) ){
 			double lat = intent.getDoubleExtra("lat", 0 );

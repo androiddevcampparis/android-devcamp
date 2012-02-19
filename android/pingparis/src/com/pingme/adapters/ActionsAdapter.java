@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.pingme.R;
 import com.pingme.model.ActionsDetail;
 import com.pingme.model.POIData;
-import com.pingme.model.Preferences;
+import com.pingme.model.Category;
 
 public class ActionsAdapter extends BaseAdapter {
 	

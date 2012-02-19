@@ -21,6 +21,7 @@ import org.json.JSONObject;
 
 import android.util.Log;
 
+import com.pingme.model.Category;
 import com.pingme.model.POIData;
 
 public class ServerRequest {
@@ -28,7 +29,7 @@ public class ServerRequest {
 	private static final String SERVER_URL = "http://pingme.cloudfoundry.com/poi/";
 	private static final int TIMEOUT_MS = 5000;
 	
-	public static POIData fetchPOI( double lat, double lng, double radius, String[] categories ) throws ClientProtocolException, IOException, JSONException {
+	public static POIData fetchPOI( double lat, double lng, double radius, Category[] categories ) throws ClientProtocolException, IOException, JSONException {
 
 		HttpParams httpParameters = new BasicHttpParams();
 		HttpConnectionParams.setConnectionTimeout(httpParameters,TIMEOUT_MS);
@@ -43,9 +44,9 @@ public class ServerRequest {
         
 		// Prepare a request object
 		StringBuilder sb = new StringBuilder();
-		for( String categorie : categories ){
+		for( Category category : categories ){
 			if( sb.length() > 0 ) sb.append(",");
-			sb.append( categorie );
+			if( category.isChecked() ) sb.append( category.getIdSync() );
 		}
 		
 		String serverURL = SERVER_URL + lat +"+"+ lng+"+"+radius+"+"+sb.toString();
