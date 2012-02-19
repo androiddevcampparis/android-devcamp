@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">PingMe</string>
-
+    <string name="app_name">PongMe</string>
     
     <string name="service_on">Geolocation On</string>
 	<string name="service_off">Geolocation Off</string>
@@ -9,10 +8,10 @@
 	<string name="notification_sound_off">Notification Sound Off</string>
 		
 	
-	<string name="titleApp">PingMe</string>
-	<string name="title_setting">PingMe Settings</string>
+	<string name="titleApp">PongMe</string>
+	<string name="title_setting">PongMe Settings</string>
 		
-	<string name="open_config">PingMe Service</string>
+	<string name="open_config">PongMe Service</string>
 	<string name="config_running">Location service running in background.</string>
 
 	 <string name="menu_openlist">Go to Places List</string>
@@ -26,5 +25,6 @@
 	 <string name="youtube">Videos about</string>
 
 	 <string name="detail_place">Details</string>
+	 <string name="wikipediaExt">See also: </string>
 
 </resources>

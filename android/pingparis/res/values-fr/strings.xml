@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">PongMe</string>
+    
+    <string name="service_on">Localisation ON</string>
+	<string name="service_off">Localisation OFF</string>
+    <string name="notification_sound_on">Notification ON</string>
+	<string name="notification_sound_off">Notification OFF</string>
+		
+	
+	<string name="titleApp">PongMe</string>
+	<string name="title_setting">Réglages PongMe</string>
+		
+	<string name="open_config">PongMe Service</string>
+	<string name="config_running">Le service de localisation tourne en tâche de fond.</string>
+
+	 <string name="menu_openlist">Voir la liste des lieux</string>
+	 <string name="menu_configure">Voir l\'écran de paramétrage</string>
+	 
+	 <string name="maps">Y aller avec Maps</string>
+	 <string name="search">Obtenir plus d\'infos</string>
+	 <string name="share">Partager le lieu</string>
+	 <string name="wikipedia">Lien Wikipedia</string>
+	 <string name="photos">Photos en mode radar</string>
+	 <string name="youtube">Videos</string>
+
+	 <string name="detail_place">Details</string>
+	 <string name="wikipediaExt">Voir aussi: </string>
+    
+    
+</resources>

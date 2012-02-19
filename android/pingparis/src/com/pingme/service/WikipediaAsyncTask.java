@@ -28,6 +28,7 @@ import org.xml.sax.SAXException;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.pingme.PingMeApplication;
 import com.pingme.model.POIData;
 import com.pingme.model.WikiData;
 
@@ -45,12 +46,13 @@ public class WikipediaAsyncTask extends AsyncTask<Void, Void, Void> {
 	
 	@Override
 	protected Void doInBackground(Void... arg0) {
-		String url = "http://en.wikipedia.org/w/api.php?format=xml&action=opensearch&limit=5&search=";
-		try {
-			url += URLEncoder.encode( poiData.getTitle(), "ISO-8859-1" );
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
+		String url = "http://api.wikilocation.org/articles?limit=30&format=xml&locale=fr&lat="+poiData.getLat()+"&lng="+poiData.getLng();
+		//tring url = "http://en.wikipedia.org/w/api.php?format=xml&action=opensearch&limit=5&search=";
+//		try {
+//			url += URLEncoder.encode( poiData.getTitle(), "ISO-8859-1" );
+//		} catch (UnsupportedEncodingException e) {
+//			e.printStackTrace();
+//		}
 		launchQuery(url);
 		return null;
 	}
@@ -111,15 +113,16 @@ public class WikipediaAsyncTask extends AsyncTask<Void, Void, Void> {
 			final Document dom = builder.parse(instream);
 			
 			if (dom != null) {
-				WikiData data = new WikiData();
-				final Element itemNode = (Element) getFirstSubNode(dom.getChildNodes().item(0), "Section", true);
-				final NodeList listeNode = itemNode.getElementsByTagName("Item");
+				final Element itemNode = (Element) getFirstSubNode(dom.getChildNodes().item(0), "articles", true);//"Section"
+				final NodeList listeNode = itemNode.getElementsByTagName("article");
 					
 					for (int i = 0; i < listeNode.getLength(); i++) {
 						try {
 							final Node node = listeNode.item(i);
-							data.setName(getValueForTag(node, "Text", false));
-							data.setUrl(getValueForTag(node, "Url", false));
+							WikiData data = new WikiData();
+							
+							data.setName(getValueForTag(node, "title", false));
+							data.setUrl(getValueForTag(node, "url", false));
 							urls.add(data);
 						} catch (final Exception e) {
 							e.printStackTrace();
@@ -146,9 +149,9 @@ public class WikipediaAsyncTask extends AsyncTask<Void, Void, Void> {
 		}
 		// Otherwise, update list
 		else if (_mActivity != null && urlOut != null && urlOut.size()>0) {
-			WikiData wiki = (WikiData) urlOut.get(0);
-			poiData.setWiki_link(wiki.getName());
-			poiData.setWiki_url(wiki.getUrl());
+//			WikiData wiki = (WikiData) urlOut.get(0);
+//			poiData.setWiki_link(wiki.getName());
+//			poiData.setWiki_url(wiki.getUrl());
 			
 			poiData.setListWiki(urlOut);
 			_mActivity.loadingFinished(new ArrayList<Object>(urlOut));

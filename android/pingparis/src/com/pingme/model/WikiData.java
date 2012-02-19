@@ -7,8 +7,6 @@ public class WikiData implements Serializable {
 	private String name;
 	private String url;
 	
-	
-	
 	public String getName() {
 		return name;
 	}

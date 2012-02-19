@@ -100,14 +100,28 @@ public abstract class ActionsDetail {
 	}
 
 	public static class WikipediaAction extends ActionsDetail{
+		public WikiData wikidata;
+		
+		public String getNameStr(Context context){
+			return context.getString(R.string.wikipediaExt) + " "+wikidata.getName();
+		}
 
 		public WikipediaAction(POIData data) {
 			super(R.string.wikipedia, R.drawable.wikipedia, 104, data);
 		}
+		
+		public WikipediaAction(POIData data, WikiData wikiData) {
+			this(data);
+			this.wikidata = wikiData;
+		}
 
 		@Override
 		public void execute(Context context) {
-			Intent browserIntent = new Intent("android.intent.action.VIEW", Uri.parse(data.getWiki_url()));
+			if(wikidata==null && wikidata==null){
+				return;
+			}
+			
+			Intent browserIntent = new Intent("android.intent.action.VIEW", Uri.parse(wikidata==null?data.getWiki_url():wikidata.getUrl()));
 			context.startActivity(browserIntent);
 		}
 	}

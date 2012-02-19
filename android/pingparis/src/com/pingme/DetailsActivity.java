@@ -9,7 +9,6 @@ import android.accounts.AccountManager;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.ListActivity;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -22,20 +21,19 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
 import android.view.View.OnTouchListener;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.Gallery;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.pingme.adapters.ActionsAdapter;
 import com.pingme.adapters.ImageAdapter;
 import com.pingme.model.ActionsDetail;
+import com.pingme.model.ActionsDetail.WikipediaAction;
 import com.pingme.model.POIData;
 import com.pingme.service.DownloadAsyncTask;
 import com.pingme.service.DownloaderCallback;
@@ -130,7 +128,34 @@ public class DetailsActivity extends Activity implements DownloaderCallback{
 		//Adapter to list of actions
 //        getListView().setSelector(R.drawable.highlight_pressed);
 //        setListAdapter(new ActionsAdapter(poiData));
-	    ViewGroup listView = (ViewGroup) findViewById(R.id.listAction);
+	    addActions();
+        
+        if(poiData.getListWiki() == null){
+        	
+        	//Load wikipedia URL
+			new WikipediaAsyncTask(new DownloaderCallback() {
+			@Override
+			public void onError(int code) {
+				
+			}
+			
+			@Override
+			public void loadingFinished(List<Object> datas) {
+				//setListAdapter(new ActionsAdapter(poiData));
+				 addActions();
+			}
+		}, poiData).execute(null);
+        }
+        
+        //Reset Location notif to Main Notif
+        if( PingMeApplication.getServiceStatus() && getIntent().getExtras().getBoolean(PingMeService.INTENT_IS_NOTIF_EXTRA, false) ){
+        	 PingMeApplication.createNotifConfig(this);
+        }
+	}
+	
+	private void addActions(){
+		ViewGroup listView = (ViewGroup) findViewById(R.id.listAction);
+		listView.removeAllViews();
 	    List<ActionsDetail> actions = poiData.getActions();
 	    boolean first = true;
 	    
@@ -146,6 +171,10 @@ public class DetailsActivity extends Activity implements DownloaderCallback{
 			
 			TextView text = (TextView) view.findViewById(R.id.textItem);
 			text.setText(action.getName());
+			if(action instanceof WikipediaAction){
+				WikipediaAction wAction = (WikipediaAction)action;
+				text.setText(wAction.wikidata==null ? getString(action.getName()) : wAction.getNameStr(this));
+			}
 			
 			view.setOnClickListener(new OnClickListener() {
 				@Override
@@ -154,27 +183,6 @@ public class DetailsActivity extends Activity implements DownloaderCallback{
 				}
 			});
 	    }
-        
-        if(Utils.isEmpty(poiData.getWiki_url())){
-        	
-        	//Load wikipedia URL
-			new WikipediaAsyncTask(new DownloaderCallback() {
-			@Override
-			public void onError(int code) {
-				
-			}
-			
-			@Override
-			public void loadingFinished(List<Object> datas) {
-				//setListAdapter(new ActionsAdapter(poiData));
-			}
-		}, poiData).execute(null);
-        }
-        
-        //Reset Location notif to Main Notif
-        if( PingMeApplication.getServiceStatus() && getIntent().getExtras().getBoolean(PingMeService.INTENT_IS_NOTIF_EXTRA, false) ){
-        	 PingMeApplication.createNotifConfig(this);
-        }
 	}
 
 //	@Override

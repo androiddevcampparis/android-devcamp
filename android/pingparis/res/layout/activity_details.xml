@@ -103,7 +103,8 @@
 	    android:layout_height="wrap_content"
         android:background="@drawable/list_bg"
         android:id="@+id/listAction"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_margin="10dip">
     </LinearLayout>
     
 <!--     <ListView 

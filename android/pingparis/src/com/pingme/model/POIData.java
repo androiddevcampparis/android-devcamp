@@ -158,9 +158,6 @@ public class POIData implements Serializable {
 		return this.plusSum;
 	}
 
-	private List<ActionsDetail> actions;
-
-
 	public List<ActionsDetail> getActions() {
 		List<ActionsDetail> actions = new ArrayList<ActionsDetail>();
 		actions.add(new MapsDriveAction(this));
@@ -176,6 +173,12 @@ public class POIData implements Serializable {
 		//actions.add(new YoutubeAction(this));
 		actions.add(new SearchAction(this));
 		actions.add(new ShareAction(this));
+		
+		if(listWiki != null){
+			for(WikiData data:listWiki){
+				actions.add(new WikipediaAction(this, data));
+			}
+		}
 		
 		return actions;
 	}
