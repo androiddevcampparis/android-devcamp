@@ -63,9 +63,11 @@ public abstract class ActionsDetail {
 		
 		@Override
 		public  void execute(Context context) {
-			String uriMaps = "http://maps.google.com/maps?saddr="+PingMeApplication.getLat()+","+PingMeApplication.getLat()+"&daddr="+data.getLat()+","+data.getLng();
+			String uriMaps = "http://maps.google.com/maps?saddr="+PingMeApplication.getLat()+","+PingMeApplication.getLng()+"&daddr="+data.getLat()+","+data.getLng();
 			Log.i("ActionDetails", "uri:"+ uriMaps);
 			Intent intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(uriMaps));
+			
+			intent.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
 			context.startActivity(intent);
 		}
 	}
@@ -126,6 +128,22 @@ public abstract class ActionsDetail {
 			i.putExtra("latitude", data.getLat());
 			i.putExtra("longitude", data.getLng());
 			context.startActivity(i);
+		}
+	}
+	
+	public static class YoutubeAction extends ActionsDetail{
+
+		public YoutubeAction(POIData data) {
+			super("youtube", R.drawable.youtube, 106, data);
+		}
+
+		@Override
+		public void execute(Context context) {
+			Intent intent = new Intent(Intent.ACTION_SEARCH, Uri.parse("http://m.youtube.com/results?q="+data.getTitle()));
+			//intent.putExtra(SearchManager.QUERY, data.getTitle());
+			//intent.setClassName("com.google.android.youtube", "com.google.android.youtube.PlayerActivity");
+			
+			context.startActivity(intent);
 		}
 	}
 }

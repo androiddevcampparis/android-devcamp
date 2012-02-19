@@ -1,16 +1,16 @@
 package com.pingme.model;
 
 import java.io.Serializable;
-
 import java.util.ArrayList;
 import java.util.List;
 
-
+import com.pingme.PingMeApplication;
 import com.pingme.model.ActionsDetail.LocatedPhotosAction;
 import com.pingme.model.ActionsDetail.MapsDriveAction;
 import com.pingme.model.ActionsDetail.SearchAction;
 import com.pingme.model.ActionsDetail.ShareAction;
 import com.pingme.model.ActionsDetail.WikipediaAction;
+
 import com.pingme.utils.Utils;
 
 /*
@@ -30,8 +30,10 @@ public class POIData implements Serializable {
 	private double longitude;
 	
 	private String url_image;
+	private List<String> urlsImages;
 	private String wiki_link;
 	private String wiki_url;
+	private List<WikiData> listWiki;
 	
 	private String credential;
 	
@@ -65,6 +67,11 @@ public class POIData implements Serializable {
 	}
 
 	public String getTitle() {
+		//RULES POUR CORRIGER OPEN DATA
+		if("immeuble".equalsIgnoreCase(title)){
+			return description.substring(0, Math.min(40, description.length()));
+		}
+		
 		return title;
 	}
 
@@ -136,6 +143,7 @@ public class POIData implements Serializable {
 		this.wiki_url = wiki_url;
 	}
 
+
 	public void setPlus( boolean plus ){
 		this.plus = plus;
 	}
@@ -152,27 +160,24 @@ public class POIData implements Serializable {
 
 	private List<ActionsDetail> actions;
 
-	public List<ActionsDetail> getActions() {
-		if(actions == null){
-			createActions();
-		}
-		return actions;
-	}
 
-	public void createActions() {
-		actions = new ArrayList<ActionsDetail>();
+	public List<ActionsDetail> getActions() {
+		List<ActionsDetail> actions = new ArrayList<ActionsDetail>();
 		actions.add(new MapsDriveAction(this));
 		
 		if(!Utils.isEmpty(wiki_url)){
 			actions.add(new WikipediaAction(this));
+		} 
+		
+		if(PingMeApplication.isPhotoIntentCallable()){
+			actions.add(new LocatedPhotosAction(this));
 		}
 		
-		//if(PingMeApplication.isPhotoIntentCallable()){
-			actions.add(new LocatedPhotosAction(this));
-		//}
-		
+		//actions.add(new YoutubeAction(this));
 		actions.add(new SearchAction(this));
 		actions.add(new ShareAction(this));
+		
+		return actions;
 	}
 
 	public String getCredential() {
@@ -181,6 +186,22 @@ public class POIData implements Serializable {
 
 	public void setCredential(String credential) {
 		this.credential = credential;
+	}
+
+	public List<WikiData> getListWiki() {
+		return listWiki;
+	}
+
+	public void setListWiki(List<WikiData> listWiki) {
+		this.listWiki = listWiki;
+	}
+
+	public List<String> getUrlsImages() {
+		return urlsImages;
+	}
+
+	public void setUrlsImages(List<String> urlsImages) {
+		this.urlsImages = urlsImages;
 	}
 		
 }

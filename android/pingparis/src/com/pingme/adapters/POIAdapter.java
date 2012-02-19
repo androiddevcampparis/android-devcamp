@@ -79,8 +79,8 @@ public class POIAdapter extends BaseAdapter {
 		}
 
 		@Override
-		public void loadingFinished(List<String> datas) {
-			PingMeApplication.getImageDownloader().download(datas.get(0), view, null, "Adapter");
+		public void loadingFinished(List<Object> datas) {
+			PingMeApplication.getImageDownloader().download((String) datas.get(0), view, null, "Adapter");
 		}
 
 		@Override

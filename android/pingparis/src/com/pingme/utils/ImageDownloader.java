@@ -44,6 +44,7 @@ import android.os.AsyncTask;
 import android.os.Debug;
 import android.os.Handler;
 import android.util.Log;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
 
 
@@ -193,17 +194,12 @@ public class ImageDownloader {
 			return null;
 		}
 		
-		int w = imageView.getLayoutParams().width, h = imageView.getLayoutParams().height;
-		// This is the old code, we prefer to take the view size as the
-		// desired width and height
-		/*if (tempImage != null) {
-			Bitmap imgTemp = tempImage.getBitmap();
-			if (imgTemp == EurosportApplication.tempImageSmall.getBitmap()) {
-				imgTemp = EurosportApplication.tempImageBig.getBitmap();
-			}
-			w = imgTemp.getWidth();
-			h = imgTemp.getHeight();
-		}*/
+		int w =0,h=0;
+		LayoutParams params = imageView.getLayoutParams();
+		if(params != null){
+			w=  params.width;
+			h = params.height;
+		}
 
 		// Change Task attributes if exist intead of Cancel
 
@@ -231,8 +227,13 @@ public class ImageDownloader {
 					downloadedDrawable = new DownloadedDrawable(task);
 				}
 
-				int minWith = imageView.getLayoutParams().width;
-				int minheight = imageView.getLayoutParams().height;
+				int minWith = 0;
+				int minheight = 0;
+				if(params != null){
+					minWith = params.width;
+					minheight = params.height;
+				}
+				
 				imageView.setImageDrawable(downloadedDrawable);
 				imageView.setMinimumWidth(minWith);
 				imageView.setMinimumHeight(minheight);
@@ -587,9 +588,6 @@ public class ImageDownloader {
 		}
 	};
 
-	// Soft cache for bitmaps kicked out of hard cache
-	// private final static ConcurrentHashMap<String, WeakReference<Bitmap>> sSoftBitmapCache = new
-	// ConcurrentHashMap<String, WeakReference<Bitmap>>( HARD_CACHE_CAPACITY / 2);
 
 	private final HashMap<String, WeakReference<Bitmap>> sSoftBitmapCache = new LinkedHashMap<String, WeakReference<Bitmap>>(
 			SOFT_CACHE_CAPACITY, 0.75f, false) {
@@ -627,22 +625,6 @@ public class ImageDownloader {
 	private void addBitmapToCache(String url, Bitmap bitmap) {
 		// never use memory cache
 		return;
-		/* if (bitmap != null) {
-			if (size_big_img == 0) {
-				size_big_img = EurosportApplication.getTempImageBig().getBitmap().getWidth() + 15;
-			}
-
-			// Les images trop grandes sont moins nombreuses en cache
-			if (bitmap.getWidth() < size_big_img) {
-				synchronized (sHardBitmapCache) {
-					sHardBitmapCache.put(url, bitmap);
-				}
-			} else {
-				synchronized (sHardBitmapCacheBigImg) {
-					sHardBitmapCacheBigImg.put(url, bitmap);
-				}
-			}
-		} */
 	}
 
 	private Bitmap getBitmapFromFile(File file, int width, int height){
@@ -713,8 +695,14 @@ public class ImageDownloader {
 
 			String filename = sFileCache.get(url);
 			if (filename != null) {
-				int width = imageView.getLayoutParams().width;
-				int height = imageView.getLayoutParams().height;
+				LayoutParams params = imageView.getLayoutParams();
+				int width = 0;
+				int height = 0;
+				if(params != null){
+					width = params.width;
+					height = params.height;
+				}
+				
 				
 				Bitmap bitmap = getBitmapFromFile(sFileCache.getCachedFile(filename), width, height);
 				if (bitmap != null) {

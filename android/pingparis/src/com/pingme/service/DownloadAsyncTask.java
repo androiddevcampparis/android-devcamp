@@ -8,13 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpUriRequest;
@@ -22,16 +17,12 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Document;
-import org.xml.sax.SAXException;
+
+import android.os.AsyncTask;
+import android.util.Log;
 
 import com.pingme.model.POIData;
 import com.pingme.utils.Utils;
-
-import android.content.Context;
-import android.os.AsyncTask;
-import android.telephony.TelephonyManager;
-import android.util.Log;
 
 public class DownloadAsyncTask extends AsyncTask<Void, Void, Void> {
 
@@ -127,8 +118,9 @@ public class DownloadAsyncTask extends AsyncTask<Void, Void, Void> {
 		}
 		// Otherwise, update list
 		else if (_mActivity != null && imagesOut != null && imagesOut.size()>0) {
-			poiData.setUrl_image(imagesOut.get(0));
-			_mActivity.loadingFinished(imagesOut);
+			poiData.setUrlsImages(imagesOut);
+			poiData.setUrl_image((String) imagesOut.get(0));
+			_mActivity.loadingFinished(new ArrayList<Object>(imagesOut));
 		}
 	}
 

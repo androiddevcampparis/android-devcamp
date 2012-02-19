@@ -2,11 +2,12 @@ package com.pingme;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
+
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import java.util.List;
 import android.app.ListActivity;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -14,22 +15,28 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
-import android.util.Log;
+import android.widget.Gallery;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.pingme.adapters.ActionsAdapter;
+import com.pingme.adapters.ImageAdapter;
 import com.pingme.model.ActionsDetail;
 import com.pingme.model.POIData;
 import com.pingme.service.DownloadAsyncTask;
 import com.pingme.service.DownloaderCallback;
+import com.pingme.service.WikipediaAsyncTask;
 import com.pingme.utils.Utils;
 
 public class DetailsActivity extends ListActivity implements DownloaderCallback{
@@ -39,7 +46,7 @@ public class DetailsActivity extends ListActivity implements DownloaderCallback{
 	private static final int DIALOG_ACCOUNTS = 0;
 	protected static final String AUTH_TOKEN_TYPE = "";
 	Context context; 
-	    
+	private Gallery gallery;
 	    
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -94,16 +101,48 @@ public class DetailsActivity extends ListActivity implements DownloaderCallback{
 	    });
 
 		//Add image or search if does not exist
-		if(Utils.isEmpty(poiData.getUrl_image())){
+//		if(Utils.isEmpty(poiData.getUrl_image())){
+//			new DownloadAsyncTask(this, poiData).execute(null);
+//		} else{
+//			final ImageView image = (ImageView) findViewById(R.id.imageEvent);
+//			PingMeApplication.getImageDownloader().download(poiData.getUrl_image(), image, null, "DetailsActivity");
+//		}
+		
+		gallery = (Gallery) findViewById(R.id.gallery);
+		if(poiData.getUrlsImages() == null){
 			new DownloadAsyncTask(this, poiData).execute(null);
 		} else{
-			final ImageView image = (ImageView) findViewById(R.id.imageEvent);
-			PingMeApplication.getImageDownloader().download(poiData.getUrl_image(), image, null, "DetailsActivity");
+			gallery.setAdapter(new ImageAdapter(this, poiData));
 		}
+
+	    gallery.setOnItemClickListener(new OnItemClickListener() {
+	        public void onItemClick(AdapterView parent, View v, int position, long id) {
+	            Intent intent = new Intent(DetailsActivity.this, ZoomImageActivity.class);
+	            intent.putExtra(ZoomImageActivity.EXTRA, poiData);
+	            intent.putExtra(ZoomImageActivity.EXTRA_POS, position);
+	            startActivity(intent);
+	        }
+	    });
 		
 		//Adapter to list of actions
         getListView().setSelector(R.drawable.highlight_pressed);
         setListAdapter(new ActionsAdapter(poiData));
+        
+        if(Utils.isEmpty(poiData.getWiki_url())){
+        	
+        	//Load wikipedia URL
+			new WikipediaAsyncTask(new DownloaderCallback() {
+			@Override
+			public void onError(int code) {
+				
+			}
+			
+			@Override
+			public void loadingFinished(List<Object> datas) {
+				setListAdapter(new ActionsAdapter(poiData));
+			}
+		}, poiData).execute(null);
+        }
         
         //Reset Location notif to Main Notif
         if( PingMeApplication.getServiceStatus() && getIntent().getExtras().getBoolean(PingMeService.INTENT_IS_NOTIF_EXTRA, false) ){
@@ -146,14 +185,15 @@ public class DetailsActivity extends ListActivity implements DownloaderCallback{
 	}
 
 	@Override
-	public void loadingFinished(List<String> datas) {
+	public void loadingFinished(List<Object> datas) {
 		if(datas == null || datas.size()==0){
 			Log.w("DetailsActivity", "Image from google images are unset");
 			return;
 		}
 		
-		final ImageView image = (ImageView) findViewById(R.id.imageEvent);
-		PingMeApplication.getImageDownloader().download(datas.get(0), image, null, "DetailsActivity");
+		gallery.setAdapter(new ImageAdapter(this, poiData));
+		//final ImageView image = (ImageView) findViewById(R.id.imageEvent);
+		//PingMeApplication.getImageDownloader().download((String) datas.get(0), image, null, "DetailsActivity");
 	}
 
 	@Override
