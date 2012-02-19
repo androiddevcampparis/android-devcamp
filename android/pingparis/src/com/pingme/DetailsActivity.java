@@ -53,18 +53,24 @@ public class DetailsActivity extends ListActivity implements DownloaderCallback{
         super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_details);
 		context=this;          
+
+
+		final TextView titleTopbar = (TextView) findViewById(R.id.titleBar);		
+		titleTopbar.setText(getString(R.string.detail_place));
 		
 		// get data from intent and set To View
 		poiData = (POIData) getIntent().getSerializableExtra(PingMeService.INTENT_POI_DATA_EXTRA);
 		
 		final TextView title = (TextView) findViewById(R.id.titleEvent);
 		final TextView descr = (TextView) findViewById(R.id.descrEvent);
-
+		final TextView plusUnSum = (TextView)findViewById(R.id.plusUnSum);
 		plusUnBtn = (Button) findViewById(R.id.plusUnButton);
-		final TextView titleTopbar = (TextView) findViewById(R.id.titleBar);		
+		
 		title.setText(poiData.getTitle());
 		descr.setText(poiData.getDescription());
-		titleTopbar.setText(getString(R.string.detail_place));
+		plusUnSum.setText( Integer.toString(poiData.getPlusSum()) );
+		Log.v("DetailsActivity", "-->" + poiData.isPlus() + " / " + poiData.getPlusSum() );
+		plusUnBtn.setPressed( poiData.isPlus() );
 		
 		plusUnBtn.setOnTouchListener(new OnTouchListener() {
 	        @Override
@@ -72,12 +78,25 @@ public class DetailsActivity extends ListActivity implements DownloaderCallback{
 	            if(event.getAction()==MotionEvent.ACTION_DOWN) return true;
 	            if(event.getAction()!=MotionEvent.ACTION_UP) return false;
 	            gotAccount(false);
+	            
+	            
 	            if (plusUnBtn.isPressed()){
+	            	poiData.setPlusSum( poiData.getPlusSum()-1 );
 	            	plusUnBtn.setPressed(false);
 	            }else{
+	            	poiData.setPlusSum( poiData.getPlusSum()+1 );
 	            	plusUnBtn.setPressed(true); 
 	            }
-	            return true;
+	            
+        		plusUnSum.setText( Integer.toString( poiData.getPlusSum() ) );
+	            poiData.setPlus( plusUnBtn.isPressed() );
+	            
+	    		Intent serviceIntent = new Intent( PingMeService.PING_ACTION_POI_DATA_UPDATE );
+	    		serviceIntent.setClassName( context, "com.pingme.PingMeService" );
+	    		serviceIntent.putExtra( PingMeService.INTENT_POI_DATA_EXTRA, poiData.copy() );	    		
+    			context.startService( serviceIntent );			
+
+	    		return true;
 	        }
 	    });
 
@@ -131,6 +150,14 @@ public class DetailsActivity extends ListActivity implements DownloaderCallback{
         }
 	}
 	
+	
+	
+
+
+
+
+
+
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		try {

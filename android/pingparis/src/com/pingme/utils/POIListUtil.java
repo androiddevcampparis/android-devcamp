@@ -20,9 +20,18 @@ public class POIListUtil {
 		}
 	}
 
+	public static void replacePOI( List<POIData> list, POIData data, int maxSize ){
+		for( int i = 0; i<list.size(); i++ ){
+			if( list.get(i).getId().equals( data.getId() ) ){
+				list.set( i, data );
+				break;
+			}
+		}
+	}
+
 	public static boolean contains( List<POIData> list, POIData data ){
 		for( POIData poi : list ){
-			if( poi.getId() == data.getId() ){
+			if( poi.getId().equals( data.getId() ) ){
 				return true;
 			}
 		}

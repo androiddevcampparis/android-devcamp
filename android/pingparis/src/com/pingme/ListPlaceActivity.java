@@ -57,20 +57,19 @@ public class ListPlaceActivity extends ListActivity {
 	// Broadcaster Reciever
     // ----------------------------------------------------------------------------
     
-    private BroadcastReceiver receiver = new BroadcastReceiver() {
+    private BroadcastReceiver poiDataReceiver = new BroadcastReceiver() {
         public void onReceive( Context context, Intent intent ){
-        	String action = intent.getAction() ;
-            if( PingMeService.PING_BROADCAST_POI_DATA.equals( action ) ){
-                POIData poiData = (POIData)intent.getSerializableExtra( PingMeService.INTENT_POI_DATA_EXTRA );
-                POIListUtil.enqueuePOI( poiList, poiData, MAX_POI_DATA_SIZE );
-                
-                getListView().setAdapter(new POIAdapter(poiList));
-            }
-            if( PingMeService.PING_BROADCAST_LOCATION.equals( action ) ){
-                Coordinate currentLocation = (Coordinate)intent.getSerializableExtra( PingMeService.INTENT_LOCATION_EXTRA );
-                PingMeApplication.setLat(currentLocation.lat);
-                PingMeApplication.setLng(currentLocation.lng);
-            }
+            POIData poiData = (POIData)intent.getSerializableExtra( PingMeService.INTENT_POI_DATA_EXTRA );
+            POIListUtil.enqueuePOI( poiList, poiData, MAX_POI_DATA_SIZE );
+            
+            getListView().setAdapter(new POIAdapter(poiList));
+        }
+    };
+    private BroadcastReceiver locationReceiver = new BroadcastReceiver() {
+        public void onReceive( Context context, Intent intent ){
+            Coordinate currentLocation = (Coordinate)intent.getSerializableExtra( PingMeService.INTENT_LOCATION_EXTRA );
+            PingMeApplication.setLat(currentLocation.lat);
+            PingMeApplication.setLng(currentLocation.lng);
         }
     };
     
@@ -120,14 +119,15 @@ public class ListPlaceActivity extends ListActivity {
         
         reloadAdapterDataFromService();
         
-        registerReceiver( receiver, new IntentFilter( PingMeService.PING_BROADCAST_POI_DATA ) );
-        registerReceiver( receiver, new IntentFilter( PingMeService.PING_BROADCAST_LOCATION ) );
+        registerReceiver( poiDataReceiver, new IntentFilter( PingMeService.PING_BROADCAST_POI_DATA ) );
+        registerReceiver( locationReceiver, new IntentFilter( PingMeService.PING_BROADCAST_LOCATION ) );
     }
 
     @Override
     public void onPause(){
         super.onPause();
-        unregisterReceiver( receiver );
+        unregisterReceiver( poiDataReceiver );
+        unregisterReceiver( locationReceiver );
 
     }
 
