@@ -8,15 +8,16 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-public class CredentialActivity extends FragmentActivity {
+public class CredentialActivity extends FragmentActivity implements OnPageChangeListener{
 
-	 static final int NUM_ITEMS = 2;
+	 static final int NUM_ITEMS = 3;
 	    MyAdapter mAdapter;
 	    ViewPager mPager;
 
@@ -29,6 +30,7 @@ public class CredentialActivity extends FragmentActivity {
 
 	        mPager = (ViewPager)findViewById(R.id.pager);
 	        mPager.setAdapter(mAdapter);
+	        mPager.setOnPageChangeListener(this);
 	    }
 
 	    public static class MyAdapter extends FragmentPagerAdapter {
@@ -45,6 +47,7 @@ public class CredentialActivity extends FragmentActivity {
 	        public Fragment getItem(int position) {
 	            return ArrayListFragment.newInstance(position);
 	        }
+	        
 	        
 	        
 	    }
@@ -155,13 +158,33 @@ public class CredentialActivity extends FragmentActivity {
 	        		break;
 	        		
 	        	case 2 : 
-//	        		Intent i1 = new Intent(getActivity(), ConfigActivity.class);
-//	        		i1.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-//	        		getActivity().startActivity(i1);
-//	        		getActivity().finish();
+	        		v = new ImageView(inflater.getContext());
+	        		((ImageView)v).setImageBitmap(null);
 	        		break;
 	        	}
 	            return v;
 	        }
 	    }
+
+		@Override
+		public void onPageScrollStateChanged(int arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void onPageScrolled(int position, float arg1, int arg2) {
+			if (position == 2) {
+        		Intent i1 = new Intent(this, ConfigActivity.class);
+        		i1.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        		startActivity(i1);
+				finish();
+			}
+		}
+
+		@Override
+		public void onPageSelected(int arg0) {
+			// TODO Auto-generated method stub
+			
+		}
 	}

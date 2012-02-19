@@ -42,13 +42,6 @@ public class ConfigActivity extends ListActivity {
             }
         });
         
-        final Button btn = (Button) findViewById(R.id.credit);
-        btn.setOnClickListener(new OnClickListener() {
-            public void onClick(View v) {
-            	startActivity(new Intent(ConfigActivity.this, CredentialActivity.class));
-            }
-        });
-        
         //Change service state: on/off
         final ToggleButton serviceStatusToggle = (ToggleButton) findViewById(R.id.statusService);
         serviceStatusToggle.setChecked( PingMeApplication.getServiceStatus() );
@@ -96,6 +89,12 @@ public class ConfigActivity extends ListActivity {
 			startActivity(intent);
 			return true;
 		}
+		if (item.getTitle().equals(getString(R.string.menu_tuto))) {
+			Intent intent = new Intent(this, CredentialActivity.class);
+			intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+			startActivity(intent);
+			return true;
+		}
 		return false;
 	}
 	
@@ -103,6 +102,7 @@ public class ConfigActivity extends ListActivity {
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		menu.clear();
 		menu.add(R.string.menu_openlist).setIcon(android.R.drawable.ic_menu_gallery);
+		menu.add(R.string.menu_tuto).setIcon(android.R.drawable.ic_menu_help);
 		return super.onPrepareOptionsMenu(menu);
 	}
 

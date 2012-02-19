@@ -26,14 +26,6 @@
         android:textOff="@string/notification_sound_off"
         android:layout_gravity="center_horizontal"/> -->
     
-    <Button 
-			        android:id="@+id/credit"
-			        android:layout_width="160dip"
-			        android:layout_height="wrap_content"
-			        android:textOn="@string/service_on"
-			        android:textOff="@string/service_off"
-			        android:layout_centerVertical="true"/>
-    
             <RelativeLayout
 			    android:layout_width="wrap_content"
 			    android:layout_height="wrap_content" 

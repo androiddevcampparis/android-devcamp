@@ -155,6 +155,12 @@ public class ListPlaceActivity extends ListActivity {
 			startActivity(intent);
 			return true;
 		}
+		if (item.getTitle().equals(getString(R.string.menu_tuto))) {
+			Intent intent = new Intent(this, CredentialActivity.class);
+			intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+			startActivity(intent);
+			return true;
+		}
 		return false;
 	}
 	
@@ -162,6 +168,7 @@ public class ListPlaceActivity extends ListActivity {
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		menu.clear();
 		menu.add(R.string.menu_configure).setIcon(android.R.drawable.ic_menu_preferences);
+		menu.add(R.string.menu_tuto).setIcon(android.R.drawable.ic_menu_help);
 		return super.onPrepareOptionsMenu(menu);
 	}
     

@@ -13,7 +13,8 @@
 		
 	<string name="open_config">PongMe Service</string>
 	<string name="config_running">Location service running in background.</string>
-
+	
+	<string name="menu_tuto">Go to Tutorial</string>
 	 <string name="menu_openlist">Go to Places List</string>
 	 <string name="menu_configure">Go to Configure List</string>
 	 
