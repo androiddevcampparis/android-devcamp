@@ -8,12 +8,10 @@ import java.util.Arrays;
 
 import java.util.List;
 
-import org.json.JSONObject;
-
 import com.pingme.model.Category;
 import com.pingme.model.Coordinate;
 import com.pingme.model.POIData;
-import com.pingme.service.ServerRequest;
+import com.pingme.service.ServerRequestAsyncTask;
 import com.pingme.utils.POIListUtil;
 
 import android.app.Notification;
@@ -123,9 +121,7 @@ public class PingMeService extends Service {
 	private void queryLatLng( double lat, double lng ){
 		Log.v("PingMeService", "queryLatLng lat:"+ lat +" lng:" + lng );
 		try{
-			POIData data = ServerRequest.fetchPOI( lat, lng, FETCH_RANGE_RADIUS, categories );
-			if( data != null )
-				processServerResponse( data );			
+			new ServerRequestAsyncTask( this, lat, lng, FETCH_RANGE_RADIUS, categories ).execute(null);;
 		}
 		catch( Exception e ){
 			Log.e( "PingMeService", e.getMessage(), e );
@@ -133,7 +129,7 @@ public class PingMeService extends Service {
 		
 	}
 	
-	private void processServerResponse( POIData data ){
+	public void processServerResponse( POIData data ){
 		/*
         data = new POIData();
         data.setId("uid"+System.currentTimeMillis());

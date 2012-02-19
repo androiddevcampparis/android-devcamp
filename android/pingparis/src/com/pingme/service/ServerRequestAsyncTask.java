@@ -1,16 +1,23 @@
 package com.pingme.service;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.zip.GZIPInputStream;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
@@ -18,18 +25,62 @@ import org.apache.http.params.HttpParams;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
 
-import android.util.Log;
-
+import com.pingme.PingMeService;
 import com.pingme.model.Category;
 import com.pingme.model.POIData;
+import com.pingme.utils.Utils;
 
-public class ServerRequest {
+import android.content.Context;
+import android.os.AsyncTask;
+import android.telephony.TelephonyManager;
+import android.util.Log;
 
+public class ServerRequestAsyncTask extends AsyncTask<Void, Void, Void> {
+
+	private POIData outData;
+	private PingMeService service;
+	private double lat;
+	private double lng;
+	private double radius;
+	private Category[] categories;
+
+	public ServerRequestAsyncTask(PingMeService service, double lat, double lng, double radius, Category[] categories) {
+		this.service = service;
+		this.lat = lat;
+		this.lng = lng;
+		this.radius = radius;
+		this.categories = categories;
+	}
+	
+	@Override
+	protected Void doInBackground(Void... arg0) {
+		try {
+			if( categories.length > 0 ) outData = fetchPOI();
+		} catch (ClientProtocolException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	@Override
+	protected void onPostExecute(Void result) {
+		if(outData == null){
+			return;
+		}
+		service.processServerResponse( outData );	
+	}
+	
 	private static final String SERVER_URL = "http://pingme.cloudfoundry.com/poi/";
 	private static final int TIMEOUT_MS = 5000;
 	
-	public static POIData fetchPOI( double lat, double lng, double radius, Category[] categories ) throws ClientProtocolException, IOException, JSONException {
+	public POIData fetchPOI() throws ClientProtocolException, IOException, JSONException {
 
 		HttpParams httpParameters = new BasicHttpParams();
 		HttpConnectionParams.setConnectionTimeout(httpParameters,TIMEOUT_MS);
@@ -60,7 +111,7 @@ public class ServerRequest {
 		if (entity != null) 
 		{
 			InputStream instream = entity.getContent();
-			String stringResult = streamToString(instream);
+			String stringResult = Utils.streamToString(instream);
 			
 			return parseJSON( stringResult );
 					
@@ -87,31 +138,4 @@ public class ServerRequest {
 		
 		return data;		
 	}
-	
-	private final static int bufferSize = 8192;
-
-	public static String streamToString(InputStream is)
-			throws UnsupportedEncodingException {
-
-		BufferedReader reader = new BufferedReader( new InputStreamReader(is, "UTF-8"), bufferSize );
-		StringBuilder sb = new StringBuilder();
-
-		String line = null;
-		try {
-			while ((line = reader.readLine()) != null) {
-					sb.append(line + "\n");
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				is.close();
-				reader.close();
-			} catch (IOException e) {
-				Log.e("ServerRequest", e.getMessage(), e );
-			}
-		}
-		return sb.toString();
-	}
-
 }
