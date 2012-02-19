@@ -17,14 +17,17 @@
 		android:layout_toRightOf="@id/imageItem"
 		android:layout_marginLeft="20dip"
 		android:layout_centerVertical="true" 
-		android:orientation="vertical">
+		android:orientation="vertical"
+		android:padding="3dip">
 		
 	    <TextView android:id="@+id/textItem"
 	        android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"/>
+		    android:layout_height="wrap_content"
+		    style="@style/title_list_item"/>
 	    
 	    <TextView android:id="@+id/detailsItem"
 	        android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"/>
+		    android:layout_height="wrap_content"
+		    style="@style/descr_list_item"/>
 	</LinearLayout>
 </RelativeLayout>
