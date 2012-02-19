@@ -21,6 +21,11 @@
 	    android:layout_height="wrap_content"
 	    android:gravity="center"/>
     
+    <Button 
+        android:id="@+id/plusUnButton"
+        android:background="@drawable/plusun_btn"
+	    android:layout_width="80dip"
+	    android:layout_height="80dip"
+	    android:gravity="center"/>
     
-
 </LinearLayout>

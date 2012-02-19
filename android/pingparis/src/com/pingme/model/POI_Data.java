@@ -9,6 +9,13 @@ public class POI_Data implements Serializable {
 	public static final int TYPE_LOCATION = 0;
 	public static final int TYPE_WIKIPEDIA = 1;
 
+	private int id;
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
 	private String title;
 	private String descr;
 	private String urlImage;
