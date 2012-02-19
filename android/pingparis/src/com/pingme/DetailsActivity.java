@@ -57,21 +57,20 @@ public class DetailsActivity extends ListActivity implements DownloaderCallback{
 		descr.setText(poiData.getDescription());
 		titleTopbar.setText(getString(R.string.detail_place));
 		
-		
 		plusUnBtn.setOnTouchListener(new OnTouchListener() {
-		        @Override
-		        public boolean onTouch(View v, MotionEvent event) {
-		            if(event.getAction()==MotionEvent.ACTION_DOWN) return true;
-		            if(event.getAction()!=MotionEvent.ACTION_UP) return false;
-		            gotAccount(false);
-		            if (plusUnBtn.isPressed()){
-		            	plusUnBtn.setPressed(false);
-		            }else{
-		            	plusUnBtn.setPressed(true); 
-		            }
-		            return true;
-		        }
-		    });
+	        @Override
+	        public boolean onTouch(View v, MotionEvent event) {
+	            if(event.getAction()==MotionEvent.ACTION_DOWN) return true;
+	            if(event.getAction()!=MotionEvent.ACTION_UP) return false;
+	            gotAccount(false);
+	            if (plusUnBtn.isPressed()){
+	            	plusUnBtn.setPressed(false);
+	            }else{
+	            	plusUnBtn.setPressed(true); 
+	            }
+	            return true;
+	        }
+	    });
 
 		//Add image or search if does not exist
 		if(Utils.isEmpty(poiData.getUrl_image())){

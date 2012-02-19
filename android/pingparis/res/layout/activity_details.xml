@@ -4,8 +4,43 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
     
-    <include android:id="@+id/topBar" layout="@layout/title_topbar" />  
-
+	<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	    android:layout_width="fill_parent"
+	    android:layout_height="50dip"
+	    
+	    android:padding="5dip"
+	    android:background="@drawable/title_bg">
+	    
+        <ImageView
+	        android:layout_width="40dip"
+		    android:layout_height="40dip"
+		    android:src="@drawable/ic_home"
+		    android:layout_marginLeft="5dip"
+	        android:layout_centerVertical="true"
+		/>
+	    
+	    <TextView android:id="@+id/titleBar"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="@string/titleApp"
+	        android:layout_centerHorizontal="true"
+	        android:layout_centerVertical="true"
+	       	style="@style/titlebar_element" 
+           />
+	
+	    <Button 
+	        android:id="@+id/plusUnButton"
+	        android:background="@drawable/plusun_btn"
+		    android:layout_width="40dip"
+		    android:layout_height="50dip"
+			android:layout_centerVertical="true"
+			android:layout_alignParentRight="true"
+			
+		    android:hapticFeedbackEnabled="true"
+			/>
+	    
+    </RelativeLayout>
+    
     <TextView 
         android:id="@+id/titleEvent"
 	    android:layout_width="fill_parent"
@@ -29,14 +64,7 @@
 	    android:ellipsize="marquee"
 	    android:layout_marginBottom="5dip"/>
     
-    <Button 
-        android:id="@+id/plusUnButton"
-        android:background="@drawable/plusun_btn"
-	    android:layout_width="80dip"
-	    android:layout_height="80dip"
-	    android:gravity="center"/>
-
-    <!-- TODO bouton voir plus de texte -->
+    
     
     <ListView 
         android:layout_margin="10dip"
