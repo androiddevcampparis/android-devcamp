@@ -30,7 +30,7 @@
 			    android:layout_width="match_parent"
 			    android:layout_height="wrap_content" 
 			    android:orientation="horizontal"
-			    android:padding="5dip"
+			    android:padding="10dip"
 			    android:layout_marginTop="10dip"
 			    android:layout_marginBottom="10dip">
               
@@ -90,7 +90,8 @@
         android:id="@+id/android:list"
         android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
-	    android:background="@drawable/list_bg">
+	    android:background="@drawable/list_bg"
+	    android:cacheColorHint="@android:color/transparent">
     </ListView>
 
 </LinearLayout>

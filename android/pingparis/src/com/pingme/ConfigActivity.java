@@ -51,8 +51,6 @@ public class ConfigActivity extends ListActivity {
         
         //Adapter to list of choices
         getListView().setSelector(R.drawable.highlight_pressed);
-        getListView().setCacheColorHint(0);
-        
         setListAdapter(new PreferencesAdapter());
 
     }

@@ -135,9 +135,9 @@ public class POIData implements Serializable {
 			actions.add(new WikipediaAction(this));
 		}
 		
-		if(PingMeApplication.isPhotoIntentCallable()){
+		//if(PingMeApplication.isPhotoIntentCallable()){
 			actions.add(new LocatedPhotosAction(this));
-		}
+		//}
 		
 		actions.add(new SearchAction(this));
 		actions.add(new ShareAction(this));
