@@ -13,6 +13,9 @@ import android.widget.TextView;
 import com.pingme.PingMeApplication;
 import com.pingme.R;
 import com.pingme.model.POIData;
+import com.pingme.service.DownloadAsyncTask;
+import com.pingme.service.DownloaderCallback;
+import com.pingme.utils.ImageDownloader;
 
 public class POIAdapter extends BaseAdapter {
 	
@@ -48,9 +51,13 @@ public class POIAdapter extends BaseAdapter {
 		
 		//Build view
 		POIData data = (POIData)getItem(position);
-		
 		ImageView image = (ImageView) cell.findViewById(R.id.imageItem);
-		PingMeApplication.getImageDownloader().download(data.getUrl_image(), image, null, "Adapter");
+		
+		if(data.getUrl_image() == null){
+			new DownloadAsyncTask(new ImageViewContainer(image, data), data).execute(null);
+		} else{
+			PingMeApplication.getImageDownloader().download(data.getUrl_image(), image, null, "Adapter");
+		}
 		
 		TextView text = (TextView) cell.findViewById(R.id.textItem);
 		text.setText(data.getTitle());
@@ -59,5 +66,26 @@ public class POIAdapter extends BaseAdapter {
 		textDetail.setText(data.getDescription());
 		
 		return cell;
+	}
+	
+	public class ImageViewContainer implements DownloaderCallback{
+		private ImageView view;
+		private POIData poiData;
+
+		public ImageViewContainer(ImageView view, POIData poiData) {
+			super();
+			this.view = view;
+			this.poiData = poiData;
+		}
+
+		@Override
+		public void loadingFinished(List<String> datas) {
+			PingMeApplication.getImageDownloader().download(datas.get(0), view, null, "Adapter");
+		}
+
+		@Override
+		public void onError(int code) {
+		}
+		
 	}
 }

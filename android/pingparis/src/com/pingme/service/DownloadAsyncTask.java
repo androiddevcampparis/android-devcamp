@@ -108,7 +108,7 @@ public class DownloadAsyncTask extends AsyncTask<Void, Void, Void> {
 		
 		for(int i=0; i<jsonArray.length(); i++){
 			jsonObject = jsonArray.getJSONObject(i);
-			imagesOut.add(jsonObject.getString("url"));
+			images.add(jsonObject.getString("url"));
 		}
 		
 		return images;		
@@ -122,7 +122,8 @@ public class DownloadAsyncTask extends AsyncTask<Void, Void, Void> {
 			showError();
 		}
 		// Otherwise, update list
-		else if (_mActivity != null && imagesOut != null) {
+		else if (_mActivity != null && imagesOut != null && imagesOut.size()>0) {
+			poiData.setUrl_image(imagesOut.get(0));
 			_mActivity.loadingFinished(imagesOut);
 		}
 	}

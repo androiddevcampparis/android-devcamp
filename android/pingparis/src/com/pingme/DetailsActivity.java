@@ -44,10 +44,10 @@ public class DetailsActivity extends ListActivity implements DownloaderCallback{
 		
 		//Add image or search if does not exist
 		if(Utils.isEmpty(poiData.getUrl_image())){
-			new DownloadAsyncTask(this, poiData);
+			new DownloadAsyncTask(this, poiData).execute(null);
 		} else{
 			final ImageView image = (ImageView) findViewById(R.id.imageEvent);
-			new ImageDownloader(this).download(poiData.getUrl_image(), image, null, "DetailsActivity");
+			PingMeApplication.getImageDownloader().download(poiData.getUrl_image(), image, null, "DetailsActivity");
 		}
 		
 		//Adapter to list of actions
@@ -93,7 +93,7 @@ public class DetailsActivity extends ListActivity implements DownloaderCallback{
 		}
 		
 		final ImageView image = (ImageView) findViewById(R.id.imageEvent);
-		new ImageDownloader(this).download(datas.get(0), image, null, "DetailsActivity");
+		PingMeApplication.getImageDownloader().download(datas.get(0), image, null, "DetailsActivity");
 	}
 
 	@Override
