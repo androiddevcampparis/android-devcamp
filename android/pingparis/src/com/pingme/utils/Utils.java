@@ -1,19 +1,61 @@
 package com.pingme.utils;
 
+import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.Log;
+
 
 public final class Utils {
+	
+	private final static int bufferSize = 8192;
+	
+	public static String streamToString(InputStream is)
+			throws UnsupportedEncodingException {
+
+		BufferedReader reader = new BufferedReader( new InputStreamReader(is, "UTF-8"), bufferSize );
+		StringBuilder sb = new StringBuilder();
+
+		String line = null;
+		try {
+			while ((line = reader.readLine()) != null) {
+					sb.append(line + "\n");
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				is.close();
+				reader.close();
+			} catch (IOException e) {
+				Log.e("ServerRequest", e.getMessage(), e );
+			}
+		}
+		return sb.toString();
+	}
+	
+	public static boolean isCallable(Intent intent, Context context) {  
+        List<ResolveInfo> list = context.getPackageManager().queryIntentActivities(intent,   
+            PackageManager.MATCH_DEFAULT_ONLY);  
+        return list.size() > 0;  
+	}
 
 	static public Object readFromFile(String fileName, Context activity) {
 		Object res = null;
