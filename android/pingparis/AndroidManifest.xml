@@ -38,10 +38,29 @@
             </intent-filter>
         </activity>
 
+        
+        <activity
+            android:launchMode="singleTask"
+            android:name=".OAuthActivity" >
+            <intent-filter >
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="localhost"
+                    android:scheme="http" />
+            </intent-filter>
+        </activity>
+
     </application>
 	
   	<uses-permission android:name="android.permission.INTERNET" />
 	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+	 <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
+    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
+    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
 	<uses-permission android:name="android.permission.VIBRATE" />
-		
 </manifest>

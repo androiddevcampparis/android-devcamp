@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 
-import android.util.Log;
 
 
 class FileCacheHashMap extends LinkedHashMap<String, String> {
