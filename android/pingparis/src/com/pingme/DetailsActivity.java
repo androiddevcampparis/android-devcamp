@@ -30,7 +30,6 @@ import android.widget.Gallery;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.pingme.adapters.ImageAdapter;
 import com.pingme.model.ActionsDetail;
 import com.pingme.model.ActionsDetail.WikipediaAction;
@@ -38,7 +37,6 @@ import com.pingme.model.POIData;
 import com.pingme.service.DownloadAsyncTask;
 import com.pingme.service.DownloaderCallback;
 import com.pingme.service.WikipediaAsyncTask;
-import com.pingme.utils.Utils;
 
 public class DetailsActivity extends Activity implements DownloaderCallback{
 	

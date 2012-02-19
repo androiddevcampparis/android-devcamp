@@ -3,7 +3,6 @@ package com.pingme.model;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
 import com.pingme.PingMeApplication;
 import com.pingme.model.ActionsDetail.LocatedPhotosAction;
 import com.pingme.model.ActionsDetail.MapsDriveAction;

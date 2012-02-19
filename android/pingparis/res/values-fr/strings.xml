@@ -27,6 +27,15 @@
 
 	 <string name="detail_place">Details</string>
 	 <string name="wikipediaExt">Voir aussi: </string>
-    
-    
+	 
+	 
+	 <string name="desc">PongMe est une application permettant de recevoir des notifications en fonction de vos centres d\'intérêts.\nPingMe est un service qui tourne en tâche de fond (service). Il permet de vous proposer des points d\'intérêts et de vous donner de nombreuses informations concernant ces points.\nDe nombreuses actions sont aussi disponibles à partir de ces points d\'intérêts telles que : Partage sur les réseaux sociaux, Visualisation de photos, +1, Données wikipédia...</string>
+     <string name="contrib">Liste des producteurs de données OpenData :</string>
+     <string name="copy">Copyright © PongMe 2012</string>
+     <string name="asso">En association avec :</string>
+     <string name="url_datasoft">http://www.opendatasoft.com</string>
+     <string name="url_datagouv">http://www.data.gouv.fr/</string>
+     <string name="url_dataparis">http://opendata.paris.fr/</string>
+     <string name="url_datapublica">http://www.data-publica.com/</string>
+     <string name="url_paug">http://www.paug.fr/</string>
 </resources>
