@@ -13,6 +13,7 @@ import com.pingme.model.Category;
 import com.pingme.model.Coordinate;
 import com.pingme.model.POIData;
 import com.pingme.service.ServerRequestAsyncTask;
+import com.pingme.service.ServerRequestPlusOneAsyncTask;
 import com.pingme.utils.POIListUtil;
 
 import android.app.Notification;
@@ -40,6 +41,11 @@ public class PingMeService extends Service {
 	
 	public static String PING_BROADCAST_POI_DATA = "com.pingme.PingMeService.PING_BROADCAST_POI_DATA";
 	public static String INTENT_POI_DATA_EXTRA = "com.pingme.PingMeService.INTENT_POI_DATA_EXTRA";
+	public static String INTENT_MD5_EXTRA = "com.pingme.PingMeService.INTENT_MD5_EXTRA";
+
+	public static String PING_BROADCAST_WATCH_POI_DATA = "com.pingme.PingMeService.PING_BROADCAST_WATCH_POI_DATA";
+	public static String INTENT_WATCH_POI_DATA_EXTRA = "com.pingme.PingMeService.INTENT_WATCH_POI_DATA_EXTRA";
+
 	
 	public static String PING_ACTION_UI_CATEGORIES = "com.pingme.PingMeService.PING_ACTION_UI_CATEGORIES";
 	public static String INTENT_CATEGORIES_EXTRA = "com.pingme.PingMeService.INTENT_CATEGORIES_EXTRA";
@@ -133,6 +139,17 @@ public class PingMeService extends Service {
 		
 	}
 	
+	private void queryPlusOne( POIData data, String md5 ){
+		Log.v("PingMeService", "query plus one:"+ data.getId() + " => " + data.isPlus() + " / " + md5 );
+		try{
+			new ServerRequestPlusOneAsyncTask( data, md5 ).execute(null);;
+		}
+		catch( Exception e ){
+			Log.e( "PingMeService", e.getMessage(), e );
+		}
+		
+	}
+	
 	public void processServerResponse( POIData data ){
         
         synchronized( pois ){ 
@@ -145,6 +162,11 @@ public class PingMeService extends Service {
 		Intent broadCastIntent = new Intent( PING_BROADCAST_POI_DATA );
 	    broadCastIntent.putExtra( INTENT_POI_DATA_EXTRA, data );
 	    sendBroadcast( broadCastIntent );
+
+	    broadCastIntent = new Intent( PING_BROADCAST_WATCH_POI_DATA );
+	    broadCastIntent.putExtra( INTENT_WATCH_POI_DATA_EXTRA, data.getWatchPOIData() );
+	    sendBroadcast( broadCastIntent );
+
 	}
 	
     // ----------------------------------------------------------------------------
@@ -216,9 +238,11 @@ public class PingMeService extends Service {
 		}
 		else if( PING_ACTION_POI_DATA_UPDATE.equals( action ) ){
             POIData poiData = (POIData)intent.getSerializableExtra( PingMeService.INTENT_POI_DATA_EXTRA );
+            String md5 = intent.getStringExtra( PingMeService.INTENT_MD5_EXTRA );
             synchronized (pois) {
             	POIListUtil.replacePOI( pois, poiData, MAX_POI_DATA_SIZE );				
 			}
+            queryPlusOne( poiData, md5 );
         }	    
 		else if( PING_ACTION_MOCK_LOCATION.equals( action ) ){
 			double lat = intent.getDoubleExtra("lat", 0 );

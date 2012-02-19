@@ -39,6 +39,13 @@ public class POIData implements Serializable {
 	private boolean plus;
 	private int plusSum = 32;
 
+	public WatchPOIData getWatchPOIData() {
+		WatchPOIData data = new WatchPOIData();
+		data.title = title;
+		data.category = category;
+		return data;
+	}
+	
 	public POIData copy() {
 		POIData data = new POIData();
 		data.id = id;
