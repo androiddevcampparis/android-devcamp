@@ -36,7 +36,7 @@ public class WikipediaAsyncTask extends AsyncTask<Void, Void, Void> {
 	private final DownloaderCallback _mActivity;
 	private int _mErrorMessageId = -1;
 	private POIData poiData;
-	private List<Object> urlOut;
+	private List<WikiData> urlOut;
 
 	public WikipediaAsyncTask(DownloaderCallback activity, POIData poiData) {
 		_mActivity = activity;
@@ -100,9 +100,9 @@ public class WikipediaAsyncTask extends AsyncTask<Void, Void, Void> {
 		}
 	}
 	
-	public List<Object> parseXML(InputStream instream) throws JSONException {
+	public List<WikiData> parseXML(InputStream instream) throws JSONException {
 		Log.v( "ServerRequest parsing", "" );
-		List<Object> urls = new ArrayList<Object>(5);
+		List<WikiData> urls = new ArrayList<WikiData>(5);
 		
 		try {
 			final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -148,7 +148,9 @@ public class WikipediaAsyncTask extends AsyncTask<Void, Void, Void> {
 			WikiData wiki = (WikiData) urlOut.get(0);
 			poiData.setWiki_link(wiki.getName());
 			poiData.setWiki_url(wiki.getUrl());
-			_mActivity.loadingFinished(urlOut);
+			
+			poiData.setListWiki(urlOut);
+			_mActivity.loadingFinished(new ArrayList<Object>(urlOut));
 		}
 	}
 
