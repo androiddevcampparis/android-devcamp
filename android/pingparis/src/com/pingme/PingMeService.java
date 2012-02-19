@@ -208,13 +208,11 @@ public class PingMeService extends Service {
 		
 		if( PING_ACTION_UI_SOUND_NOTIFICATION.equals( action ) ){
 			notificationSound = intent.getBooleanExtra( INTENT_NOTIFICATION_SOUND_EXTRA, false );
-			Toast.makeText( this, "Sound Notification " + notificationSound, Toast.LENGTH_SHORT).show();
 		}
 		else if( PING_ACTION_UI_CATEGORIES.equals( action ) ){
 			Object[] array = (Object[])intent.getSerializableExtra( INTENT_CATEGORIES_EXTRA );
 			categories = new Category[array.length];
 			for( int i = 0; i< array.length; i++ ) categories[i] = (Category)array[i];
-			Toast.makeText( this, "Categories " + Arrays.asList(categories), Toast.LENGTH_SHORT).show();			
 		}
 		else if( PING_ACTION_MOCK_LOCATION.equals( action ) ){
 			double lat = intent.getDoubleExtra("lat", 0 );

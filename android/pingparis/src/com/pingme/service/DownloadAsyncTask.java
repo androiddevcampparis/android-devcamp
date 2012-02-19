@@ -2,6 +2,7 @@ package com.pingme.service;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +48,11 @@ public class DownloadAsyncTask extends AsyncTask<Void, Void, Void> {
 	@Override
 	protected Void doInBackground(Void... arg0) {
 		String url = "https://ajax.googleapis.com/ajax/services/search/images?v=1.0&q=";
-		url += poiData.getTitle();
+		try {
+			url += URLEncoder.encode( poiData.getTitle(), "ISO-8859-1" );
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
 		launchQuery(url);
 		return null;
 	}
@@ -58,12 +63,14 @@ public class DownloadAsyncTask extends AsyncTask<Void, Void, Void> {
 		InputStream instream = null;
 		_mErrorMessageId = -1;
 
-		final HttpUriRequest request = new HttpGet(baseUrl);
-		request.addHeader("Accept-Encoding", "gzip");
-		request.addHeader("Connection", "keep-alive");
-		//request.addHeader("User-Agent", NetworkUtils.getUserAgent(_mActivity));
-
 		try {
+			java.net.URLEncoder.encode(baseUrl.toString(), "ISO-8859-1");
+
+			final HttpUriRequest request = new HttpGet(baseUrl);
+			request.addHeader("Accept-Encoding", "gzip");
+			request.addHeader("Connection", "keep-alive");
+			//request.addHeader("User-Agent", NetworkUtils.getUserAgent(_mActivity));
+
 			response = httpClient.execute(request);
 
 			instream = response.getEntity().getContent();
@@ -79,10 +86,7 @@ public class DownloadAsyncTask extends AsyncTask<Void, Void, Void> {
 				e.printStackTrace();
 				_mErrorMessageId = 1;
 			}
-		} catch (final ClientProtocolException e) {
-			e.printStackTrace();
-			_mErrorMessageId = 1;
-		} catch (final IOException e) {
+		} catch (final Exception e) {
 			e.printStackTrace();
 			_mErrorMessageId = 1;
 		} finally {
