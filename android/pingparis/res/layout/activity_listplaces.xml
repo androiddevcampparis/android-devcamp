@@ -14,5 +14,13 @@
 	    android:background="@drawable/list_bg"
 	    android:cacheColorHint="@android:color/transparent">
     </ListView>
+    
+    <TextView android:id="@+id/nodata"
+               android:layout_width="match_parent"
+               android:layout_height="match_parent"
+               android:background="#000000"
+               android:text="@string/nodata"
+               style="@style/title_detail"
+               android:gravity="center"/>
 
 </LinearLayout>

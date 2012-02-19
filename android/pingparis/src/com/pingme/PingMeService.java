@@ -97,7 +97,7 @@ public class PingMeService extends Service {
         
         long when = System.currentTimeMillis();
 
-        Notification notification = new Notification( android.R.drawable.stat_sys_warning, tickerText, when);
+        Notification notification = new Notification( android.R.drawable.stat_notify_more, tickerText, when);
                 
         PendingIntent contentIntent = DetailsActivity.getMyLauncher( this, data );
         notification.setLatestEventInfo(this, tickerText, data.getTitle(), contentIntent);
@@ -134,13 +134,6 @@ public class PingMeService extends Service {
 	}
 	
 	public void processServerResponse( POIData data ){
-		/*
-        data = new POIData();
-        data.setId("uid"+System.currentTimeMillis());
-        data.setTitle("Tour Effeil");
-        data.setDescription("La plus grand tour de Paris");
-        data.setUrl_image("https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Tour_Eiffel_Wikimedia_Commons.jpg/220px-Tour_Eiffel_Wikimedia_Commons.jpg");
-        */
         
         synchronized( pois ){ 
         	if( !POIListUtil.contains( pois, data )  )
@@ -160,11 +153,12 @@ public class PingMeService extends Service {
 	private static final int MIN_DISTANCE_MOVEMENT_TRIGGER = 20;
 	private double prevLat = 0;
 	private double prevLng = 0;
+	private LocationListener listenerUpdate;
 	
 	private void startLocation(){
 	    LocationManager locationManager = (LocationManager)getSystemService(LOCATION_SERVICE);
-	    locationManager.requestLocationUpdates( LocationManager.NETWORK_PROVIDER, 0, 0, new LocationListener() {
-
+	    
+	    listenerUpdate = new LocationListener() {
 			@Override
 			public void onLocationChanged(Location location) {
 				float[] results = new float[1];
@@ -192,7 +186,9 @@ public class PingMeService extends Service {
 			@Override
 			public void onStatusChanged(String str, int arg1, Bundle arg2) {				
 			}
-		} );
+		};
+		
+		locationManager.requestLocationUpdates( LocationManager.NETWORK_PROVIDER, 30000, 20, listenerUpdate);
 	    
 	    //Add permanent icon in status bar
 //	    Notification notifStatusBar = new Notification(R.drawable.status_icon, getString(R.string.app_name), System.currentTimeMillis());
@@ -245,15 +241,27 @@ public class PingMeService extends Service {
 	@Override
     public void onCreate(){
         super.onCreate();
-        
+        PingMeApplication.setServiceStatus(this, true);
         startLocation();
     }
     
     @Override
     public void onDestroy(){
+    	PingMeApplication.setServiceStatus(this, false);
+    	LocationManager locationManager = (LocationManager)getSystemService(LOCATION_SERVICE);
+    	locationManager.removeUpdates(listenerUpdate);
     	//remove permanent icon in status bar
     	//((NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE)).cancel(1);
     }
+    
+    
+
+
+	@Override
+	protected void finalize() throws Throwable {
+		// TODO Auto-generated method stub
+		super.finalize();
+	}
 
 
     

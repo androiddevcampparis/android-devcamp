@@ -26,5 +26,7 @@
 
 	 <string name="detail_place">Details</string>
 	 <string name="wikipediaExt">See also: </string>
+	 
+	 <string name="nodata">No place found around you</string>
 
 </resources>

@@ -124,8 +124,18 @@ public class ServerRequestAsyncTask extends AsyncTask<Void, Void, Void> {
 		Log.v( "ServerRequest parsing", jsonString );
 		
 		POIData data = new POIData();
-		JSONArray jsonArray = new JSONObject(jsonString).getJSONArray("poiDatas");
-		JSONObject jsonObject = jsonArray.getJSONObject(0); 
+		JSONObject jsonData = new JSONObject(jsonString);
+		Object obj = jsonData.opt("poiDatas");
+		
+		JSONObject jsonObject = null;
+		if( obj instanceof JSONArray ){
+			jsonObject = ((JSONArray)obj).getJSONObject(0); 
+		}
+		else if( obj instanceof JSONObject ){
+			jsonObject = ((JSONObject)obj);
+		}
+		
+		
 		//data.setId( jsonObject.getString("id") );
 		data.setTitle( jsonObject.getString("title") );
 		data.setDescription( jsonObject.getString("description") );
