@@ -25,18 +25,17 @@ import com.pingme.model.POIData;
 
 public class ServerRequest {
 
-	private static final String SERVER_URL = "http://pingme.cloudfoundry.com/poi/%f+%f+%f+%s";
+	private static final String SERVER_URL = "http://pingme.cloudfoundry.com/poi/";
+	private static final int TIMEOUT_MS = 5000;
 	
 	public static POIData fetchPOI( double lat, double lng, double radius, String[] categories ) throws ClientProtocolException, IOException, JSONException {
-		final int timeoutConnection = 45000;
 
 		HttpParams httpParameters = new BasicHttpParams();
-		HttpConnectionParams.setConnectionTimeout(httpParameters,timeoutConnection);
+		HttpConnectionParams.setConnectionTimeout(httpParameters,TIMEOUT_MS);
 
 		// Set the default socket timeout (SO_TIMEOUT)
 		// in milliseconds which is the timeout for waiting for data.
-		final int timeoutSocket = 45000;
-		HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
+		HttpConnectionParams.setSoTimeout(httpParameters, TIMEOUT_MS);
 
 		// Initialize the HTTP client with params
 		HttpClient httpclient = new DefaultHttpClient(httpParameters);
@@ -49,7 +48,7 @@ public class ServerRequest {
 			sb.append( categorie );
 		}
 		
-		String serverURL = String.format( SERVER_URL, lat, lng, radius, sb.toString() );
+		String serverURL = SERVER_URL + lat +"+"+ lng+"+"+radius+"+"+sb.toString();
 		Log.v( "ServerRequest", "URL: " + serverURL );
 		HttpGet httpget = new HttpGet(serverURL);
 		HttpResponse httpResponse = httpclient.execute(httpget);
