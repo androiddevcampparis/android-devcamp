@@ -14,6 +14,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
@@ -210,4 +212,28 @@ public class DetailsActivity extends ListActivity implements DownloaderCallback{
     	 
     	 
      }
+     
+     // ----------------------------------------------------------------------------
+ 	// Menu
+     // ----------------------------------------------------------------------------
+     
+     @Override
+ 	public boolean onOptionsItemSelected(MenuItem item) {
+ 		if (item.getTitle().equals(getString(R.string.menu_configure))) {
+ 			Intent intent = new Intent(this, ConfigActivity.class);
+ 			intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+ 			startActivity(intent);
+ 			return true;
+ 		}
+ 		return false;
+ 	}
+ 	
+ 	@Override
+ 	public boolean onPrepareOptionsMenu(Menu menu) {
+ 		menu.clear();
+ 		menu.add(R.string.menu_configure).setIcon(android.R.drawable.ic_menu_preferences);
+ 		return super.onPrepareOptionsMenu(menu);
+ 	}
+
+
 }

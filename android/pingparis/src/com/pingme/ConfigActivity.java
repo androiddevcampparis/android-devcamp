@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import com.pingme.adapters.CategoriesAdapter;
@@ -26,6 +27,9 @@ public class ConfigActivity extends ListActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+
+        final TextView titleTopbar = (TextView) findViewById(R.id.titleBar);
+        titleTopbar.setText(getString(R.string.title_setting));
 
         //Change notification sound: on/off
         final ToggleButton notificationSoundToggle = (ToggleButton) findViewById(R.id.notificationSound);
