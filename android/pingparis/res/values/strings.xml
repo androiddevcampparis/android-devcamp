@@ -29,5 +29,7 @@
 	 <string name="wikipediaExt">See also: </string>
 	 
 	 <string name="nodata">No place found around you</string>
+	 
+	     <string name="menu_change_server">Change server</string>
 
 </resources>

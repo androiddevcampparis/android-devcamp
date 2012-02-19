@@ -1,11 +1,6 @@
-package com.pingme;
+package com.pongme;
 
 import java.util.List;
-
-import com.pingme.adapters.CategoriesAdapter;
-import com.pingme.model.Category;
-import com.pingme.utils.ImageDownloader;
-import com.pingme.utils.Utils;
 
 import android.app.Application;
 import android.app.Notification;
@@ -15,8 +10,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-
 import android.preference.PreferenceManager;
+
+import com.pongme.model.Category;
+import com.pongme.utils.ImageDownloader;
+import com.pongme.utils.Utils;
 
 public class PingMeApplication extends Application {
 	
@@ -30,6 +28,7 @@ public class PingMeApplication extends Application {
 	private static double lat;
 	private static double lng;
 	private static boolean isPhotoIntentCallable;
+	public static boolean isTest = true;
 	
 	private static boolean firstLaunch = true;
 
@@ -44,7 +43,7 @@ public class PingMeApplication extends Application {
 		editor.commit();
 		
 		Intent serviceIntent = new Intent( PingMeService.PING_ACTION_UI_SOUND_NOTIFICATION );
-		serviceIntent.setClassName( context, "com.pingme.PingMeService" );
+		serviceIntent.setClassName( context, "com.pongme.PingMeService" );
 
 		serviceIntent.putExtra( PingMeService.INTENT_NOTIFICATION_SOUND_EXTRA, status );
 		context.startService( serviceIntent );			
@@ -62,7 +61,7 @@ public class PingMeApplication extends Application {
 		editor.commit();
 
 		Intent serviceIntent = new Intent( PingMeService.PING_ACTION_LIFECYCLE );
-		serviceIntent.setClassName( context, "com.pingme.PingMeService" );
+		serviceIntent.setClassName( context, "com.pongme.PingMeService" );
 		if( status ){
 			context.startService( serviceIntent );			
 		}
@@ -116,7 +115,7 @@ public class PingMeApplication extends Application {
 		}
 		
 		Intent serviceIntent = new Intent( PingMeService.PING_ACTION_UI_CATEGORIES );
-		serviceIntent.setClassName( context, "com.pingme.PingMeService" );
+		serviceIntent.setClassName( context, "com.pongme.PingMeService" );
 
 		Category[] catArray = categories.toArray(new Category[0]) ;
 		serviceIntent.putExtra( PingMeService.INTENT_CATEGORIES_EXTRA,  catArray );

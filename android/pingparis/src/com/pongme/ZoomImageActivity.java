@@ -1,10 +1,10 @@
-package com.pingme;
-
-import com.pingme.model.POIData;
+package com.pongme;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.widget.ImageView;
+
+import com.pongme.model.POIData;
 
 public class ZoomImageActivity extends Activity {
 

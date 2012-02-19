@@ -1,4 +1,4 @@
-package com.pingme.service;
+package com.pongme.service;
 
 import java.util.List;
 

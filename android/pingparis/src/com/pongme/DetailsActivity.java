@@ -1,4 +1,4 @@
-package com.pingme;
+package com.pongme;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -30,13 +30,14 @@ import android.widget.Gallery;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.pingme.adapters.ImageAdapter;
-import com.pingme.model.ActionsDetail;
-import com.pingme.model.ActionsDetail.WikipediaAction;
-import com.pingme.model.POIData;
-import com.pingme.service.DownloadAsyncTask;
-import com.pingme.service.DownloaderCallback;
-import com.pingme.service.WikipediaAsyncTask;
+
+import com.pongme.adapters.ImageAdapter;
+import com.pongme.model.ActionsDetail;
+import com.pongme.model.ActionsDetail.WikipediaAction;
+import com.pongme.model.POIData;
+import com.pongme.service.DownloadAsyncTask;
+import com.pongme.service.DownloaderCallback;
+import com.pongme.service.WikipediaAsyncTask;
 
 public class DetailsActivity extends Activity implements DownloaderCallback{
 	
@@ -76,24 +77,29 @@ public class DetailsActivity extends Activity implements DownloaderCallback{
 	        public boolean onTouch(View v, MotionEvent event) {
 	            if(event.getAction()==MotionEvent.ACTION_DOWN) return true;
 	            if(event.getAction()!=MotionEvent.ACTION_UP) return false;
-	            gotAccount(false);
 	            
-	            
-	            if (plusUnBtn.isPressed()){
-	            	poiData.setPlusSum( poiData.getPlusSum()-1 );
-	            	plusUnBtn.setPressed(false);
-	            }else{
-	            	poiData.setPlusSum( poiData.getPlusSum()+1 );
-	            	plusUnBtn.setPressed(true); 
+	            String md5 = gotAccount();
+	            if ( md5 != null ){
+	            	if (plusUnBtn.isPressed()){
+	            		poiData.setPlusSum( poiData.getPlusSum()-1 );
+	            		plusUnBtn.setPressed(false);
+	            	}else{
+	            		poiData.setPlusSum( poiData.getPlusSum()+1 );
+	            		plusUnBtn.setPressed(true); 
+	            	}
+	            	
+	            	plusUnSum.setText( Integer.toString( poiData.getPlusSum() ) );
+	            	poiData.setPlus( plusUnBtn.isPressed() );
+	            	
+	            	
+	            	
+	            	Intent serviceIntent = new Intent( PingMeService.PING_ACTION_POI_DATA_UPDATE );
+	            	serviceIntent.setClassName( context, "com.pongme.PingMeService" );
+	            	serviceIntent.putExtra( PingMeService.INTENT_POI_DATA_EXTRA, poiData.copy() );	    		
+	            	serviceIntent.putExtra( PingMeService.INTENT_MD5_EXTRA, md5 );	    		
+	            	context.startService( serviceIntent );				            	
 	            }
 	            
-        		plusUnSum.setText( Integer.toString( poiData.getPlusSum() ) );
-	            poiData.setPlus( plusUnBtn.isPressed() );
-	            
-	    		Intent serviceIntent = new Intent( PingMeService.PING_ACTION_POI_DATA_UPDATE );
-	    		serviceIntent.setClassName( context, "com.pingme.PingMeService" );
-	    		serviceIntent.putExtra( PingMeService.INTENT_POI_DATA_EXTRA, poiData.copy() );	    		
-    			context.startService( serviceIntent );			
 
 	    		return true;
 	        }
@@ -266,7 +272,7 @@ public class DetailsActivity extends Activity implements DownloaderCallback{
     	    return "";
     	}
      
-     private void gotAccount(boolean tokenExpired) {
+     private String gotAccount() {
        SharedPreferences settings = getSharedPreferences("test", 0);
        String accountName = settings.getString("accountName", null);
        if (accountName != null) {
@@ -276,20 +282,22 @@ public class DetailsActivity extends Activity implements DownloaderCallback{
          for (int i = 0; i < size; i++) {
            Account account = accounts[i];
            if (accountName.equals(account.name)) {
+        	   String md5 = md5(account.name);
+        	   
         	   if (plusUnBtn.isPressed()){
                    Toast.makeText(this,"-1 "+account.name , Toast.LENGTH_SHORT).show(); 
-                   sendData(poiData.getId()+md5(account.name)+true);
         	   }else{
         		   Toast.makeText(this,"+1 "+account.name , Toast.LENGTH_SHORT).show();
-        		   sendData(poiData.getId()+md5(account.name)+false);
         	   }
+        	   
                 plusUnBtn.setSelected(true);
              gotAccount(manager, account);
-             return;
+             return md5;
            }
          }
        }
        showDialog(DIALOG_ACCOUNTS);
+       return null;
      }
 
      private void gotAccount(final AccountManager manager, final Account account) {
@@ -299,10 +307,6 @@ public class DetailsActivity extends Activity implements DownloaderCallback{
        editor.commit();            
      }
      
-     private void sendData(String s){
-    	 
-    	 
-     }
      
      // ----------------------------------------------------------------------------
  	// Menu

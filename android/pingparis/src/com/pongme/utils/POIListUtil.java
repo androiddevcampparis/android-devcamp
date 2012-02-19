@@ -1,9 +1,9 @@
-package com.pingme.utils;
+package com.pongme.utils;
 
 
 import java.util.List;
 
-import com.pingme.model.POIData;
+import com.pongme.model.POIData;
 
 public class POIListUtil {
 	

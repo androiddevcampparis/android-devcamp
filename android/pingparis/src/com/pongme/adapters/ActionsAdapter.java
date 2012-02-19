@@ -1,4 +1,4 @@
-package com.pingme.adapters;
+package com.pongme.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,19 +8,27 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.pingme.R;
-import com.pingme.model.Category;
+import com.pongme.R;
+import com.pongme.model.ActionsDetail;
+import com.pongme.model.POIData;
 
-public class CategoriesAdapter extends BaseAdapter {
+public class ActionsAdapter extends BaseAdapter {
+	
+	private POIData data;
+
+	public ActionsAdapter(POIData data) {
+		super();
+		this.data = data;
+	}
 
 	@Override
 	public int getCount() {
-		return Category.getCategories().size();
+		return data.getActions().size();
 	}
 
 	@Override
 	public Object getItem(int arg0) {
-		return Category.getCategories().get(arg0);
+		return data.getActions().get(arg0);
 	}
 
 	@Override
@@ -33,25 +41,18 @@ public class CategoriesAdapter extends BaseAdapter {
 		View cell = convertView;
 		if (cell == null) {
 			final LayoutInflater layoutInflater = (LayoutInflater) parent.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			cell = layoutInflater.inflate(R.layout.item_preferences, null);
+			cell = layoutInflater.inflate(R.layout.item_action, null);
 		}
 		
 		//Build view
-		Category pref = (Category)getItem(position);
-		setStatusIcon(cell, pref);
+		ActionsDetail action = (ActionsDetail)getItem(position);
 		
 		ImageView image = (ImageView) cell.findViewById(R.id.imageItem);
-		image.setImageResource(pref.getIdRes());
+		image.setImageResource(action.getIdRes());
 		
 		TextView text = (TextView) cell.findViewById(R.id.textItem);
-		text.setText(pref.getName());
+		text.setText(action.getName());
 		
 		return cell;
 	}
-	
-	public static void setStatusIcon(View view, Category pref){
-		ImageView imageStatus = (ImageView) view.findViewById(R.id.statusItem);
-		imageStatus.setImageResource(pref.isChecked() ? R.drawable.pref_on : R.drawable.pref_off);
-	}
-
 }

@@ -1,4 +1,4 @@
-package com.pingme.service;
+package com.pongme.service;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,8 +21,8 @@ import org.json.JSONObject;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.pingme.model.POIData;
-import com.pingme.utils.Utils;
+import com.pongme.model.POIData;
+import com.pongme.utils.Utils;
 
 public class DownloadAsyncTask extends AsyncTask<Void, Void, Void> {
 

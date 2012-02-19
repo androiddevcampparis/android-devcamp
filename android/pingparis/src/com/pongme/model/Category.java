@@ -1,11 +1,11 @@
-package com.pingme.model;
+package com.pongme.model;
 
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.pingme.PingMeApplication;
-import com.pingme.R;
+import com.pongme.PingMeApplication;
+import com.pongme.R;
 
 public class Category implements Serializable {
 	private static final long serialVersionUID = 1L;

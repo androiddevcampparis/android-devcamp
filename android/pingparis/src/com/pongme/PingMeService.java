@@ -1,26 +1,15 @@
-package com.pingme;
+package com.pongme;
 
 
 
 
 import java.util.ArrayList;
-import java.util.Arrays;
-
 import java.util.List;
-
-import com.pingme.adapters.POIAdapter;
-import com.pingme.model.Category;
-import com.pingme.model.Coordinate;
-import com.pingme.model.POIData;
-import com.pingme.service.ServerRequestAsyncTask;
-import com.pingme.utils.POIListUtil;
 
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.location.Location;
@@ -32,27 +21,39 @@ import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.pongme.model.Category;
+import com.pongme.model.Coordinate;
+import com.pongme.model.POIData;
+import com.pongme.service.ServerRequestAsyncTask;
+import com.pongme.service.ServerRequestPlusOneAsyncTask;
+import com.pongme.utils.POIListUtil;
+
 
 public class PingMeService extends Service {
 
-	public static String PING_BROADCAST_LOCATION = "com.pingme.PingMeService.PING_BROADCAST_LOCATION";
-	public static String INTENT_LOCATION_EXTRA = "com.pingme.PingMeService.INTENT_LOCATION_EXTRA";
+	public static String PING_BROADCAST_LOCATION = "com.pongme.PingMeService.PING_BROADCAST_LOCATION";
+	public static String INTENT_LOCATION_EXTRA = "com.pongme.PingMeService.INTENT_LOCATION_EXTRA";
 	
-	public static String PING_BROADCAST_POI_DATA = "com.pingme.PingMeService.PING_BROADCAST_POI_DATA";
-	public static String INTENT_POI_DATA_EXTRA = "com.pingme.PingMeService.INTENT_POI_DATA_EXTRA";
-	
-	public static String PING_ACTION_UI_CATEGORIES = "com.pingme.PingMeService.PING_ACTION_UI_CATEGORIES";
-	public static String INTENT_CATEGORIES_EXTRA = "com.pingme.PingMeService.INTENT_CATEGORIES_EXTRA";
-	
-	
-	public static String INTENT_IS_NOTIF_EXTRA = "com.pingme.PingMeService.INTENT_IS_NOTIF_EXTRA";
+	public static String PING_BROADCAST_POI_DATA = "com.pongme.PingMeService.PING_BROADCAST_POI_DATA";
+	public static String INTENT_POI_DATA_EXTRA = "com.pongme.PingMeService.INTENT_POI_DATA_EXTRA";
+	public static String INTENT_MD5_EXTRA = "com.pongme.PingMeService.INTENT_MD5_EXTRA";
 
-	public static String INTENT_NOTIFICATION_SOUND_EXTRA = "com.pingme.PingMeService.INTENT_NOTIFICATION_SOUND_EXTRA";
+	public static String PING_BROADCAST_WATCH_POI_DATA = "com.pongme.PingMeService.PING_BROADCAST_WATCH_POI_DATA";
+	public static String INTENT_WATCH_POI_DATA_EXTRA = "com.pongme.PingMeService.INTENT_WATCH_POI_DATA_EXTRA";
 
-	public static String PING_ACTION_LIFECYCLE = "com.pingme.PingMeService.PING_ACTION_LIFECYCLE";
-	public static String PING_ACTION_UI_SOUND_NOTIFICATION = "com.pingme.PingMeService.PING_ACTION_UI_SOUND_NOTIFICATION";
-	public static String PING_ACTION_MOCK_LOCATION = "com.pingme.PingMeService.PING_ACTION_MOCK_LOCATION";
-	public static String PING_ACTION_POI_DATA_UPDATE = "com.pingme.PingMeService.PING_ACTION_POI_DATA_UPDATE";
+	
+	public static String PING_ACTION_UI_CATEGORIES = "com.pongme.PingMeService.PING_ACTION_UI_CATEGORIES";
+	public static String INTENT_CATEGORIES_EXTRA = "com.pongme.PingMeService.INTENT_CATEGORIES_EXTRA";
+	
+	
+	public static String INTENT_IS_NOTIF_EXTRA = "com.pongme.PingMeService.INTENT_IS_NOTIF_EXTRA";
+
+	public static String INTENT_NOTIFICATION_SOUND_EXTRA = "com.pongme.PingMeService.INTENT_NOTIFICATION_SOUND_EXTRA";
+
+	public static String PING_ACTION_LIFECYCLE = "com.pongme.PingMeService.PING_ACTION_LIFECYCLE";
+	public static String PING_ACTION_UI_SOUND_NOTIFICATION = "com.pongme.PingMeService.PING_ACTION_UI_SOUND_NOTIFICATION";
+	public static String PING_ACTION_MOCK_LOCATION = "com.pongme.PingMeService.PING_ACTION_MOCK_LOCATION";
+	public static String PING_ACTION_POI_DATA_UPDATE = "com.pongme.PingMeService.PING_ACTION_POI_DATA_UPDATE";
 	
 	public static final boolean NOTIFICATION_SOUND_DEFAULT = false;
 	private boolean notificationSound = NOTIFICATION_SOUND_DEFAULT; 
@@ -133,6 +134,17 @@ public class PingMeService extends Service {
 		
 	}
 	
+	private void queryPlusOne( POIData data, String md5 ){
+		Log.v("PingMeService", "query plus one:"+ data.getId() + " => " + data.isPlus() + " / " + md5 );
+		try{
+			new ServerRequestPlusOneAsyncTask( data, md5 ).execute(null);;
+		}
+		catch( Exception e ){
+			Log.e( "PingMeService", e.getMessage(), e );
+		}
+		
+	}
+	
 	public void processServerResponse( POIData data ){
         
         synchronized( pois ){ 
@@ -145,6 +157,11 @@ public class PingMeService extends Service {
 		Intent broadCastIntent = new Intent( PING_BROADCAST_POI_DATA );
 	    broadCastIntent.putExtra( INTENT_POI_DATA_EXTRA, data );
 	    sendBroadcast( broadCastIntent );
+
+	    broadCastIntent = new Intent( PING_BROADCAST_WATCH_POI_DATA );
+	    broadCastIntent.putExtra( INTENT_WATCH_POI_DATA_EXTRA, data.getWatchPOIData() );
+	    sendBroadcast( broadCastIntent );
+
 	}
 	
     // ----------------------------------------------------------------------------
@@ -216,9 +233,11 @@ public class PingMeService extends Service {
 		}
 		else if( PING_ACTION_POI_DATA_UPDATE.equals( action ) ){
             POIData poiData = (POIData)intent.getSerializableExtra( PingMeService.INTENT_POI_DATA_EXTRA );
+            String md5 = intent.getStringExtra( PingMeService.INTENT_MD5_EXTRA );
             synchronized (pois) {
             	POIListUtil.replacePOI( pois, poiData, MAX_POI_DATA_SIZE );				
 			}
+            queryPlusOne( poiData, md5 );
         }	    
 		else if( PING_ACTION_MOCK_LOCATION.equals( action ) ){
 			double lat = intent.getDoubleExtra("lat", 0 );

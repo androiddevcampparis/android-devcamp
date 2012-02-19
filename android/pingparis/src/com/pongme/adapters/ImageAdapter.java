@@ -1,4 +1,4 @@
-package com.pingme.adapters;
+package com.pongme.adapters;
 
 import java.util.List;
 
@@ -10,9 +10,9 @@ import android.widget.BaseAdapter;
 import android.widget.Gallery;
 import android.widget.ImageView;
 
-import com.pingme.PingMeApplication;
-import com.pingme.R;
-import com.pingme.model.POIData;
+import com.pongme.PingMeApplication;
+import com.pongme.R;
+import com.pongme.model.POIData;
 
 public class ImageAdapter extends BaseAdapter {
 

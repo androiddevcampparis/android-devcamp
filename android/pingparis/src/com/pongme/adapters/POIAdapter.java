@@ -1,4 +1,4 @@
-package com.pingme.adapters;
+package com.pongme.adapters;
 
 import java.util.List;
 
@@ -10,12 +10,11 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.pingme.PingMeApplication;
-import com.pingme.R;
-import com.pingme.model.POIData;
-import com.pingme.service.DownloadAsyncTask;
-import com.pingme.service.DownloaderCallback;
-import com.pingme.utils.ImageDownloader;
+import com.pongme.PingMeApplication;
+import com.pongme.R;
+import com.pongme.model.POIData;
+import com.pongme.service.DownloadAsyncTask;
+import com.pongme.service.DownloaderCallback;
 
 public class POIAdapter extends BaseAdapter {
 	

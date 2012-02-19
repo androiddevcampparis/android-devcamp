@@ -1,4 +1,4 @@
-package com.pingme.model;
+package com.pongme.model;
 
 import java.util.List;
 
@@ -8,8 +8,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
 
-import com.pingme.PingMeApplication;
-import com.pingme.R;
+import com.pongme.PingMeApplication;
+import com.pongme.R;
 
 public abstract class ActionsDetail {
 

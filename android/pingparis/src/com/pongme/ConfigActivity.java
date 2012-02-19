@@ -1,26 +1,22 @@
-package com.pingme;
-
-
-import android.content.Context;
-import android.content.Intent;
+package com.pongme;
 
 
 import android.app.ListActivity;
 import android.app.PendingIntent;
-
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import com.pingme.adapters.CategoriesAdapter;
-
-import com.pingme.model.Category;
+import com.pongme.adapters.CategoriesAdapter;
+import com.pongme.model.Category;
 
 public class ConfigActivity extends ListActivity {
     /** Called when the activity is first created. */
@@ -95,6 +91,11 @@ public class ConfigActivity extends ListActivity {
 			startActivity(intent);
 			return true;
 		}
+		if (item.getTitle().equals(getString(R.string.menu_change_server))) {
+			PingMeApplication.isTest = !PingMeApplication.isTest;
+			Toast.makeText(this, "Server de test: " + PingMeApplication.isTest, Toast.LENGTH_SHORT).show();
+			return true;
+		}
 		return false;
 	}
 	
@@ -103,6 +104,7 @@ public class ConfigActivity extends ListActivity {
 		menu.clear();
 		menu.add(R.string.menu_openlist).setIcon(android.R.drawable.ic_menu_gallery);
 		menu.add(R.string.menu_tuto).setIcon(android.R.drawable.ic_menu_help);
+		menu.add(R.string.menu_change_server).setIcon(android.R.drawable.ic_menu_edit);
 		return super.onPrepareOptionsMenu(menu);
 	}
 

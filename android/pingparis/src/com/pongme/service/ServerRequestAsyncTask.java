@@ -1,23 +1,13 @@
-package com.pingme.service;
+package com.pongme.service;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.zip.GZIPInputStream;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
@@ -25,18 +15,15 @@ import org.apache.http.params.HttpParams;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Document;
-import org.xml.sax.SAXException;
 
-import com.pingme.PingMeService;
-import com.pingme.model.Category;
-import com.pingme.model.POIData;
-import com.pingme.utils.Utils;
-
-import android.content.Context;
 import android.os.AsyncTask;
-import android.telephony.TelephonyManager;
 import android.util.Log;
+
+import com.pongme.PingMeApplication;
+import com.pongme.PingMeService;
+import com.pongme.model.Category;
+import com.pongme.model.POIData;
+import com.pongme.utils.Utils;
 
 public class ServerRequestAsyncTask extends AsyncTask<Void, Void, Void> {
 
@@ -77,6 +64,7 @@ public class ServerRequestAsyncTask extends AsyncTask<Void, Void, Void> {
 		service.processServerResponse( outData );	
 	}
 	
+	private static final String SERVER_URL_PROD = "http://pongserver.appspot.com/poi/";
 	private static final String SERVER_URL = "http://pingme.cloudfoundry.com/poi/";
 	private static final int TIMEOUT_MS = 5000;
 	
@@ -100,7 +88,8 @@ public class ServerRequestAsyncTask extends AsyncTask<Void, Void, Void> {
 			if( category.isChecked() ) sb.append( category.getIdSync() );
 		}
 		
-		String serverURL = SERVER_URL + lat +"+"+ lng+"+"+radius+"+"+sb.toString();
+		String serverBaseUrl = PingMeApplication.isTest ? SERVER_URL : SERVER_URL_PROD;
+		String serverURL = serverBaseUrl + lat +"+"+ lng+"+"+radius+"+"+sb.toString();
 		Log.v( "ServerRequest", "URL: " + serverURL );
 		HttpGet httpget = new HttpGet(serverURL);
 		HttpResponse httpResponse = httpclient.execute(httpget);

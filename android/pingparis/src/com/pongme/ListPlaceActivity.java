@@ -1,7 +1,6 @@
-package com.pingme;
+package com.pongme;
 
 import java.util.List;
-
 
 import android.app.ListActivity;
 import android.content.BroadcastReceiver;
@@ -15,14 +14,13 @@ import android.os.IBinder;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.pingme.adapters.POIAdapter;
-import com.pingme.model.Coordinate;
-import com.pingme.model.POIData;
-import com.pingme.utils.POIListUtil;
+import com.pongme.adapters.POIAdapter;
+import com.pongme.model.Coordinate;
+import com.pongme.model.POIData;
+import com.pongme.utils.POIListUtil;
 
 
 public class ListPlaceActivity extends ListActivity {
@@ -42,6 +40,7 @@ public class ListPlaceActivity extends ListActivity {
 			
 			getListView().setVisibility(View.VISIBLE);
             findViewById(R.id.nodata).setVisibility(View.INVISIBLE);
+
 			getListView().setAdapter(new POIAdapter(poiList));			
 		}
 	}
@@ -67,6 +66,7 @@ public class ListPlaceActivity extends ListActivity {
             
             getListView().setVisibility(View.VISIBLE);
             findViewById(R.id.nodata).setVisibility(View.INVISIBLE);
+
             getListView().setAdapter(new POIAdapter(poiList));
         }
     };
@@ -98,7 +98,7 @@ public class ListPlaceActivity extends ListActivity {
         setContentView(R.layout.activity_listplaces);
         getListView().setSelector(R.drawable.highlight_pressed);
         getListView().setVisibility(View.INVISIBLE);
-        
+
         final TextView titleTopbar = (TextView) findViewById(R.id.titleBar);
         titleTopbar.setText(getString(R.string.titleApp));
         
@@ -120,6 +120,7 @@ public class ListPlaceActivity extends ListActivity {
 
     @Override
     public void onResume(){
+    	
         super.onResume();
         
         reloadAdapterDataFromService();

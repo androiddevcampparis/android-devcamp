@@ -1,4 +1,4 @@
-package com.pingme.model;
+package com.pongme.model;
 
 import java.io.Serializable;
 

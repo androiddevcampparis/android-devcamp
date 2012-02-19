@@ -1,6 +1,7 @@
-package com.pingme.service;
+package com.pongme.service;
 
 import java.io.IOException;
+
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
@@ -9,19 +10,21 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.json.JSONException;
-import com.pingme.DetailsActivity;
+
 import android.os.AsyncTask;
 import android.util.Log;
+
+import com.pongme.model.POIData;
 
 public class ServerRequestPlusOneAsyncTask extends AsyncTask<Void, Void, Void> {
 
 	@SuppressWarnings("unused")
-	private DetailsActivity detailsAct;
-	private String requete;
+	private POIData poiData;
+	private String md5;
 
-	public ServerRequestPlusOneAsyncTask(DetailsActivity detailsActivity, String s) {
-		this.detailsAct = detailsActivity;
-		this.requete=s;
+	public ServerRequestPlusOneAsyncTask( POIData poiData, String md5 ) {
+		this.poiData = poiData;
+		this.md5 = md5;
 	}
 	
 	@Override
@@ -57,7 +60,7 @@ public class ServerRequestPlusOneAsyncTask extends AsyncTask<Void, Void, Void> {
 		// Initialize the HTTP client with params
 		HttpClient httpclient = new DefaultHttpClient(httpParameters);
 		
-		String serverURL = SERVER_URL + requete.toString();
+		String serverURL = SERVER_URL + poiData.getId() + "+" + md5 + "+" + poiData.isPlus();
 		Log.v( "ServerRequest", "URL: " + serverURL );
 		HttpPost httpPost = new HttpPost(serverURL);
 		httpclient.execute(httpPost);

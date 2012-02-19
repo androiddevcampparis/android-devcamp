@@ -1,4 +1,4 @@
-package com.pingme.adapters;
+package com.pongme.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,28 +8,19 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.pingme.R;
-import com.pingme.model.ActionsDetail;
-import com.pingme.model.POIData;
-import com.pingme.model.Category;
+import com.pongme.R;
+import com.pongme.model.Category;
 
-public class ActionsAdapter extends BaseAdapter {
-	
-	private POIData data;
-
-	public ActionsAdapter(POIData data) {
-		super();
-		this.data = data;
-	}
+public class CategoriesAdapter extends BaseAdapter {
 
 	@Override
 	public int getCount() {
-		return data.getActions().size();
+		return Category.getCategories().size();
 	}
 
 	@Override
 	public Object getItem(int arg0) {
-		return data.getActions().get(arg0);
+		return Category.getCategories().get(arg0);
 	}
 
 	@Override
@@ -42,18 +33,25 @@ public class ActionsAdapter extends BaseAdapter {
 		View cell = convertView;
 		if (cell == null) {
 			final LayoutInflater layoutInflater = (LayoutInflater) parent.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			cell = layoutInflater.inflate(R.layout.item_action, null);
+			cell = layoutInflater.inflate(R.layout.item_preferences, null);
 		}
 		
 		//Build view
-		ActionsDetail action = (ActionsDetail)getItem(position);
+		Category pref = (Category)getItem(position);
+		setStatusIcon(cell, pref);
 		
 		ImageView image = (ImageView) cell.findViewById(R.id.imageItem);
-		image.setImageResource(action.getIdRes());
+		image.setImageResource(pref.getIdRes());
 		
 		TextView text = (TextView) cell.findViewById(R.id.textItem);
-		text.setText(action.getName());
+		text.setText(pref.getName());
 		
 		return cell;
 	}
+	
+	public static void setStatusIcon(View view, Category pref){
+		ImageView imageStatus = (ImageView) view.findViewById(R.id.statusItem);
+		imageStatus.setImageResource(pref.isChecked() ? R.drawable.pref_on : R.drawable.pref_off);
+	}
+
 }

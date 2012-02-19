@@ -1,16 +1,16 @@
-package com.pingme.model;
+package com.pongme.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import com.pingme.PingMeApplication;
-import com.pingme.model.ActionsDetail.LocatedPhotosAction;
-import com.pingme.model.ActionsDetail.MapsDriveAction;
-import com.pingme.model.ActionsDetail.SearchAction;
-import com.pingme.model.ActionsDetail.ShareAction;
-import com.pingme.model.ActionsDetail.WikipediaAction;
 
-import com.pingme.utils.Utils;
+import com.pongme.PingMeApplication;
+import com.pongme.model.ActionsDetail.LocatedPhotosAction;
+import com.pongme.model.ActionsDetail.MapsDriveAction;
+import com.pongme.model.ActionsDetail.SearchAction;
+import com.pongme.model.ActionsDetail.ShareAction;
+import com.pongme.model.ActionsDetail.WikipediaAction;
+import com.pongme.utils.Utils;
 
 /*
  * Check https://github.com/androiddevcampparis/android-devcamp-server/blob/master/src/main/java/com/devcamp/server/resources/ResponseData.java
@@ -39,6 +39,13 @@ public class POIData implements Serializable {
 	private boolean plus;
 	private int plusSum = 32;
 
+	public WatchPOIData getWatchPOIData() {
+		WatchPOIData data = new WatchPOIData();
+		data.title = title;
+		data.category = category;
+		return data;
+	}
+	
 	public POIData copy() {
 		POIData data = new POIData();
 		data.id = id;

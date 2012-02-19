@@ -1,4 +1,4 @@
-package com.pingme;
+package com.pongme;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -20,6 +20,10 @@ public class CredentialActivity extends FragmentActivity implements OnPageChange
 	 static final int NUM_ITEMS = 3;
 	    MyAdapter mAdapter;
 	    ViewPager mPager;
+	    
+	    @Override
+		public void onSaveInstanceState(Bundle outState) {
+		}
 
 	    @Override
 	    protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +58,6 @@ public class CredentialActivity extends FragmentActivity implements OnPageChange
 
 	    public static class ArrayListFragment extends Fragment {
 	        int mNum;
-
 	        
 	        /**
 	         * Create a new instance of CountingFragment, providing "num"
@@ -70,8 +73,14 @@ public class CredentialActivity extends FragmentActivity implements OnPageChange
 
 	            return f;
 	        }
+	        
+	        
 
-	        /**
+	        @Override
+			public void onSaveInstanceState(Bundle outState) {
+			}
+
+			/**
 	         * When creating, retrieve this instance's number from its arguments.
 	         */
 	        @Override

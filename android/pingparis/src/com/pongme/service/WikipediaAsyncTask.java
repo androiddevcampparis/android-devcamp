@@ -1,9 +1,7 @@
-package com.pingme.service;
+package com.pongme.service;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
@@ -28,9 +26,8 @@ import org.xml.sax.SAXException;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.pingme.PingMeApplication;
-import com.pingme.model.POIData;
-import com.pingme.model.WikiData;
+import com.pongme.model.POIData;
+import com.pongme.model.WikiData;
 
 public class WikipediaAsyncTask extends AsyncTask<Void, Void, Void> {
 

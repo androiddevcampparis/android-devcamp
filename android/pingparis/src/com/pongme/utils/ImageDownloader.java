@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.pingme.utils;
+package com.pongme.utils;
 
 import java.io.File;
 import java.io.FileOutputStream;
