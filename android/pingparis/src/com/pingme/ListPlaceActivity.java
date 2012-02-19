@@ -10,17 +10,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
-import android.location.Location;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.pingme.adapters.POIAdapter;
-import com.pingme.model.ActionsDetail;
 import com.pingme.model.Coordinate;
 import com.pingme.model.POIData;
 import com.pingme.utils.POIListUtil;
@@ -35,18 +34,22 @@ public class ListPlaceActivity extends ListActivity {
 	// ----------------------------------------------------------------------------
 	// Service Binding
     // ----------------------------------------------------------------------------
+	private PingMeService pingMeService;
+	private void reloadAdapterDataFromService() {
+		if( pingMeService != null ){
+			List<POIData> list = pingMeService.getPOIList();
+			poiList = list.subList( Math.max(0,list.size()-MAX_POI_DATA_SIZE), list.size() );
+			getListView().setAdapter(new POIAdapter(poiList));			
+		}
+	}
+	
     private ServiceConnection onService = new ServiceConnection(){
         public void onServiceConnected( ComponentName className, IBinder rawBinder ){
-            PingMeService pingMeService = ( (PingMeService.LocalBinder) rawBinder ).getService();
-            List<POIData> list = pingMeService.getPOIList();
-            poiList = list.subList( Math.max(0,list.size()-MAX_POI_DATA_SIZE), list.size() );
-
-            registerReceiver( receiver, new IntentFilter( PingMeService.PING_BROADCAST_POI_DATA ) );
-            registerReceiver( receiver, new IntentFilter( PingMeService.PING_BROADCAST_LOCATION ) );
-            setDataToList(null);
+            pingMeService = ( (PingMeService.LocalBinder) rawBinder ).getService();
+            reloadAdapterDataFromService();
         }
         public void onServiceDisconnected( ComponentName className ){
-            unregisterReceiver( receiver );
+        	pingMeService = null;
         }
     };
 
@@ -60,7 +63,8 @@ public class ListPlaceActivity extends ListActivity {
             if( PingMeService.PING_BROADCAST_POI_DATA.equals( action ) ){
                 POIData poiData = (POIData)intent.getSerializableExtra( PingMeService.INTENT_POI_DATA_EXTRA );
                 POIListUtil.enqueuePOI( poiList, poiData, MAX_POI_DATA_SIZE );
-                setDataToList(poiData);
+                
+                getListView().setAdapter(new POIAdapter(poiList));
             }
             if( PingMeService.PING_BROADCAST_LOCATION.equals( action ) ){
                 Coordinate currentLocation = (Coordinate)intent.getSerializableExtra( PingMeService.INTENT_LOCATION_EXTRA );
@@ -70,18 +74,6 @@ public class ListPlaceActivity extends ListActivity {
         }
     };
     
-    /**
-     * Set the list content, or only add a item
-     * @param poiData
-     */
-    private void setDataToList(POIData poiData){
-    	if(poiData != null && poiList.size() >= MAX_POI_DATA_SIZE){
-    		//TODO effet de mise à jour stylé
-    	}
-    	
-    	getListView().setAdapter(new POIAdapter(poiList));
-    }
-
     
     // ----------------------------------------------------------------------------
 	// Activity Lifecycle
@@ -89,6 +81,8 @@ public class ListPlaceActivity extends ListActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        
         if(PingMeApplication.isFirstLaunch()){
         	PingMeApplication.setLaunchedOnce();
         	
@@ -96,12 +90,15 @@ public class ListPlaceActivity extends ListActivity {
         	Intent intent = new Intent(this, ConfigActivity.class);
         	startActivity(intent);
         }
-        
+                
         setContentView(R.layout.activity_listplaces);
         getListView().setSelector(R.drawable.highlight_pressed);
         
         final TextView titleTopbar = (TextView) findViewById(R.id.titleBar);
         titleTopbar.setText(getString(R.string.titleApp_list));
+        
+        bindService( new Intent( this, PingMeService.class ), onService, BIND_AUTO_CREATE );
+        
     }
     
     @Override
@@ -118,19 +115,26 @@ public class ListPlaceActivity extends ListActivity {
 
     @Override
     public void onResume(){
+    	
         super.onResume();
-        bindService( new Intent( this, PingMeService.class ), onService, BIND_AUTO_CREATE );
+        
+        reloadAdapterDataFromService();
+        
+        registerReceiver( receiver, new IntentFilter( PingMeService.PING_BROADCAST_POI_DATA ) );
+        registerReceiver( receiver, new IntentFilter( PingMeService.PING_BROADCAST_LOCATION ) );
     }
 
     @Override
     public void onPause(){
         super.onPause();
-        unbindService( onService );
+        unregisterReceiver( receiver );
+
     }
 
     @Override
     public void onDestroy(){
         super.onDestroy();
+    	unbindService( onService );
     }
     
     @Override
