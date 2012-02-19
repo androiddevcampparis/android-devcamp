@@ -93,6 +93,7 @@ public class PingMeService extends Service {
         if( notificationSound )
         	notification.defaults |= Notification.DEFAULT_SOUND;
 
+    	notification.defaults |= Notification.DEFAULT_VIBRATE;
         notification.flags |= Notification.FLAG_SHOW_LIGHTS;
         notification.ledARGB = Color.GREEN; 
         notification.ledOffMS = 500; 
@@ -108,10 +109,12 @@ public class PingMeService extends Service {
     // ----------------------------------------------------------------------------
     // Network IO
     // ----------------------------------------------------------------------------
+    private static final float FETCH_RANGE_RADIUS = 200; // in meter
 	private void queryLatLng( double lat, double lng ){
 		Log.v("PingMeService", "queryLatLng lat:"+ lat +" lng:" + lng );
 		try{
-			POIData data = new POIData();//ServerRequest.fetchPOI();
+			String[] categories = { "monument" };
+			POIData data = ServerRequest.fetchPOI( lat, lng, FETCH_RANGE_RADIUS, categories );
 			if( data != null )
 				processServerResponse( data );			
 		}
@@ -122,12 +125,13 @@ public class PingMeService extends Service {
 	}
 	
 	private void processServerResponse( POIData data ){
+		/*
         data = new POIData();
         data.setId("uid"+System.currentTimeMillis());
         data.setTitle("Tour Effeil");
         data.setDescription("La plus grand tour de Paris");
         data.setUrl_image("https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Tour_Eiffel_Wikimedia_Commons.jpg/220px-Tour_Eiffel_Wikimedia_Commons.jpg");
-        
+        */
         
         synchronized( pois ){ 
         	if( !POIListUtil.contains( pois, data )  )

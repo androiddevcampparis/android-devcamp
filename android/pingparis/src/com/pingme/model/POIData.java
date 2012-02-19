@@ -1,8 +1,10 @@
 package com.pingme.model;
 
 import java.io.Serializable;
+
 import java.util.ArrayList;
 import java.util.List;
+
 
 
 import com.pingme.model.ActionsDetail.MapsDriveAction;
@@ -17,7 +19,7 @@ import com.pingme.model.ActionsDetail.ShareAction;
 public class POIData implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	private String id;
+	private String id = "uid-"+System.currentTimeMillis();
 	private String title;
 	private String description;
 	private String addresse;

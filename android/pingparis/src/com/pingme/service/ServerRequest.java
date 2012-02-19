@@ -15,6 +15,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -24,9 +25,9 @@ import com.pingme.model.POIData;
 
 public class ServerRequest {
 
-	private static final String SERVER_URL = "http://";
+	private static final String SERVER_URL = "http://pingme.cloudfoundry.com/poi/%f+%f+%f+%s";
 	
-	public static POIData fetchPOI() throws ClientProtocolException, IOException, JSONException {
+	public static POIData fetchPOI( double lat, double lng, double radius, String[] categories ) throws ClientProtocolException, IOException, JSONException {
 		final int timeoutConnection = 45000;
 
 		HttpParams httpParameters = new BasicHttpParams();
@@ -42,7 +43,15 @@ public class ServerRequest {
 
         
 		// Prepare a request object
-		HttpGet httpget = new HttpGet(SERVER_URL);
+		StringBuilder sb = new StringBuilder();
+		for( String categorie : categories ){
+			if( sb.length() > 0 ) sb.append(",");
+			sb.append( categorie );
+		}
+		
+		String serverURL = String.format( SERVER_URL, lat, lng, radius, sb.toString() );
+		Log.v( "ServerRequest", "URL: " + serverURL );
+		HttpGet httpget = new HttpGet(serverURL);
 		HttpResponse httpResponse = httpclient.execute(httpget);
 
 		// Get hold of the response entity
@@ -62,9 +71,21 @@ public class ServerRequest {
 	}
 	public static POIData parseJSON(String jsonString) throws JSONException {
 		Log.v( "ServerRequest parsing", jsonString );
-		JSONObject rootObject = new JSONObject(jsonString);
 		
-		return new POIData();		
+		POIData data = new POIData();
+		JSONArray jsonArray = new JSONObject(jsonString).getJSONArray("poiDatas");
+		JSONObject jsonObject = jsonArray.getJSONObject(0); 
+		//data.setId( jsonObject.getString("id") );
+		data.setTitle( jsonObject.getString("title") );
+		data.setDescription( jsonObject.getString("description") );
+		data.setAddresse( jsonObject.getString("addresse") );
+		data.setLat( jsonObject.getDouble("latitude") );
+		data.setLng( jsonObject.getDouble("longitude") );
+		data.setCategory( jsonObject.getString("category") );
+		//data.setUrl_image( jsonObject.getString(""));
+		
+		
+		return data;		
 	}
 	
 	private final static int bufferSize = 8192;
