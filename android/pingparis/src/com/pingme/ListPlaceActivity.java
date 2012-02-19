@@ -92,7 +92,7 @@ public class ListPlaceActivity extends ListActivity {
         	PingMeApplication.setLaunchedOnce();
         	
         	//TODO launch tutorial and add to Menu
-        	Intent intent = new Intent(this, ConfigActivity.class);
+        	Intent intent = new Intent(this, CredentialActivity.class);
         	startActivity(intent);
         }
                 

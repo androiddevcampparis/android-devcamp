@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.ToggleButton;
@@ -38,6 +39,13 @@ public class ConfigActivity extends ListActivity {
         notificationSoundToggle.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
             	PingMeApplication.setNotificationSound( ConfigActivity.this, notificationSoundToggle.isChecked());
+            }
+        });
+        
+        final Button btn = (Button) findViewById(R.id.credit);
+        btn.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+            	startActivity(new Intent(ConfigActivity.this, CredentialActivity.class));
             }
         });
         

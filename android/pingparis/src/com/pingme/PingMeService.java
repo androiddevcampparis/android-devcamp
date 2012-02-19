@@ -153,11 +153,12 @@ public class PingMeService extends Service {
 	private static final int MIN_DISTANCE_MOVEMENT_TRIGGER = 20;
 	private double prevLat = 0;
 	private double prevLng = 0;
+	private LocationListener listenerUpdate;
 	
 	private void startLocation(){
 	    LocationManager locationManager = (LocationManager)getSystemService(LOCATION_SERVICE);
-	    locationManager.requestLocationUpdates( LocationManager.NETWORK_PROVIDER, 0, 0, new LocationListener() {
-
+	    
+	    listenerUpdate = new LocationListener() {
 			@Override
 			public void onLocationChanged(Location location) {
 				float[] results = new float[1];
@@ -185,7 +186,9 @@ public class PingMeService extends Service {
 			@Override
 			public void onStatusChanged(String str, int arg1, Bundle arg2) {				
 			}
-		} );
+		};
+		
+		locationManager.requestLocationUpdates( LocationManager.NETWORK_PROVIDER, 30000, 20, listenerUpdate);
 	    
 	    //Add permanent icon in status bar
 //	    Notification notifStatusBar = new Notification(R.drawable.status_icon, getString(R.string.app_name), System.currentTimeMillis());
@@ -245,9 +248,20 @@ public class PingMeService extends Service {
     @Override
     public void onDestroy(){
     	PingMeApplication.setServiceStatus(this, false);
+    	LocationManager locationManager = (LocationManager)getSystemService(LOCATION_SERVICE);
+    	locationManager.removeUpdates(listenerUpdate);
     	//remove permanent icon in status bar
     	//((NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE)).cancel(1);
     }
+    
+    
+
+
+	@Override
+	protected void finalize() throws Throwable {
+		// TODO Auto-generated method stub
+		super.finalize();
+	}
 
 
     
