@@ -100,7 +100,7 @@ public class PingMeApplication extends Application {
 		 PendingIntent contentIntent = ConfigActivity.getMyLauncher( context );
 		 long when = System.currentTimeMillis();
 		 
-		 Notification notification = new Notification( android.R.drawable.stat_sys_warning, context.getString(R.string.open_config), when);
+		 Notification notification = new Notification( android.R.drawable.stat_notify_more, context.getString(R.string.open_config), when);
 	     notification.setLatestEventInfo(context, context.getString(R.string.open_config), context.getString(R.string.config_running), contentIntent);
 	     notificationManager.notify( R.string.app_name, notification);
 	}

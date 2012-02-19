@@ -27,6 +27,6 @@
 
 	 <string name="detail_place">Details</string>
 	 <string name="wikipediaExt">Voir aussi: </string>
-    
+     <string name="nodata">Aucun emplacement trouvé aux alentours</string>
     
 </resources>

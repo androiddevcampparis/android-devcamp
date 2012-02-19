@@ -39,6 +39,9 @@ public class ListPlaceActivity extends ListActivity {
 		if( pingMeService != null ){
 			List<POIData> list = pingMeService.getPOIList();
 			poiList = list.subList( Math.max(0,list.size()-MAX_POI_DATA_SIZE), list.size() );
+			
+			getListView().setVisibility(View.VISIBLE);
+            findViewById(R.id.nodata).setVisibility(View.INVISIBLE);
 			getListView().setAdapter(new POIAdapter(poiList));			
 		}
 	}
@@ -62,6 +65,8 @@ public class ListPlaceActivity extends ListActivity {
             POIData poiData = (POIData)intent.getSerializableExtra( PingMeService.INTENT_POI_DATA_EXTRA );
             POIListUtil.enqueuePOI( poiList, poiData, MAX_POI_DATA_SIZE );
             
+            getListView().setVisibility(View.VISIBLE);
+            findViewById(R.id.nodata).setVisibility(View.INVISIBLE);
             getListView().setAdapter(new POIAdapter(poiList));
         }
     };
@@ -92,6 +97,7 @@ public class ListPlaceActivity extends ListActivity {
                 
         setContentView(R.layout.activity_listplaces);
         getListView().setSelector(R.drawable.highlight_pressed);
+        getListView().setVisibility(View.INVISIBLE);
         
         final TextView titleTopbar = (TextView) findViewById(R.id.titleBar);
         titleTopbar.setText(getString(R.string.titleApp));

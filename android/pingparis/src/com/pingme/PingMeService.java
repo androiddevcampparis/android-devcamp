@@ -97,7 +97,7 @@ public class PingMeService extends Service {
         
         long when = System.currentTimeMillis();
 
-        Notification notification = new Notification( android.R.drawable.stat_sys_warning, tickerText, when);
+        Notification notification = new Notification( android.R.drawable.stat_notify_more, tickerText, when);
                 
         PendingIntent contentIntent = DetailsActivity.getMyLauncher( this, data );
         notification.setLatestEventInfo(this, tickerText, data.getTitle(), contentIntent);
@@ -245,12 +245,13 @@ public class PingMeService extends Service {
 	@Override
     public void onCreate(){
         super.onCreate();
-        
+        PingMeApplication.setServiceStatus(this, true);
         startLocation();
     }
     
     @Override
     public void onDestroy(){
+    	PingMeApplication.setServiceStatus(this, false);
     	//remove permanent icon in status bar
     	//((NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE)).cancel(1);
     }
