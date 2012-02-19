@@ -17,7 +17,8 @@
 		    android:src="@drawable/ic_home"
 		    android:layout_marginLeft="5dip"
 	        android:layout_centerVertical="true"
-		/>
+		/> 
+        
 	    
 	    <TextView android:id="@+id/titleBar"
 	        android:layout_width="wrap_content"
@@ -48,13 +49,20 @@
 	    android:gravity="center"
 	    style="@style/title_detail"/>
     
-    <ImageView 
+<!--     <ImageView 
         android:id="@+id/imageEvent"
         android:layout_width="fill_parent"
 	    android:layout_height="120dip"
 	    android:scaleType="fitCenter"
 	    android:layout_margin="15dip"
-	    android:src="@drawable/temp_img"/>
+	    android:src="@drawable/temp_img"/> -->
+    <Gallery
+		    android:id="@+id/gallery"
+		    android:layout_width="fill_parent"
+		    android:layout_height="120dip"
+		    android:layout_marginTop="15dip"
+		    android:layout_marginBottom="15dip"
+		/>
     
     <TextView 
         android:id="@+id/descrEvent"

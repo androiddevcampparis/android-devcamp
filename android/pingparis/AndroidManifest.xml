@@ -30,6 +30,10 @@
 	         android:excludeFromRecents="true">
         </activity>
         
+        <activity android:label="zoomdetails"  
+             android:name=".ZoomImageActivity">
+        </activity>
+        
          <activity android:label="@string/app_name"  
              android:name=".ListPlaceActivity">
              <intent-filter >

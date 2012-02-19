@@ -1,6 +1,8 @@
 package com.pingme.model;
 
-public class WikiData {
+import java.io.Serializable;
+
+public class WikiData implements Serializable {
 
 	private String name;
 	private String url;

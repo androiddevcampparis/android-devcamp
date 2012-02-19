@@ -56,6 +56,7 @@ public class WikipediaAsyncTask extends AsyncTask<Void, Void, Void> {
 	}
 
 	private void launchQuery(String baseUrl) {
+		Log.i("WikipediaAsyncTask", baseUrl);
 		final HttpClient httpClient = new DefaultHttpClient();
 		HttpResponse response = null;
 		InputStream instream = null;

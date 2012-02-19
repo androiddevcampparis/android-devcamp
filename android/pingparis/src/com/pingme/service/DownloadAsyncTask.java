@@ -29,7 +29,7 @@ public class DownloadAsyncTask extends AsyncTask<Void, Void, Void> {
 	private final DownloaderCallback _mActivity;
 	private int _mErrorMessageId = -1;
 	private POIData poiData;
-	private List<Object> imagesOut;
+	private List<String> imagesOut;
 
 	public DownloadAsyncTask(DownloaderCallback activity, POIData poiData) {
 		_mActivity = activity;
@@ -94,10 +94,10 @@ public class DownloadAsyncTask extends AsyncTask<Void, Void, Void> {
 		}
 	}
 	
-	public List<Object> parseJSON(String jsonString) throws JSONException {
+	public List<String> parseJSON(String jsonString) throws JSONException {
 		Log.v( "ServerRequest parsing", jsonString );
 		
-		List<Object> images = new ArrayList<Object>(10);
+		List<String> images = new ArrayList<String>(10);
 		JSONObject jsonObject = new JSONObject(jsonString).getJSONObject("responseData");
 		JSONArray jsonArray = jsonObject.getJSONArray("results");
 		
@@ -118,8 +118,9 @@ public class DownloadAsyncTask extends AsyncTask<Void, Void, Void> {
 		}
 		// Otherwise, update list
 		else if (_mActivity != null && imagesOut != null && imagesOut.size()>0) {
+			poiData.setUrlsImages(imagesOut);
 			poiData.setUrl_image((String) imagesOut.get(0));
-			_mActivity.loadingFinished(imagesOut);
+			_mActivity.loadingFinished(new ArrayList<Object>(imagesOut));
 		}
 	}
 

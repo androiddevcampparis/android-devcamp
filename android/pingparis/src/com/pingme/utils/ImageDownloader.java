@@ -44,6 +44,7 @@ import android.os.AsyncTask;
 import android.os.Debug;
 import android.os.Handler;
 import android.util.Log;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
 
 
@@ -193,7 +194,12 @@ public class ImageDownloader {
 			return null;
 		}
 		
-		int w = imageView.getLayoutParams().width, h = imageView.getLayoutParams().height;
+		int w =0,h=0;
+		LayoutParams params = imageView.getLayoutParams();
+		if(params != null){
+			w=  params.width;
+			h = params.height;
+		}
 
 		// Change Task attributes if exist intead of Cancel
 
@@ -221,8 +227,13 @@ public class ImageDownloader {
 					downloadedDrawable = new DownloadedDrawable(task);
 				}
 
-				int minWith = imageView.getLayoutParams().width;
-				int minheight = imageView.getLayoutParams().height;
+				int minWith = 0;
+				int minheight = 0;
+				if(params != null){
+					minWith = params.width;
+					minheight = params.height;
+				}
+				
 				imageView.setImageDrawable(downloadedDrawable);
 				imageView.setMinimumWidth(minWith);
 				imageView.setMinimumHeight(minheight);
@@ -684,8 +695,14 @@ public class ImageDownloader {
 
 			String filename = sFileCache.get(url);
 			if (filename != null) {
-				int width = imageView.getLayoutParams().width;
-				int height = imageView.getLayoutParams().height;
+				LayoutParams params = imageView.getLayoutParams();
+				int width = 0;
+				int height = 0;
+				if(params != null){
+					width = params.width;
+					height = params.height;
+				}
+				
 				
 				Bitmap bitmap = getBitmapFromFile(sFileCache.getCachedFile(filename), width, height);
 				if (bitmap != null) {
