@@ -35,7 +35,27 @@ public class POIData implements Serializable {
 	
 	private String credential;
 	
+	private boolean plus;
+	private int plusSum = 32;
 
+	public POIData copy() {
+		POIData data = new POIData();
+		data.id = id;
+		data.title = title;
+		data.description = description;
+		data.addresse = addresse;
+		data.category = category;
+		data.latitude = latitude;
+		data.longitude = longitude;
+		data.url_image = url_image;
+		data.wiki_link = wiki_link;
+		data.wiki_url = wiki_url;
+		data.credential = credential;
+		data.plus = plus;
+		data.plusSum = plusSum;
+		return data;
+	}
+	
 	public String getId() {
 		return id;
 	}
@@ -116,6 +136,19 @@ public class POIData implements Serializable {
 		this.wiki_url = wiki_url;
 	}
 
+	public void setPlus( boolean plus ){
+		this.plus = plus;
+	}
+	public boolean isPlus(){
+		return this.plus;
+	}
+
+	public void setPlusSum( int plusSum ){
+		this.plusSum = plusSum;
+	}
+	public int getPlusSum(){
+		return this.plusSum;
+	}
 
 	private List<ActionsDetail> actions;
 

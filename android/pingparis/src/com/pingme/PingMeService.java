@@ -8,6 +8,7 @@ import java.util.Arrays;
 
 import java.util.List;
 
+import com.pingme.adapters.POIAdapter;
 import com.pingme.model.Category;
 import com.pingme.model.Coordinate;
 import com.pingme.model.POIData;
@@ -18,6 +19,8 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.location.Location;
@@ -35,8 +38,8 @@ public class PingMeService extends Service {
 	public static String PING_BROADCAST_LOCATION = "com.pingme.PingMeService.PING_BROADCAST_LOCATION";
 	public static String INTENT_LOCATION_EXTRA = "com.pingme.PingMeService.INTENT_LOCATION_EXTRA";
 	
-	public static String PING_BROADCAST_POI_DATA = "com.pingme.PingMeService.PING_BROADCAST_MESSAGE";
-	public static String INTENT_POI_DATA_EXTRA = "com.pingme.PingMeService.INTENT_DATA_EXTRA";
+	public static String PING_BROADCAST_POI_DATA = "com.pingme.PingMeService.PING_BROADCAST_POI_DATA";
+	public static String INTENT_POI_DATA_EXTRA = "com.pingme.PingMeService.INTENT_POI_DATA_EXTRA";
 	
 	public static String PING_ACTION_UI_CATEGORIES = "com.pingme.PingMeService.PING_ACTION_UI_CATEGORIES";
 	public static String INTENT_CATEGORIES_EXTRA = "com.pingme.PingMeService.INTENT_CATEGORIES_EXTRA";
@@ -49,6 +52,7 @@ public class PingMeService extends Service {
 	public static String PING_ACTION_LIFECYCLE = "com.pingme.PingMeService.PING_ACTION_LIFECYCLE";
 	public static String PING_ACTION_UI_SOUND_NOTIFICATION = "com.pingme.PingMeService.PING_ACTION_UI_SOUND_NOTIFICATION";
 	public static String PING_ACTION_MOCK_LOCATION = "com.pingme.PingMeService.PING_ACTION_MOCK_LOCATION";
+	public static String PING_ACTION_POI_DATA_UPDATE = "com.pingme.PingMeService.PING_ACTION_POI_DATA_UPDATE";
 	
 	public static final boolean NOTIFICATION_SOUND_DEFAULT = false;
 	private boolean notificationSound = NOTIFICATION_SOUND_DEFAULT; 
@@ -214,10 +218,21 @@ public class PingMeService extends Service {
 			categories = new Category[array.length];
 			for( int i = 0; i< array.length; i++ ) categories[i] = (Category)array[i];
 		}
+		else if( PING_ACTION_POI_DATA_UPDATE.equals( action ) ){
+            POIData poiData = (POIData)intent.getSerializableExtra( PingMeService.INTENT_POI_DATA_EXTRA );
+            synchronized (pois) {
+            	POIListUtil.replacePOI( pois, poiData, MAX_POI_DATA_SIZE );				
+			}
+        }	    
 		else if( PING_ACTION_MOCK_LOCATION.equals( action ) ){
 			double lat = intent.getDoubleExtra("lat", 0 );
 			double lng = intent.getDoubleExtra("lng", 0 );
 			Toast.makeText( this, "GeoLoc "+ lat + "/"+lng , Toast.LENGTH_SHORT).show();
+			
+			Intent broadCastIntent = new Intent( PING_BROADCAST_LOCATION );
+		    broadCastIntent.putExtra( INTENT_LOCATION_EXTRA, new Coordinate( lat, lng ) );
+		    sendBroadcast( broadCastIntent );
+
 			queryLatLng( lat, lng );
 		}
 		else if( PING_ACTION_LIFECYCLE.equals( action ) ){			

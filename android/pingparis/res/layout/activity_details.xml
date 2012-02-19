@@ -28,17 +28,41 @@
 	       	style="@style/titlebar_element" 
            />
 	
-	    <Button 
-	        android:id="@+id/plusUnButton"
-	        android:background="@drawable/plusun_btn"
-		    android:layout_width="40dip"
-		    android:layout_height="50dip"
+	    <LinearLayout
+            android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
 			android:layout_centerVertical="true"
 			android:layout_alignParentRight="true"
 			
-		    android:hapticFeedbackEnabled="true"
-			/>
-	    
+			android:gravity="center_vertical"
+	    	>
+	    	
+	        
+	    	<TextView 
+				android:id="@+id/plusUnSum"
+				
+	            android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        
+	            android:textColor="@color/title_color"
+	
+	            android:shadowRadius="0.5"
+	            android:shadowDx="0.5"
+	            android:shadowDy="0.5"
+	            android:shadowColor="#000"
+	            
+	            android:paddingRight="5dip"
+	    	    />
+
+  		    <Button 
+		        android:id="@+id/plusUnButton"
+		        android:background="@drawable/plusun_btn"
+			    android:layout_width="40dip"
+			    android:layout_height="50dip"
+				
+			    android:hapticFeedbackEnabled="true"
+				/>
+		</LinearLayout>	    
     </RelativeLayout>
     
     <TextView 
