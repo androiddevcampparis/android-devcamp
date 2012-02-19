@@ -15,9 +15,12 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.pingme.adapters.POIAdapter;
+import com.pingme.model.ActionsDetail;
 import com.pingme.model.Coordinate;
 import com.pingme.model.POIData;
 import com.pingme.utils.POIListUtil;
@@ -73,7 +76,7 @@ public class ListPlaceActivity extends ListActivity {
      */
     private void setDataToList(POIData poiData){
     	if(poiData != null && poiList.size() >= MAX_POI_DATA_SIZE){
-    		
+    		//TODO effet de mise à jour stylé
     	}
     	
     	getListView().setAdapter(new POIAdapter(poiList));
@@ -100,6 +103,18 @@ public class ListPlaceActivity extends ListActivity {
         final TextView titleTopbar = (TextView) findViewById(R.id.titleBar);
         titleTopbar.setText(getString(R.string.titleApp_list));
     }
+    
+    @Override
+	protected void onListItemClick(ListView l, View v, int position, long id) {
+		try {
+			Intent intent = new Intent(this, DetailsActivity.class);
+			POIData poiData = poiList.get(position);
+			intent.putExtra(PingMeService.INTENT_POI_DATA_EXTRA, poiData);
+			startActivity(intent);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
     @Override
     public void onResume(){
@@ -122,6 +137,7 @@ public class ListPlaceActivity extends ListActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if (item.getTitle().equals(getString(R.string.menu_configure))) {
 			Intent intent = new Intent(this, ConfigActivity.class);
+			intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
 			startActivity(intent);
 			return true;
 		}

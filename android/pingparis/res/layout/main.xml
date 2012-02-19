@@ -5,7 +5,8 @@
     android:orientation="vertical" >
 
     <include android:id="@+id/topBar" layout="@layout/title_topbar" />   
-        
+    
+<!--     
     <ToggleButton 
         android:layout_marginTop="10dip"
         android:layout_marginBottom="10dip"
@@ -17,21 +18,80 @@
         android:layout_gravity="center_horizontal"/>
     
     <ToggleButton 
-        android:layout_marginTop="10dip"
         android:layout_marginBottom="10dip"
         android:id="@+id/notificationSound"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textOn="@string/notification_sound_on"
         android:textOff="@string/notification_sound_off"
-        android:layout_gravity="center_horizontal"/>
+        android:layout_gravity="center_horizontal"/> -->
+    
+    <RelativeLayout
+			    android:layout_width="match_parent"
+			    android:layout_height="wrap_content" 
+			    android:orientation="horizontal"
+			    android:padding="10dip"
+			    android:layout_marginTop="10dip"
+			    android:layout_marginBottom="10dip">
+              
+            <RelativeLayout
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content" 
+			    android:layout_weight="1">
+              
+                 <ImageView android:id="@+id/image1"
+			        android:layout_width="30dip"
+			        android:layout_height="30dip"
+			        android:src="@drawable/satelite"
+			        android:layout_marginRight="10dip"
+			        android:layout_alignParentLeft="true"
+			        android:layout_centerVertical="true"
+			        android:scaleType="fitCenter"/>
+                  
+                 <ToggleButton 
+			        android:id="@+id/statusService"
+			        android:layout_width="160dip"
+			        android:layout_height="wrap_content"
+			        android:textOn="@string/service_on"
+			        android:textOff="@string/service_off"
+			        android:layout_toRightOf="@id/image1"
+			        android:layout_centerVertical="true"/>
+        	</RelativeLayout>
+        	
+            <RelativeLayout
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content" 
+			    android:layout_weight="1"
+			    android:layout_alignParentRight="true">
+              
+                 <ImageView android:id="@+id/image2"
+			        android:layout_width="30dip"
+			        android:layout_height="30dip"
+			        android:src="@drawable/kmixdocked"
+			        android:layout_marginRight="10dip"
+			        android:layout_alignParentLeft="true"
+			        android:layout_centerVertical="true"
+			        android:scaleType="fitCenter"/>
+                 
+                  <ToggleButton 
+			        android:id="@+id/notificationSound"
+			        android:layout_width="160dip"
+			        android:layout_height="wrap_content"
+			        android:textOn="@string/notification_sound_on"
+			        android:textOff="@string/notification_sound_off"
+			        android:layout_toRightOf="@id/image2"
+			        android:layout_centerVertical="true"/>
+        	</RelativeLayout>
+        </RelativeLayout>
+
     
     <ListView 
         android:layout_margin="10dip"
         android:id="@+id/android:list"
         android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
-	    android:background="@drawable/list_bg">
+	    android:background="@drawable/list_bg"
+	    android:cacheColorHint="@android:color/transparent">
     </ListView>
 
 </LinearLayout>

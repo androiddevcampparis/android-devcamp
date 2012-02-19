@@ -11,7 +11,8 @@
         android:id="@+id/android:list"
         android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
-	    android:background="@drawable/list_bg">
+	    android:background="@drawable/list_bg"
+	    android:cacheColorHint="@android:color/transparent">
     </ListView>
 
 </LinearLayout>

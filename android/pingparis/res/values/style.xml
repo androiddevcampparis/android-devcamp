@@ -8,8 +8,15 @@
 	<style name="titlebar_element">
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">18sp</item>
-        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textColor">#5593E3</item>
         <item name="android:singleLine">true</item>
+    </style>
+    
+	<style name="title_detail">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">22sp</item>
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:singleLine">false</item>
     </style>
     
 </resources>
