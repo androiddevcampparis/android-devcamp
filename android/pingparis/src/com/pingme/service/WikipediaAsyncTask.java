@@ -8,37 +8,44 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 import android.os.AsyncTask;
 import android.util.Log;
 
 import com.pingme.model.POIData;
-import com.pingme.utils.Utils;
+import com.pingme.model.WikiData;
 
-public class DownloadAsyncTask extends AsyncTask<Void, Void, Void> {
+public class WikipediaAsyncTask extends AsyncTask<Void, Void, Void> {
 
 	private final DownloaderCallback _mActivity;
 	private int _mErrorMessageId = -1;
 	private POIData poiData;
-	private List<Object> imagesOut;
+	private List<Object> urlOut;
 
-	public DownloadAsyncTask(DownloaderCallback activity, POIData poiData) {
+	public WikipediaAsyncTask(DownloaderCallback activity, POIData poiData) {
 		_mActivity = activity;
 		this.poiData = poiData;
 	}
 	
 	@Override
 	protected Void doInBackground(Void... arg0) {
-		String url = "https://ajax.googleapis.com/ajax/services/search/images?v=1.0&q=";
+		String url = "http://en.wikipedia.org/w/api.php?format=xml&action=opensearch&limit=5&search=";
 		try {
 			url += URLEncoder.encode( poiData.getTitle(), "ISO-8859-1" );
 		} catch (UnsupportedEncodingException e) {
@@ -71,8 +78,7 @@ public class DownloadAsyncTask extends AsyncTask<Void, Void, Void> {
 			}
 
 			try {
-				String stringResult = Utils.streamToString(instream);
-				imagesOut = parseJSON(stringResult);
+				urlOut = parseXML(instream);
 			} catch (final Exception e) {
 				e.printStackTrace();
 				_mErrorMessageId = 1;
@@ -94,19 +100,40 @@ public class DownloadAsyncTask extends AsyncTask<Void, Void, Void> {
 		}
 	}
 	
-	public List<Object> parseJSON(String jsonString) throws JSONException {
-		Log.v( "ServerRequest parsing", jsonString );
+	public List<Object> parseXML(InputStream instream) throws JSONException {
+		Log.v( "ServerRequest parsing", "" );
+		List<Object> urls = new ArrayList<Object>(5);
 		
-		List<Object> images = new ArrayList<Object>(10);
-		JSONObject jsonObject = new JSONObject(jsonString).getJSONObject("responseData");
-		JSONArray jsonArray = jsonObject.getJSONArray("results");
-		
-		for(int i=0; i<jsonArray.length(); i++){
-			jsonObject = jsonArray.getJSONObject(i);
-			images.add(jsonObject.getString("url"));
+		try {
+			final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+			final DocumentBuilder builder = factory.newDocumentBuilder();
+			final Document dom = builder.parse(instream);
+			
+			if (dom != null) {
+				WikiData data = new WikiData();
+				final Element itemNode = (Element) getFirstSubNode(dom.getChildNodes().item(0), "Section", true);
+				final NodeList listeNode = itemNode.getElementsByTagName("Item");
+					
+					for (int i = 0; i < listeNode.getLength(); i++) {
+						try {
+							final Node node = listeNode.item(i);
+							data.setName(getValueForTag(node, "Text", false));
+							data.setUrl(getValueForTag(node, "Url", false));
+							urls.add(data);
+						} catch (final Exception e) {
+							e.printStackTrace();
+						}
+					}
+			}
+		} catch (final ParserConfigurationException e) {
+			e.printStackTrace();
+		} catch (final SAXException e) {
+			e.printStackTrace();
+		} catch (final Exception e) {
+			e.printStackTrace();
 		}
 		
-		return images;		
+		return urls;		
 	}
 
 
@@ -117,9 +144,11 @@ public class DownloadAsyncTask extends AsyncTask<Void, Void, Void> {
 			showError();
 		}
 		// Otherwise, update list
-		else if (_mActivity != null && imagesOut != null && imagesOut.size()>0) {
-			poiData.setUrl_image((String) imagesOut.get(0));
-			_mActivity.loadingFinished(imagesOut);
+		else if (_mActivity != null && urlOut != null && urlOut.size()>0) {
+			WikiData wiki = (WikiData) urlOut.get(0);
+			poiData.setWiki_link(wiki.getName());
+			poiData.setWiki_url(wiki.getUrl());
+			_mActivity.loadingFinished(urlOut);
 		}
 	}
 
@@ -127,5 +156,24 @@ public class DownloadAsyncTask extends AsyncTask<Void, Void, Void> {
 		if (_mActivity != null) {
 			_mActivity.onError(_mErrorMessageId);
 		}
+	}
+	
+	private Node getFirstSubNode(Node fatherNode, String tag, boolean mandatory) throws Exception {
+		final NodeList list = ((Element) fatherNode).getElementsByTagName(tag);
+		if (list.getLength() > 0) {
+			return list.item(0);
+		}
+		if (mandatory) {
+			throw (new Exception(""));
+		}
+		return null;
+	}
+	
+	private String getValueForTag(Node fatherNode, String tag, boolean mandatory) throws Exception {
+		final Node node = getFirstSubNode(fatherNode, tag, mandatory);
+		if (node != null) {
+			return node.getFirstChild().getNodeValue();
+		}
+		return null;
 	}
 }

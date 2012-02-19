@@ -45,6 +45,11 @@ public class POIData implements Serializable {
 	}
 
 	public String getTitle() {
+		//RULES POUR CORRIGER OPEN DATA
+		if("immeuble".equalsIgnoreCase(title)){
+			return description.substring(0, Math.min(20, description.length()));
+		}
+		
 		return title;
 	}
 

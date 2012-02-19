@@ -86,14 +86,14 @@ public class DetailsActivity extends ListActivity implements DownloaderCallback{
 	}
 
 	@Override
-	public void loadingFinished(List<String> datas) {
+	public void loadingFinished(List<Object> datas) {
 		if(datas == null || datas.size()==0){
 			Log.w("DetailsActivity", "Image from google images are unset");
 			return;
 		}
 		
 		final ImageView image = (ImageView) findViewById(R.id.imageEvent);
-		PingMeApplication.getImageDownloader().download(datas.get(0), image, null, "DetailsActivity");
+		PingMeApplication.getImageDownloader().download((String) datas.get(0), image, null, "DetailsActivity");
 	}
 
 	@Override
