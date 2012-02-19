@@ -76,7 +76,7 @@ public class ListPlaceActivity extends ListActivity {
      */
     private void setDataToList(POIData poiData){
     	if(poiData != null && poiList.size() >= MAX_POI_DATA_SIZE){
-    		
+    		//TODO effet de mise à jour stylé
     	}
     	
     	getListView().setAdapter(new POIAdapter(poiList));
@@ -108,7 +108,7 @@ public class ListPlaceActivity extends ListActivity {
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		try {
 			Intent intent = new Intent(this, DetailsActivity.class);
-			POI_Data poiData = (POI_Data) getListAdapter().getItem(position);
+			POIData poiData = poiList.get(position);
 			intent.putExtra(PingMeService.INTENT_POI_DATA_EXTRA, poiData);
 			startActivity(intent);
 		} catch (Exception e) {
@@ -137,6 +137,7 @@ public class ListPlaceActivity extends ListActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if (item.getTitle().equals(getString(R.string.menu_configure))) {
 			Intent intent = new Intent(this, ConfigActivity.class);
+			intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
 			startActivity(intent);
 			return true;
 		}

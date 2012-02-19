@@ -6,7 +6,6 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.sax.StartElementListener;
 import android.util.Log;
 
 import com.pingme.PingMeApplication;
@@ -80,7 +79,7 @@ public abstract class ActionsDetail {
 		@Override
 		public void execute(Context context) {
 			Intent intent = new Intent(Intent.ACTION_SEARCH);
-			intent.putExtra(SearchManager.QUERY, name);
+			intent.putExtra(SearchManager.QUERY, data.getTitle());
 			context.startActivity(intent);
 		}
 	}
@@ -88,7 +87,7 @@ public abstract class ActionsDetail {
 	public static class ShareAction extends ActionsDetail{
 
 		public ShareAction(POIData data) {
-			super("Share", R.drawable.sharemanager, 103,data);
+			super("Share", R.drawable.share_img, 103,data);
 		}
 
 		@Override
@@ -99,6 +98,34 @@ public abstract class ActionsDetail {
 			shareIntent.putExtra(Intent.EXTRA_TEXT, data.getDescription());
 			
 			context.startActivity(shareIntent);
+		}
+	}
+
+	public static class WikipediaAction extends ActionsDetail{
+
+		public WikipediaAction(POIData data) {
+			super("wikipedia", R.drawable.wikipedia, 104, data);
+		}
+
+		@Override
+		public void execute(Context context) {
+			Intent browserIntent = new Intent("android.intent.action.VIEW", Uri.parse(data.getWiki_url()));
+			context.startActivity(browserIntent);
+		}
+	}
+	
+	public static class LocatedPhotosAction extends ActionsDetail{
+
+		public LocatedPhotosAction(POIData data) {
+			super("photos", R.drawable.pictures_intent, 105, data);
+		}
+
+		@Override
+		public void execute(Context context) {
+			Intent i = new Intent("com.google.android.radar.SHOW_RADAR");
+			i.putExtra("latitude", data.getLat());
+			i.putExtra("longitude", data.getLng());
+			context.startActivity(i);
 		}
 	}
 }

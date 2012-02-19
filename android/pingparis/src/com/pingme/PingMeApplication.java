@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.pingme.model.Preferences;
 import com.pingme.utils.ImageDownloader;
+import com.pingme.utils.Utils;
 
 import android.app.Application;
 import android.app.Notification;
@@ -26,6 +27,7 @@ public class PingMeApplication extends Application {
 	
 	private static double lat;
 	private static double lng;
+	private static boolean isPhotoIntentCallable;
 	
 	private static boolean firstLaunch = true;
 
@@ -80,6 +82,9 @@ public class PingMeApplication extends Application {
 		preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 		imageDownloader = new ImageDownloader(getApplicationContext());
 		firstLaunch = preferences.getBoolean("firstLaunch", true);
+		
+		Intent photoIntent = new Intent("com.google.android.radar.SHOW_RADAR");
+		isPhotoIntentCallable = Utils.isCallable(photoIntent, this);
 		
 		setServiceStatus( getApplicationContext(), getServiceStatus() );
 		setNotificationSound( getApplicationContext(), getNotificationSound() );
@@ -144,6 +149,14 @@ public class PingMeApplication extends Application {
 		Editor editor = preferences.edit();
 		editor.putBoolean( "firstLaunch", false);
 		editor.commit();
+	}
+
+	public static boolean isPhotoIntentCallable() {
+		return isPhotoIntentCallable;
+	}
+
+	public static void setPhotoIntentCallable(boolean isPhotoIntentCallable) {
+		PingMeApplication.isPhotoIntentCallable = isPhotoIntentCallable;
 	}
 	
 	

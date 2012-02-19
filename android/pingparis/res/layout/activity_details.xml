@@ -10,13 +10,15 @@
         android:id="@+id/titleEvent"
 	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
-	    android:gravity="center"/>
+	    android:gravity="center"
+	    style="@style/title_detail"/>
     
     <ImageView 
         android:id="@+id/imageEvent"
         android:layout_width="fill_parent"
-	    android:layout_height="50dip"
-	    android:scaleType="fitCenter"/>
+	    android:layout_height="120dip"
+	    android:scaleType="fitCenter"
+	    android:layout_margin="15dip"/>
     
     <TextView 
         android:id="@+id/descrEvent"
@@ -24,7 +26,9 @@
 	    android:layout_height="wrap_content"
 	    android:gravity="center"
 	    android:maxLines="3"
-	    android:ellipsize="marquee"/>
+	    android:ellipsize="marquee"
+	    android:layout_marginBottom="5dip"
+	    android:clickable="true"/>
     
     <ListView 
         android:layout_margin="10dip"

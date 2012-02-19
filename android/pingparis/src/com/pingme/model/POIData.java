@@ -4,10 +4,15 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.Intent;
 
+import com.pingme.PingMeApplication;
+import com.pingme.model.ActionsDetail.LocatedPhotosAction;
 import com.pingme.model.ActionsDetail.MapsDriveAction;
 import com.pingme.model.ActionsDetail.SearchAction;
 import com.pingme.model.ActionsDetail.ShareAction;
+import com.pingme.model.ActionsDetail.WikipediaAction;
+import com.pingme.utils.Utils;
 
 /*
  * Check https://github.com/androiddevcampparis/android-devcamp-server/blob/master/src/main/java/com/devcamp/server/resources/ResponseData.java
@@ -28,6 +33,8 @@ public class POIData implements Serializable {
 	private String url_image;
 	private String wiki_link;
 	private String wiki_url;
+	
+	private String credential;
 	
 
 	public String getId() {
@@ -123,8 +130,25 @@ public class POIData implements Serializable {
 	public void createActions() {
 		actions = new ArrayList<ActionsDetail>();
 		actions.add(new MapsDriveAction(this));
+		
+		if(!Utils.isEmpty(wiki_url)){
+			actions.add(new WikipediaAction(this));
+		}
+		
+		if(PingMeApplication.isPhotoIntentCallable()){
+			actions.add(new LocatedPhotosAction(this));
+		}
+		
 		actions.add(new SearchAction(this));
 		actions.add(new ShareAction(this));
+	}
+
+	public String getCredential() {
+		return credential;
+	}
+
+	public void setCredential(String credential) {
+		this.credential = credential;
 	}
 		
 }

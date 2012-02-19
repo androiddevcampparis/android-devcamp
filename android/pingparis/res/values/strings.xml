@@ -3,8 +3,8 @@
     <string name="app_name">PingMe</string>
 
     
-    <string name="service_on">Service On</string>
-	<string name="service_off">Service Off</string>
+    <string name="service_on">Geolocation On</string>
+	<string name="service_off">Geolocation Off</string>
     <string name="notification_sound_on">Notification Sound On</string>
 	<string name="notification_sound_off">Notification Sound Off</string>
 		

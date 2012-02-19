@@ -51,6 +51,8 @@ public class ConfigActivity extends ListActivity {
         
         //Adapter to list of choices
         getListView().setSelector(R.drawable.highlight_pressed);
+        getListView().setCacheColorHint(0);
+        
         setListAdapter(new PreferencesAdapter());
 
     }
@@ -80,6 +82,7 @@ public class ConfigActivity extends ListActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if (item.getTitle().equals(getString(R.string.menu_openlist))) {
 			Intent intent = new Intent(this, ListPlaceActivity.class);
+			intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
 			startActivity(intent);
 			return true;
 		}
