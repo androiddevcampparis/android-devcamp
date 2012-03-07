@@ -22,91 +22,89 @@ import com.pongme.model.Coordinate;
 import com.pongme.model.POIData;
 import com.pongme.utils.POIListUtil;
 
-
 public class ListPlaceActivity extends ListActivity {
 
 	private final int MAX_POI_DATA_SIZE = 10;
 	private List<POIData> poiList;
-	
 
 	// ----------------------------------------------------------------------------
 	// Service Binding
-    // ----------------------------------------------------------------------------
+	// ----------------------------------------------------------------------------
 	private PingMeService pingMeService;
-	private void reloadAdapterDataFromService() {
-		if( pingMeService != null ){
-			List<POIData> list = pingMeService.getPOIList();
-			poiList = list.subList( Math.max(0,list.size()-MAX_POI_DATA_SIZE), list.size() );
-			
-			getListView().setVisibility(View.VISIBLE);
-            findViewById(R.id.nodata).setVisibility(View.INVISIBLE);
 
-			getListView().setAdapter(new POIAdapter(poiList));			
+	private void reloadAdapterDataFromService() {
+		if (pingMeService != null) {
+			List<POIData> list = pingMeService.getPOIList();
+			poiList = list.subList(Math.max(0, list.size() - MAX_POI_DATA_SIZE), list.size());
+
+			getListView().setVisibility(View.VISIBLE);
+			findViewById(R.id.nodata).setVisibility(View.INVISIBLE);
+
+			getListView().setAdapter(new POIAdapter(poiList));
 		}
 	}
-	
-    private ServiceConnection onService = new ServiceConnection(){
-        public void onServiceConnected( ComponentName className, IBinder rawBinder ){
-            pingMeService = ( (PingMeService.LocalBinder) rawBinder ).getService();
-            reloadAdapterDataFromService();
-        }
-        public void onServiceDisconnected( ComponentName className ){
-        	pingMeService = null;
-        }
-    };
 
-    // ----------------------------------------------------------------------------
+	private ServiceConnection onService = new ServiceConnection() {
+		public void onServiceConnected(ComponentName className, IBinder rawBinder) {
+			pingMeService = ((PingMeService.LocalBinder) rawBinder).getService();
+			reloadAdapterDataFromService();
+		}
+
+		public void onServiceDisconnected(ComponentName className) {
+			pingMeService = null;
+		}
+	};
+
+	// ----------------------------------------------------------------------------
 	// Broadcaster Reciever
-    // ----------------------------------------------------------------------------
-    
-    private BroadcastReceiver poiDataReceiver = new BroadcastReceiver() {
-        public void onReceive( Context context, Intent intent ){
-            POIData poiData = (POIData)intent.getSerializableExtra( PingMeService.INTENT_POI_DATA_EXTRA );
-            POIListUtil.enqueuePOI( poiList, poiData, MAX_POI_DATA_SIZE );
-            
-            getListView().setVisibility(View.VISIBLE);
-            findViewById(R.id.nodata).setVisibility(View.INVISIBLE);
+	// ----------------------------------------------------------------------------
 
-            getListView().setAdapter(new POIAdapter(poiList));
-        }
-    };
-    private BroadcastReceiver locationReceiver = new BroadcastReceiver() {
-        public void onReceive( Context context, Intent intent ){
-            Coordinate currentLocation = (Coordinate)intent.getSerializableExtra( PingMeService.INTENT_LOCATION_EXTRA );
-            PingMeApplication.setLat(currentLocation.lat);
-            PingMeApplication.setLng(currentLocation.lng);
-        }
-    };
-    
-    
-    // ----------------------------------------------------------------------------
+	private BroadcastReceiver poiDataReceiver = new BroadcastReceiver() {
+		public void onReceive(Context context, Intent intent) {
+			POIData poiData = (POIData) intent.getSerializableExtra(PingMeService.INTENT_POI_DATA_EXTRA);
+			POIListUtil.enqueuePOI(poiList, poiData, MAX_POI_DATA_SIZE);
+
+			getListView().setVisibility(View.VISIBLE);
+			findViewById(R.id.nodata).setVisibility(View.INVISIBLE);
+
+			getListView().setAdapter(new POIAdapter(poiList));
+		}
+	};
+	private BroadcastReceiver locationReceiver = new BroadcastReceiver() {
+		public void onReceive(Context context, Intent intent) {
+			Coordinate currentLocation = (Coordinate) intent.getSerializableExtra(PingMeService.INTENT_LOCATION_EXTRA);
+			PingMeApplication.setLat(currentLocation.lat);
+			PingMeApplication.setLng(currentLocation.lng);
+		}
+	};
+
+	// ----------------------------------------------------------------------------
 	// Activity Lifecycle
-    // ----------------------------------------------------------------------------
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        
-        
-        if(PingMeApplication.isFirstLaunch()){
-        	PingMeApplication.setLaunchedOnce();
-        	
-        	//TODO launch tutorial and add to Menu
-        	Intent intent = new Intent(this, CredentialActivity.class);
-        	startActivity(intent);
-        }
-                
-        setContentView(R.layout.activity_listplaces);
-        getListView().setSelector(R.drawable.highlight_pressed);
-        getListView().setVisibility(View.INVISIBLE);
+	// ----------------------------------------------------------------------------
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 
-        final TextView titleTopbar = (TextView) findViewById(R.id.titleBar);
-        titleTopbar.setText(getString(R.string.titleApp));
-        
-        bindService( new Intent( this, PingMeService.class ), onService, BIND_AUTO_CREATE );
-        
-    }
-    
-    @Override
+		if (PingMeApplication.isFirstLaunch()) {
+			PingMeApplication.setLaunchedOnce();
+
+			//TODO launch tutorial and add to Menu
+			Intent intent = new Intent(this, CredentialActivity.class);
+			startActivity(intent);
+		}
+
+		setContentView(R.layout.activity_listplaces);
+		getListView().setSelector(R.drawable.highlight_pressed);
+		getListView().setVisibility(View.INVISIBLE);
+
+		final TextView titleTopbar = (TextView) findViewById(R.id.titleBar);
+		titleTopbar.setText(getString(R.string.titleApp));
+
+		bindService(new Intent(this, PingMeService.class), onService, BIND_AUTO_CREATE);
+
+	}
+
+	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		try {
 			Intent intent = new Intent(this, DetailsActivity.class);
@@ -118,41 +116,40 @@ public class ListPlaceActivity extends ListActivity {
 		}
 	}
 
-    @Override
-    public void onResume(){
-    	
-        super.onResume();
-        
-        reloadAdapterDataFromService();
-        
-        registerReceiver( poiDataReceiver, new IntentFilter( PingMeService.PING_BROADCAST_POI_DATA ) );
-        registerReceiver( locationReceiver, new IntentFilter( PingMeService.PING_BROADCAST_LOCATION ) );
-    }
+	@Override
+	public void onResume() {
 
-    @Override
-    public void onPause(){
-        super.onPause();
-        unregisterReceiver( poiDataReceiver );
-        unregisterReceiver( locationReceiver );
+		super.onResume();
 
-    }
+		reloadAdapterDataFromService();
 
-    @Override
-    public void onDestroy(){
-        super.onDestroy();
-    	unbindService( onService );
-    }
+		registerReceiver(poiDataReceiver, new IntentFilter(PingMeService.PING_BROADCAST_POI_DATA));
+		registerReceiver(locationReceiver, new IntentFilter(PingMeService.PING_BROADCAST_LOCATION));
+	}
 
-    
-    // ----------------------------------------------------------------------------
+	@Override
+	public void onPause() {
+		super.onPause();
+		unregisterReceiver(poiDataReceiver);
+		unregisterReceiver(locationReceiver);
+
+	}
+
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		unbindService(onService);
+	}
+
+	// ----------------------------------------------------------------------------
 	// Menu
-    // ----------------------------------------------------------------------------
-    
-    @Override
+	// ----------------------------------------------------------------------------
+
+	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if (item.getTitle().equals(getString(R.string.menu_configure))) {
 			Intent intent = new Intent(this, ConfigActivity.class);
-			intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			startActivity(intent);
 			return true;
 		}
@@ -164,7 +161,7 @@ public class ListPlaceActivity extends ListActivity {
 		}
 		return false;
 	}
-	
+
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		menu.clear();
@@ -172,5 +169,5 @@ public class ListPlaceActivity extends ListActivity {
 		menu.add(R.string.menu_tuto).setIcon(android.R.drawable.ic_menu_help);
 		return super.onPrepareOptionsMenu(menu);
 	}
-    
+
 }
